@@ -1,0 +1,97 @@
+/* Base styles for the menu bar */
+.menuBar {
+    max-width: 25%;
+    min-width: 300px;
+    border-right: thin solid #3535354d;
+    min-height: 100%;
+    transition: transform 0.5s ease-in-out;
+    z-index: 1000;
+    display: none;
+    background: #f1f1f1;
+    border-right: thin solid #3535354d;
+    color: black;
+
+}
+
+.menuToggleBar {
+    display: none;
+    font-size: 1.5rem;
+    background: #e0e0e0;
+    border-bottom: thin solid #35353586;
+}
+
+/* Styles for the menu button */
+.menuBtn {
+    padding: 15px 20px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.menuBtn:hover,
+.activeMenu {
+    background: rgba(0, 0, 0, 0.1);
+}
+
+.menuBtn:active {
+    background: rgba(0, 0, 0, 0.1);
+}
+
+
+
+/* Media query for screens smaller than 900px */
+@media (max-width: 900px) {
+    .menuBar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100%;
+        transform: translateX(-100%);
+        transition: transform 0.3s ease-in-out;
+        z-index: 1000;
+        display: initial;
+    }
+
+    .menuBar.open {
+        transform: translateX(0);
+    }
+
+    .backdrop {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.5s ease-in-out, visibility 0.5s;
+        z-index: 900;
+    }
+
+    .backdrop.open {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .menuToggleBar {
+        display: flex;
+        align-items: center;
+        background: white;
+        border-bottom: thin solid #ffffff4d;
+        max-height: 45px;
+        min-height: 45px;
+        padding: 0 20px;
+        box-sizing: border-box;
+    }
+
+    .menuToggleBar span {
+        margin-right: 20px;
+        cursor: pointer;
+    }
+}
+
+@media (max-width: 500px) {
+    .menuBar {
+        min-width: 65%;
+    }
+}
