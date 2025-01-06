@@ -1,7 +1,7 @@
 import React, { useState, memo } from 'react';
 import './trending.css';
 
-import medicinesImg from '../../../imgs/medicines.jpg';
+import medicinesImg from '../../../assets/medicines.jpg';
 
 function TrendingMedicines() {
 	const [favorites, setFavorites] = useState(new Set());

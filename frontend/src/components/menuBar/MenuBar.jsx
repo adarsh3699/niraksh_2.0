@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, memo } from 'react';
 import PropTypes from 'prop-types';
 import './menuBar.css';
 
-import menuIcon from '../../imgs/Icons/menu.svg';
+import menuIcon from '../../assets/Icons/menu.svg';
 
 function MenuBar({ menuItems, navigate, menuName, isMenuOpen, setIsMenuOpen }) {
 	const handleMenuChange = useCallback(

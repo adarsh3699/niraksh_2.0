@@ -1,8 +1,8 @@
 import React, { memo } from 'react';
 import './doMore.css';
 
-import bookBedsImg from '../../../imgs/bookBeds.avif';
-import prescription from '../../../imgs/prescription.webp';
+import bookBedsImg from '../../../assets/bookBeds.avif';
+import prescription from '../../../assets/prescription.webp';
 
 function DoMore() {
 	const handleSearch = () => {

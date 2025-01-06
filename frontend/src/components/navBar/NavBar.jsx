@@ -5,10 +5,10 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { extractEncryptedToken, userDeviceType } from '../../utils';
 import MenuBar from '../menuBar/MenuBar';
 
-import brandLogo from '../../imgs/brandLogo.png';
-import searchIcon from '../../imgs/icons/searchIcon.svg';
-import profileIcon from '../../imgs/icons/profile.svg';
-import menuIcon from '../../imgs/icons/menu.svg';
+import brandLogo from '../../assets/brandLogo.png';
+import searchIcon from '../../assets/icons/searchIcon.svg';
+import profileIcon from '../../assets/icons/profile.svg';
+import menuIcon from '../../assets/icons/menu.svg';
 
 const userLoggedIn = localStorage.getItem('JWT_token');
 
