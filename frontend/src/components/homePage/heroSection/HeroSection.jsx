@@ -1,8 +1,8 @@
 import React, { memo } from 'react';
 import './heroSection.css';
 
-import professional from '../../../assets/professionalImg.svg';
-// import captureIcon from '../../../assets/icons/capture.svg';
+import professional from '../../../imgs/professionalImg.svg';
+// import captureIcon from '../../../imgs/icons/capture.svg';
 
 const HeroSection = () => {
 	return (
