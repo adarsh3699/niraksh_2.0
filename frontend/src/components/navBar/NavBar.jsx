@@ -1,42 +1,42 @@
-import { useState, memo } from 'react';
-import './NavBar.css'; // Assuming you have a CSS file for styling
+import { useState, memo } from "react";
+import "./NavBar.css"; // Assuming you have a CSS file for styling
 
-import { NavLink, useNavigate } from 'react-router-dom';
-import { extractEncryptedToken, userDeviceType } from '../../utils';
-import MenuBar from '../menuBar/MenuBar';
+import { NavLink, useNavigate } from "react-router-dom";
+import { extractEncryptedToken, userDeviceType } from "../../utils";
+import MenuBar from "../menuBar/MenuBar";
 
-import brandLogo from '../../assets/brandLogo.png';
-import searchIcon from '../../assets/icons/search.svg';
-import profileIcon from '../../assets/icons/profile.svg';
-import menuIcon from '../../assets/icons/menu.svg';
+import brandLogo from "../../assets/brandLogo.png";
+import searchIcon from "../../assets/icons/search.svg";
+import profileIcon from "../../assets/icons/profile.svg";
+import menuIcon from "../../assets/icons/menu.svg";
 
-const userLoggedIn = localStorage.getItem('JWT_token');
+const userLoggedIn = localStorage.getItem("JWT_token");
 
 const userEmail = extractEncryptedToken(userLoggedIn)?.email;
 
 const menuItems = [
 	{
-		name: 'Medicine',
-		path: '/medicine',
+		name: "Medicine",
+		path: "/medicine",
 	},
 	{
-		name: 'Prescription Explainer',
-		path: '/prescription_Explainer',
+		name: "Prescription Explainer",
+		path: "/prescription_Explainer",
 	},
 	{
-		name: 'Price Comp.',
-		path: '/price-comparison',
+		name: "Price Comp.",
+		path: "/price-comparison",
 	},
 	{
-		name: 'Diseases',
-		path: '/diseases',
+		name: "Diseases",
+		path: "/diseases",
 	},
 ];
 
 const NabBar = () => {
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-	const menuName = location.pathname?.split('/')[1] || '/';
+	const menuName = location.pathname?.split("/")[1] || "/";
 
 	const navigate = useNavigate();
 	// const [isLogged, setIsLogged] = useState(!!userEmail);

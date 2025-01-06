@@ -1,8 +1,8 @@
-import React, { useCallback, useEffect, memo } from 'react';
-import PropTypes from 'prop-types';
-import './menuBar.css';
+import React, { useCallback, useEffect, memo } from "react";
+import PropTypes from "prop-types";
+import "./menuBar.css";
 
-import menuIcon from '../../assets/Icons/menu.svg';
+import menuIcon from "../../assets/icons/menu.svg";
 
 function MenuBar({ menuItems, navigate, menuName, isMenuOpen, setIsMenuOpen }) {
 	const handleMenuChange = useCallback(
@@ -15,23 +15,23 @@ function MenuBar({ menuItems, navigate, menuName, isMenuOpen, setIsMenuOpen }) {
 	);
 
 	const handleCloseMenu = (e) => {
-		if (e.target.className.includes('backdrop')) {
+		if (e.target.className.includes("backdrop")) {
 			setIsMenuOpen(false);
 		}
 	};
 
 	useEffect(() => {
 		if (isMenuOpen) {
-			document.body.style.overflow = 'hidden';
+			document.body.style.overflow = "hidden";
 		} else {
-			document.body.style.overflow = 'auto';
+			document.body.style.overflow = "auto";
 		}
 	}, [isMenuOpen]);
 
 	return (
 		<>
-			<div className={`backdrop ${isMenuOpen ? 'open' : ''}`} onClick={handleCloseMenu}></div>
-			<div className={`menuBar ${isMenuOpen ? 'open' : ''}`}>
+			<div className={`backdrop ${isMenuOpen ? "open" : ""}`} onClick={handleCloseMenu}></div>
+			<div className={`menuBar ${isMenuOpen ? "open" : ""}`}>
 				<div className="menuToggleBar">
 					{/* <span onClick={() => setIsMenuOpen(false)}>☰</span> */}
 					<img src={menuIcon} alt="menu" onClick={() => setIsMenuOpen(false)} />
@@ -41,7 +41,7 @@ function MenuBar({ menuItems, navigate, menuName, isMenuOpen, setIsMenuOpen }) {
 				{menuItems.map(({ path, name }, index) => (
 					<div
 						key={index}
-						className={`menuBtn ${menuName === path ? 'activeMenu' : ''}`}
+						className={`menuBtn ${menuName === path ? "activeMenu" : ""}`}
 						onClick={() => handleMenuChange({ menuName: path, name })}
 					>
 						{name}
