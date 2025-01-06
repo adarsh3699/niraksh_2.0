@@ -1,5 +1,5 @@
 import React, { memo } from 'react';
-import './HeroSection.css';
+import './heroSection.css';
 
 import professional from '../../../assets/professionalImg.svg';
 import captureIcon from '../../../assets/icons/capture.svg';
