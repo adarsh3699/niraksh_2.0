@@ -6,7 +6,7 @@ import { extractEncryptedToken, userDeviceType } from '../../utils';
 import MenuBar from '../menuBar/MenuBar';
 
 import brandLogo from '../../assets/brandLogo.png';
-import searchIcon from '../../assets/icons/searchIcon.svg';
+// import searchIcon from '../../assets/icons/searchIcon.svg';
 import profileIcon from '../../assets/icons/profile.svg';
 import menuIcon from '../../assets/icons/menu.svg';
 
@@ -89,7 +89,7 @@ function DesktopNavBar() {
 			</div>
 			<div className="nav-links_2">
 				<NavLink className="nav-icon" to="/">
-					<img src={searchIcon} alt="Logo" />
+					{/* <img src={searchIcon} alt="sogo" /> */}
 				</NavLink>
 				<NavLink className="nav-icon" to="/">
 					<img src={profileIcon} alt="Logo" />
