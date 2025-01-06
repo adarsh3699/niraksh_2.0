@@ -7,8 +7,8 @@ import MenuBar from '../menuBar/MenuBar';
 
 import brandLogo from '../../assets/brandLogo.png';
 // import searchIcon from '../../assets/icons/searchIcon.svg';
-import profileIcon from '../../assets/icons/profile.svg';
-import menuIcon from '../../assets/icons/menu.svg';
+// import profileIcon from '../../assets/icons/profile.svg';
+// import menuIcon from '../../assets/icons/menu.svg';
 
 const userLoggedIn = localStorage.getItem('JWT_token');
 
@@ -92,7 +92,7 @@ function DesktopNavBar() {
 					{/* <img src={searchIcon} alt="sogo" /> */}
 				</NavLink>
 				<NavLink className="nav-icon" to="/">
-					<img src={profileIcon} alt="Logo" />
+					{/* <img src={profileIcon} alt="Logo" /> */}
 				</NavLink>
 			</div>
 		</>
@@ -104,7 +104,7 @@ function MobileNavBar({ navigate, menuName, isMenuOpen, setIsMenuOpen }) {
 		<>
 			<div className="phone-nav-links">
 				<div className="menuIcon" onClick={() => setIsMenuOpen(!isMenuOpen)}>
-					<img src={menuIcon} alt="Menu" />
+					{/* <img src={menuIcon} alt="Menu" /> */}
 				</div>
 				<NavLink className="nav-logo phoneBrandLogo" to="/">
 					<img src={brandLogo} alt="Logo" />
@@ -112,7 +112,7 @@ function MobileNavBar({ navigate, menuName, isMenuOpen, setIsMenuOpen }) {
 				</NavLink>
 
 				<NavLink className="nav-icon" to="/">
-					<img src={profileIcon} alt="Logo" />
+					{/* <img src={profileIcon} alt="Logo" /> */}
 				</NavLink>
 			</div>
 			<MenuBar
