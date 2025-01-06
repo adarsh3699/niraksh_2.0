@@ -6,6 +6,9 @@ import '../styles/homePage.css';
 
 import Disease from '../components/homePage/disease/disease';
 import HeroSection from '../components/homePage/heroSection/HeroSection';
+import Trending from '../components/homePage/trending/Trending';
+import DoMore from '../components/homePage/doMore/DoMore';
+import Footer from '../components/footer/Footer';
 
 import { extractEncryptedToken } from '../utils';
 
@@ -17,6 +20,9 @@ function HomePage() {
 		<div id="homePage">
 			<HeroSection />
 			<Disease />
+			<Trending />
+			<DoMore />
+			<Footer />
 		</div>
 	);
 }

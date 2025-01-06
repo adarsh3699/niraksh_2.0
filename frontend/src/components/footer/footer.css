@@ -1,0 +1,115 @@
+.footer {
+    padding: 40px 20px;
+    width: 100%;
+    box-sizing: border-box;
+    position: absolute;
+    left: 0;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    background-color: rgb(240, 226, 208);
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.footer-left {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: inherit;
+}
+
+.brand-icon {
+    width: 24px;
+    height: 24px;
+}
+
+.brand-name {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.tagline {
+    font-size: 16px;
+    color: #333;
+}
+
+.social-links {
+    display: flex;
+    gap: 16px;
+    margin-top: 8px;
+}
+
+.social-link {
+    text-decoration: none;
+    color: #000;
+}
+
+.social-icon {
+    width: 24px;
+    height: 24px;
+}
+
+.footer-right {
+    text-align: right;
+}
+
+.help-text {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 4px;
+}
+
+.support-text {
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 20px;
+}
+
+.contact-info {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.phone-link,
+.email-link {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+    text-decoration: none;
+    color: #000;
+    font-size: 16px;
+}
+
+.email-link {
+    text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+    .footer {
+        flex-direction: column;
+        gap: 32px;
+    }
+
+    .footer-right {
+        text-align: left;
+    }
+
+    .contact-info {
+        align-items: flex-start;
+    }
+
+    .phone-link,
+    .email-link {
+        justify-content: flex-start;
+    }
+}
