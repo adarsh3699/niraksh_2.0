@@ -1,31 +1,38 @@
-import React, { memo } from 'react';
-import './disease.css';
+import React, { memo } from "react";
+import "./disease.css";
+
+import cancerImg from "../../../assets/diseases/cancer.svg";
+import sugerImg from "../../../assets/diseases/suger.svg";
+import heartImg from "../../../assets/diseases/heart.svg";
+import mentalImg from "../../../assets/diseases/mental.svg";
+import covidImg from "../../../assets/diseases/covid.svg";
+import hmpvImg from "../../../assets/diseases/hmpv.svg";
 
 function Diseases() {
 	const diseases = [
 		{
-			title: 'Cancer',
-			icon: '/placeholder.svg?height=80&width=80',
+			title: "Cancer",
+			icon: cancerImg,
 		},
 		{
-			title: 'Diabetes',
-			icon: '/placeholder.svg?height=80&width=80',
+			title: "Diabetes",
+			icon: sugerImg,
 		},
 		{
-			title: 'Heart',
-			icon: '/placeholder.svg?height=80&width=80',
+			title: "Heart",
+			icon: heartImg,
 		},
 		{
-			title: 'Mental',
-			icon: '/placeholder.svg?height=80&width=80',
+			title: "Mental",
+			icon: mentalImg,
 		},
 		{
-			title: 'COVID-19',
-			icon: '/placeholder.svg?height=80&width=80',
+			title: "COVID-19",
+			icon: covidImg,
 		},
 		{
-			title: 'Book a',
-			icon: '/placeholder.svg?height=80&width=80',
+			title: "HMPV",
+			icon: hmpvImg,
 		},
 	];
 
@@ -47,7 +54,7 @@ function Diseases() {
 						tabIndex={0}
 					>
 						<h2 className="disease-title">{disease.title}</h2>
-						<img src={disease.icon} alt={`${disease.title} icon`} className="disease-icon" />
+						<img src={disease.icon} alt={`${disease.title} icon`} loading="lazy" className="disease-icon" />
 					</div>
 				))}
 			</div>

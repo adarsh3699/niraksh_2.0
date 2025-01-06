@@ -30,6 +30,7 @@
     align-items: center;
     cursor: pointer;
     transition: transform 0.2s ease;
+
 }
 
 .disease-card:hover {
@@ -39,16 +40,18 @@
 .disease-title {
     font-size: 1.25rem;
     font-weight: bold;
-    margin-bottom: 1rem;
+    margin-top: unset;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 .disease-icon {
-    /* width: 80px;
-    height: 80px; */
+
+    height: 70%;
     object-fit: contain;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 900px) {
     .diseases-grid {
         gap: 1rem;
     }
@@ -56,5 +59,36 @@
     .disease-card {
         width: 150px;
         height: 150px;
+        padding: 1rem
     }
+
+    .disease-title {
+        font-size: 1rem;
+    }
+
+    .disease-icon {
+        width: 80%;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .diseases-title {
+        font-size: 1.5rem;
+    }
+
+    .disease-card {
+        /* width: 100px;
+        height: 100px; */
+        /* padding: 0.5rem; */
+        width: 45%;
+    }
+
+    .disease-title {
+        font-size: 0.75rem;
+    }
+
+    .disease-icon {
+        width: 70%;
+    }
+
 }

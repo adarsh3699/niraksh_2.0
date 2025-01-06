@@ -127,6 +127,11 @@
     .medicines-grid {
         grid-template-columns: repeat(2, 1fr);
     }
+
+    .trending-title {
+        font-size: 24px;
+    }
+
 }
 
 @media (max-width: 480px) {

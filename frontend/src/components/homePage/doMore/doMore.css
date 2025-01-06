@@ -1,4 +1,4 @@
-.search-container {
+.DoMore-container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
@@ -23,7 +23,7 @@
     height: 24px;
 }
 
-.search-title {
+.DoMore-title {
     font-size: 28px;
     font-weight: bold;
     color: #000;
@@ -70,6 +70,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
+    box-sizing: border-box;
 }
 
 .card-title {
@@ -83,6 +84,7 @@
     font-size: 18px;
     color: rgba(255, 255, 255, 0.9);
     margin-bottom: 24px;
+    margin-top: 0
 }
 
 .card-button {
@@ -102,6 +104,10 @@
 }
 
 @media (max-width: 768px) {
+    .DoMore-title {
+        font-size: 24px;
+    }
+
     .cards-grid {
         grid-template-columns: 1fr;
     }
