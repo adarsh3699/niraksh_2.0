@@ -4,7 +4,7 @@ import { NavLink } from 'react-router-dom';
 
 import '../styles/homePage.css';
 
-import Disease from '../components/homePage/disease/disease';
+import Disease from '../components/homePage/disease/Disease';
 import HeroSection from '../components/homePage/heroSection/HeroSection';
 import Trending from '../components/homePage/trending/Trending';
 import DoMore from '../components/homePage/doMore/DoMore';
