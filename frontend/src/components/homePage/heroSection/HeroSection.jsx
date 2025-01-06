@@ -2,7 +2,7 @@ import React, { memo } from 'react';
 import './heroSection.css';
 
 import professional from '../../../assets/professionalImg.svg';
-import captureIcon from '../../../assets/icons/capture.svg';
+// import captureIcon from '../../../assets/icons/capture.svg';
 
 const HeroSection = () => {
 	return (
@@ -15,7 +15,7 @@ const HeroSection = () => {
 				<form className="searchArea">
 					<div className="searchbar">
 						<input type="text" placeholder="Search for medicines" />
-						<img src={captureIcon} className="captureBtn" alt="Capture Icon" />
+						{/* <img src={captureIcon} className="captureBtn" alt="Capture Icon" /> */}
 					</div>
 					<button className="searchBtn">Search</button>
 				</form>
