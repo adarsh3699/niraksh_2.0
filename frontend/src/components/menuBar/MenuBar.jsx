@@ -2,6 +2,8 @@ import React, { useCallback, useEffect, memo } from 'react';
 import PropTypes from 'prop-types';
 import './menuBar.css';
 
+import menuIcon from '../../assets/Icons/menu.svg';
+
 function MenuBar({ menuItems, navigate, menuName, isMenuOpen, setIsMenuOpen }) {
 	const handleMenuChange = useCallback(
 		(item) => {
@@ -31,7 +33,9 @@ function MenuBar({ menuItems, navigate, menuName, isMenuOpen, setIsMenuOpen }) {
 			<div className={`backdrop ${isMenuOpen ? 'open' : ''}`} onClick={handleCloseMenu}></div>
 			<div className={`menuBar ${isMenuOpen ? 'open' : ''}`}>
 				<div className="menuToggleBar">
-					<span onClick={() => setIsMenuOpen(false)}>☰</span> Menu
+					{/* <span onClick={() => setIsMenuOpen(false)}>☰</span> */}
+					<img src={menuIcon} alt="menu" onClick={() => setIsMenuOpen(false)} />
+					Menu
 				</div>
 
 				{menuItems.map(({ path, name }, index) => (
