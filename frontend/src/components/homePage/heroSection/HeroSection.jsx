@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import { memo } from 'react';
 import './heroSection.css';
 
 import professional from '../../../assets/professionalImg.svg';

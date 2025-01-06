@@ -1,4 +1,4 @@
-import React, { useState, memo } from 'react';
+import { useState, memo } from 'react';
 import './NavBar.css'; // Assuming you have a CSS file for styling
 
 import { NavLink, useNavigate } from 'react-router-dom';
@@ -6,7 +6,7 @@ import { extractEncryptedToken, userDeviceType } from '../../utils';
 import MenuBar from '../menuBar/MenuBar';
 
 import brandLogo from '../../assets/brandLogo.png';
-import searchIcon from '../../assets/icons/searchIcon.svg';
+import searchIcon from '../../assets/icons/search.svg';
 import profileIcon from '../../assets/icons/profile.svg';
 import menuIcon from '../../assets/icons/menu.svg';
 
