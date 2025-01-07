@@ -33,12 +33,11 @@ function MenuBar({ menuItems, navigate, menuName, isMenuOpen, setIsMenuOpen }) {
 			<div className={`backdrop ${isMenuOpen ? "open" : ""}`} onClick={handleCloseMenu}></div>
 			<div className={`menuBar ${isMenuOpen ? "open" : ""}`}>
 				<div className="menuToggleBar">
-					{/* <span onClick={() => setIsMenuOpen(false)}>☰</span> */}
 					<img src={menuIcon} alt="menu" loading="lazy" onClick={() => setIsMenuOpen(false)} />
 					Menu
 				</div>
 
-				{menuItems.map(({ path, name }, index) => (
+				{menuItems.map(({ name, path }, index) => (
 					<div
 						key={index}
 						className={`menuBtn ${menuName === path ? "activeMenu" : ""}`}

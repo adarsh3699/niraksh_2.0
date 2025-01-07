@@ -37,7 +37,7 @@ const menuItems = [
 const NabBar = () => {
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-	const menuName = location.pathname?.split("/")[1] || "/";
+	const menuName = `/${location.pathname?.split("/")[1]}`;
 
 	const navigate = useNavigate();
 	// const [isLogged, setIsLogged] = useState(!!userEmail);
@@ -117,7 +117,13 @@ function MobileNavBar({ navigate, menuName, isMenuOpen, setIsMenuOpen }) {
 				</NavLink>
 			</div>
 			<MenuBar
-				menuItems={menuItems}
+				menuItems={[
+					{
+						name: "Home",
+						path: "/",
+					},
+					...menuItems,
+				]}
 				navigate={navigate}
 				menuName={menuName}
 				isMenuOpen={isMenuOpen}
