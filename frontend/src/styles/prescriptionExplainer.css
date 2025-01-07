@@ -1,0 +1,285 @@
+/* General Styles */
+.prescription-explainer-container {
+    font-family: 'Poppins', sans-serif;
+    max-width: 800px;
+    margin: 40px auto;
+    text-align: center;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.title {
+    font-size: 32px;
+    font-weight: 700;
+    color: #212121;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    font-size: 16px;
+    color: #757575;
+    margin-bottom: 25px;
+}
+
+/* Dropzone Styles */
+.dropzone {
+    border: 2px dashed #448e94;
+    background-color: #f9f9f9;
+    padding: 40px;
+    border-radius: 10px;
+    transition: 0.3s ease;
+    cursor: pointer;
+    color: #448e94;
+    font-size: 16px;
+}
+
+.dropzone.active {
+    background-color: #f7e7e7;
+    border-color: #2a98a1;
+}
+
+.dropzone p {
+    margin: 0;
+    font-size: 16px;
+}
+
+/* Uploaded Files Section */
+.uploaded-files {
+    margin-top: 20px;
+    text-align: left;
+    background-color: #fafafa;
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.uploaded-files h3 {
+    font-size: 20px;
+    font-weight: bold;
+    color: #212121;
+    margin-bottom: 10px;
+}
+
+.file-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    padding: 8px 10px;
+    border-bottom: 1px solid #eeeeee;
+}
+
+.file-item:last-child {
+    border-bottom: none;
+}
+
+.file-name {
+    font-size: 14px;
+    color: #333333;
+    font-weight: 500;
+}
+
+.file-size {
+    font-size: 12px;
+    color: #999999;
+}
+
+/* Button Styles */
+.button-container {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.primary-btn {
+    background-color: rgb(223, 137, 52);
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.primary-btn:hover {
+    background-color: rgb(214, 111, 8);
+}
+
+.primary-btn:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+.search-btn {
+    background-color: #4BB6B0;
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.search-btn:hover:not(:disabled) {
+    background-color: rgba(75, 182, 176, 0.9);
+}
+
+
+/* Prescription Details Section */
+.prescription-details {
+    margin-top: 30px;
+    text-align: left;
+    background-color: #fafafa;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.prescription-details h3 {
+    font-size: 22px;
+    font-weight: bold;
+    color: #212121;
+    margin-bottom: 15px;
+}
+
+.prescription-details p {
+    font-size: 16px;
+    color: #555555;
+    margin-bottom: 10px;
+}
+
+.prescription-details ul {
+    list-style-type: disc;
+    padding-left: 20px;
+    margin-bottom: 10px;
+}
+
+.prescription-details ul li {
+    font-size: 16px;
+    color: #555555;
+    margin-bottom: 5px;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .prescription-explainer-container {
+        padding: 15px;
+        margin: 20px auto;
+    }
+
+    .title {
+        font-size: 28px;
+    }
+
+    .subtitle {
+        font-size: 14px;
+    }
+
+    .dropzone {
+        padding: 30px;
+        font-size: 14px;
+    }
+
+    .uploaded-files {
+        padding: 10px;
+    }
+
+    .uploaded-files h3 {
+        font-size: 18px;
+    }
+
+    .file-item {
+        padding: 6px 8px;
+    }
+
+    .file-name {
+        font-size: 12px;
+    }
+
+    .file-size {
+        font-size: 10px;
+    }
+
+    .primary-btn {
+        padding: 8px 16px;
+        font-size: 14px;
+    }
+
+    .prescription-details {
+        padding: 15px;
+    }
+
+    .prescription-details h3 {
+        font-size: 20px;
+    }
+
+    .prescription-details p,
+    .prescription-details ul li {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .prescription-explainer-container {
+        padding: 10px;
+        margin: 10px auto;
+    }
+
+    .title {
+        font-size: 24px;
+    }
+
+    .subtitle {
+        font-size: 12px;
+    }
+
+    .dropzone {
+        padding: 20px;
+        font-size: 12px;
+    }
+
+    .uploaded-files {
+        padding: 8px;
+    }
+
+    .uploaded-files h3 {
+        font-size: 16px;
+    }
+
+    .file-item {
+        padding: 4px 6px;
+    }
+
+    .file-name {
+        font-size: 10px;
+    }
+
+    .file-size {
+        font-size: 8px;
+    }
+
+    .primary-btn {
+        padding: 6px 12px;
+        font-size: 12px;
+    }
+
+    .prescription-details {
+        padding: 10px;
+    }
+
+    .prescription-details h3 {
+        font-size: 18px;
+    }
+
+    .prescription-details p,
+    .prescription-details ul li {
+        font-size: 12px;
+    }
+}

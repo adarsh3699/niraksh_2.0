@@ -1,23 +1,24 @@
-import { memo, Suspense, lazy, useEffect } from 'react';
-import { DNA } from 'react-loader-spinner';
-import { Navigate, useLocation, Routes as Switch, Route } from 'react-router-dom';
+import { memo, Suspense, lazy, useEffect } from "react";
+import { DNA } from "react-loader-spinner";
+import { Navigate, useLocation, Routes as Switch, Route } from "react-router-dom";
 
-import NavBar from './components/navBar/NavBar';
+import NavBar from "./components/navBar/NavBar";
 
 //lazy loading split the main bundle into many chunks
-const HomePage = lazy(() => import('./pages/HomePage'));
-const HospitalLogin = lazy(() => import('./pages/HospitalLogin'));
-const HospitalRegPage = lazy(() => import('./pages/HospitalRegPage'));
-const HospitalDashboard = lazy(() => import('./pages/HospitalDashboard'));
-const HospitalSearch = lazy(() => import('./pages/HospitalSearch'));
-const PatientPortal = lazy(() => import('./pages/PatientPortal'));
-const UserLogin = lazy(() => import('./pages/UserLogin'));
-const UserSignup = lazy(() => import('./pages/UserSignup'));
-const UserForgetPass = lazy(() => import('./pages/UserForgetPass'));
-const AboutUs = lazy(() => import('./pages/AboutUs'));
-const ContactUs = lazy(() => import('./pages/ContactUs'));
-const UserEmergencyForm = lazy(() => import('./pages/UserEmergencyForm'));
-const OPDappointment = lazy(() => import('./pages/OPDappointment'));
+const HomePage = lazy(() => import("./pages/HomePage"));
+const PrescriptionExplainer = lazy(() => import("./pages/PrescriptionExplainer"));
+const HospitalLogin = lazy(() => import("./pages/HospitalLogin"));
+const HospitalRegPage = lazy(() => import("./pages/HospitalRegPage"));
+const HospitalDashboard = lazy(() => import("./pages/HospitalDashboard"));
+const HospitalSearch = lazy(() => import("./pages/HospitalSearch"));
+const PatientPortal = lazy(() => import("./pages/PatientPortal"));
+const UserLogin = lazy(() => import("./pages/UserLogin"));
+const UserSignup = lazy(() => import("./pages/UserSignup"));
+const UserForgetPass = lazy(() => import("./pages/UserForgetPass"));
+const AboutUs = lazy(() => import("./pages/AboutUs"));
+const ContactUs = lazy(() => import("./pages/ContactUs"));
+const UserEmergencyForm = lazy(() => import("./pages/UserEmergencyForm"));
+const OPDappointment = lazy(() => import("./pages/OPDappointment"));
 
 function Routes() {
 	const { pathname } = useLocation();
@@ -54,6 +55,18 @@ function Routes() {
 					}
 				/>
 				<Route exact path="/home" element={<Navigate to="/" />} />
+
+				<Route
+					exact
+					path="/prescription_explainer"
+					element={
+						<>
+							<NavBar />
+							<PrescriptionExplainer />
+						</>
+					}
+				/>
+
 				<Route
 					exact
 					path="/hospital-login"
