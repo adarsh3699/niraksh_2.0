@@ -7,6 +7,7 @@ import NavBar from "./components/navBar/NavBar";
 //lazy loading split the main bundle into many chunks
 const HomePage = lazy(() => import("./pages/HomePage"));
 const PrescriptionExplainer = lazy(() => import("./pages/PrescriptionExplainer"));
+const MedicineSearch = lazy(() => import("./pages/MedicineSearch"));
 const HospitalLogin = lazy(() => import("./pages/HospitalLogin"));
 const HospitalRegPage = lazy(() => import("./pages/HospitalRegPage"));
 const HospitalDashboard = lazy(() => import("./pages/HospitalDashboard"));
@@ -63,6 +64,17 @@ function Routes() {
 						<>
 							<NavBar />
 							<PrescriptionExplainer />
+						</>
+					}
+				/>
+
+				<Route
+					exact
+					path="/medicine_search"
+					element={
+						<>
+							<NavBar />
+							<MedicineSearch />
 						</>
 					}
 				/>

@@ -34,7 +34,7 @@ function MenuBar({ menuItems, navigate, menuName, isMenuOpen, setIsMenuOpen }) {
 			<div className={`menuBar ${isMenuOpen ? "open" : ""}`}>
 				<div className="menuToggleBar">
 					{/* <span onClick={() => setIsMenuOpen(false)}>☰</span> */}
-					<img src={menuIcon} alt="menu" onClick={() => setIsMenuOpen(false)} />
+					<img src={menuIcon} alt="menu" loading="lazy" onClick={() => setIsMenuOpen(false)} />
 					Menu
 				</div>
 

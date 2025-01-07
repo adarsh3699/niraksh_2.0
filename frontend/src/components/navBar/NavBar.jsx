@@ -1,4 +1,5 @@
 import { useState, memo } from "react";
+import PropTypes from "prop-types";
 import "./NavBar.css"; // Assuming you have a CSS file for styling
 
 import { NavLink, useNavigate } from "react-router-dom";
@@ -10,14 +11,14 @@ import searchIcon from "../../assets/icons/search.svg";
 import profileIcon from "../../assets/icons/profile.svg";
 import menuIcon from "../../assets/icons/menu.svg";
 
-const userLoggedIn = localStorage.getItem("JWT_token");
+// const userLoggedIn = localStorage.getItem("JWT_token");
 
-const userEmail = extractEncryptedToken(userLoggedIn)?.email;
+// const userEmail = extractEncryptedToken(userLoggedIn)?.email;
 
 const menuItems = [
 	{
 		name: "Medicine",
-		path: "/medicine",
+		path: "/medicine_search",
 	},
 	{
 		name: "Prescription Explainer",
@@ -125,5 +126,11 @@ function MobileNavBar({ navigate, menuName, isMenuOpen, setIsMenuOpen }) {
 		</>
 	);
 }
+MobileNavBar.propTypes = {
+	navigate: PropTypes.func.isRequired,
+	menuName: PropTypes.string.isRequired,
+	isMenuOpen: PropTypes.bool.isRequired,
+	setIsMenuOpen: PropTypes.func.isRequired,
+};
 
 export default memo(NabBar);

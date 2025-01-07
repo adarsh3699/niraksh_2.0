@@ -1,26 +1,26 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState } from "react";
 
-import '../styles/userSignup.css';
-import { NavLink } from 'react-router-dom';
-import { apiCall } from '../utils';
-import ShowMsg from '../components/showMsg/ShowMsg';
+import "../styles/userSignup.css";
+import { NavLink } from "react-router-dom";
+import { apiCall } from "../utils";
+import ShowMsg from "../components/showMsg/ShowMsg";
 
 const UserSignup = () => {
-	const [msg, setMsg] = useState({ text: '', type: '' });
+	const [msg, setMsg] = useState({ text: "", type: "" });
 	const [formData, setFormData] = useState({
-		username: '',
-		email: '',
-		password: '',
+		username: "",
+		email: "",
+		password: "",
 	});
 
 	const handleMsgShown = useCallback((msgText, type) => {
 		if (msgText) {
 			setMsg({ text: msgText, type: type });
 			setTimeout(() => {
-				setMsg({ text: '', type: '' });
+				setMsg({ text: "", type: "" });
 			}, 2500);
 		} else {
-			console.log('Please Provide Text Msg');
+			console.log("Please Provide Text Msg");
 		}
 	}, []);
 
@@ -36,12 +36,12 @@ const UserSignup = () => {
 		async (e) => {
 			e.preventDefault();
 
-			const apiResp = await apiCall('user/signup', 'post', formData);
+			const apiResp = await apiCall("user/signup", "post", formData);
 
 			if (apiResp.statusCode === 200) {
-				document.location.href = '/login';
+				document.location.href = "/login";
 			} else {
-				handleMsgShown(apiResp.msg, 'error');
+				handleMsgShown(apiResp.msg, "error");
 			}
 		},
 		[formData, handleMsgShown]
@@ -104,7 +104,12 @@ const UserSignup = () => {
 					<button type="submit">Continue</button>
 				</form>
 				<button className="google-btn">
-					<img src="https://www.freepnglogos.com/uploads/google-logo-png/google-logo-icon-png-transparent-background-osteopathy-16.png" alt="Google" width="20px" />
+					<img
+						src="https://www.freepnglogos.com/uploads/google-logo-png/google-logo-icon-png-transparent-background-osteopathy-16.png"
+						loading="lazy"
+						alt="Google"
+						width="20px"
+					/>
 					Continue with Google
 				</button>
 				<div className="login-link">

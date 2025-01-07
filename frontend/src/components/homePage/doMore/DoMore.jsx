@@ -26,7 +26,7 @@ function DoMore() {
 
 			<div className="cards-grid">
 				<div className="search-card">
-					<img src={prescription} alt="Medical storage facility" className="card-background" />
+					<img src={prescription} alt="Medical storage facility" loading="lazy" className="card-background" />
 					<div className="card-overlay">
 						<h2 className="card-title">Prescription Explainer</h2>
 						<p className="card-subtitle">Get detailed info and treatment</p>
@@ -37,7 +37,7 @@ function DoMore() {
 				</div>
 
 				<div className="search-card">
-					<img src={bookBedsImg} alt="Hospital bed" className="card-background" />
+					<img src={bookBedsImg} alt="Hospital bed" loading="lazy" className="card-background" />
 					<div className="card-overlay">
 						<h2 className="card-title">Book Hospital Beds</h2>
 						<p className="card-subtitle">Find and book hospital beds</p>

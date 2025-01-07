@@ -15,13 +15,13 @@ const HeroSection = () => {
 				<form className="searchArea">
 					<div className="searchbar">
 						<input type="text" placeholder="Search for medicines" />
-						<img src={captureIcon} className="captureBtn" alt="Capture Icon" />
+						<img src={captureIcon} className="captureBtn" loading="lazy" alt="Capture Icon" />
 					</div>
 					<button className="searchBtn">Search</button>
 				</form>
 			</div>
 			{/* <div className="image-content"> */}
-			<img src={professional} className="professional_image" alt="Medical professionals" />
+			<img src={professional} className="professional_image" loading="lazy" alt="Medical professionals" />
 			{/* </div> */}
 		</div>
 	);

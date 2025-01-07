@@ -1,6 +1,6 @@
-import React from 'react';
-import '../styles/aboutUs.css';
-import aboutpic from '../assets/doctor-online-service-platform-healthcare-modern-medicine-treatment-analysis-diagnosis-emergency-call-isolated-vector-illustration_613284-1170-removebg-preview.png';
+import React from "react";
+import "../styles/aboutUs.css";
+import aboutpic from "../assets/doctor-online-service-platform-healthcare-modern-medicine-treatment-analysis-diagnosis-emergency-call-isolated-vector-illustration_613284-1170-removebg-preview.png";
 const AboutUs = () => {
 	return (
 		<div id="aboutUs">
@@ -22,7 +22,7 @@ const AboutUs = () => {
 					</p>
 				</div>
 				<div className="image">
-					<img src={aboutpic} alt="Healthcare Illustration" />
+					<img src={aboutpic} loading="lazy" alt="Healthcare Illustration" />
 				</div>
 			</div>
 		</div>

@@ -1,7 +1,7 @@
-import React, { useState, memo } from 'react';
-import './trending.css';
+import React, { useState, memo } from "react";
+import "./trending.css";
 
-import medicinesImg from '../../../assets/medicines.jpg';
+import medicinesImg from "../../../assets/medicines.jpg";
 
 function TrendingMedicines() {
 	const [favorites, setFavorites] = useState(new Set());
@@ -9,39 +9,39 @@ function TrendingMedicines() {
 	const medicines = [
 		{
 			id: 1,
-			title: 'Fast-acting pain relief',
+			title: "Fast-acting pain relief",
 			price: 8.99,
 			image: medicinesImg,
 			hasAddToCart: true,
 		},
 		{
 			id: 2,
-			title: 'Heart health supplements',
+			title: "Heart health supplements",
 			price: 8.99,
 			image: medicinesImg,
 		},
 		{
 			id: 3,
-			title: 'Mental health supplements',
+			title: "Mental health supplements",
 			price: 8.99,
 			image: medicinesImg,
 		},
 		{
 			id: 4,
-			title: 'Find detailed info about Startin',
-			subtitle: 'Startin',
+			title: "Find detailed info about Startin",
+			subtitle: "Startin",
 			image: medicinesImg,
 		},
 		{
 			id: 5,
-			title: 'Find supplements for your Startin',
-			subtitle: 'Startin',
+			title: "Find supplements for your Startin",
+			subtitle: "Startin",
 			image: medicinesImg,
 		},
 		{
 			id: 6,
-			title: 'Find healthy treats for your Startin',
-			subtitle: 'Startin',
+			title: "Find healthy treats for your Startin",
+			subtitle: "Startin",
 			image: medicinesImg,
 		},
 	];
@@ -80,7 +80,7 @@ function TrendingMedicines() {
 			<div className="medicines-grid">
 				{medicines.map((medicine) => (
 					<div key={medicine.id} className="medicine-card">
-						<img src={medicine.image} alt={medicine.title} className="medicine-image" />
+						<img src={medicine.image} alt={medicine.title} loading="lazy" className="medicine-image" />
 						{medicine.hasAddToCart && <button className="add-to-cart">Add to cart</button>}
 						<div className="medicine-content">
 							<h3 className="medicine-title">{medicine.title}</h3>
@@ -93,9 +93,9 @@ function TrendingMedicines() {
 							{medicine.subtitle && <div className="medicine-subtitle">{medicine.subtitle}</div>}
 						</div>
 						<button
-							className={`favorite-button ${favorites.has(medicine.id) ? 'active' : ''}`}
+							className={`favorite-button ${favorites.has(medicine.id) ? "active" : ""}`}
 							onClick={() => toggleFavorite(medicine.id)}
-							aria-label={`${favorites.has(medicine.id) ? 'Remove from' : 'Add to'} favorites`}
+							aria-label={`${favorites.has(medicine.id) ? "Remove from" : "Add to"} favorites`}
 						>
 							<svg viewBox="0 0 24 24">
 								<path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />

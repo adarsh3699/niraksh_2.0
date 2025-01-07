@@ -143,6 +143,7 @@ const UserEmergencyForm = () => {
 					<img
 						id="capturedImage"
 						src={imageUpload ? URL?.createObjectURL(imageUpload) : ""}
+						loading="lazy"
 						alt="Captured incident"
 					/>
 					<input type="file" accept="image/*" id="image" onChange={handleImageUpload} />
