@@ -1,10 +1,12 @@
-import { memo, useState } from "react";
+import { memo, useState, useCallback } from "react";
 import { useDropzone } from "react-dropzone";
 import "../styles/prescriptionExplainer.css";
 
 const PrescriptionExplainer = () => {
 	const [files, setFiles] = useState([]);
 	const [showResults, setShowResults] = useState(false);
+	const [uploaded, setUploaded] = useState(false);
+
 	const dummyData = {
 		name: "Dolo 650 Tablet",
 		uses: [
@@ -20,11 +22,30 @@ const PrescriptionExplainer = () => {
 		],
 	};
 
-	const onDrop = (acceptedFiles) => {
+	// Memoize the onDrop handler to avoid re-creation on every render
+	const onDrop = useCallback((acceptedFiles) => {
 		setFiles((prevFiles) => [...prevFiles, ...acceptedFiles]);
 		setShowResults(false); // Reset results when new files are uploaded
-	};
+	}, []);
 
+	// Memoize the handleUpload function
+	const handleUpload = useCallback(() => {
+		setUploaded(true);
+		alert("Files uploaded successfully!");
+	}, []);
+
+	// Memoize the handleReset function
+	const handleReset = useCallback(() => {
+		setFiles([]);
+		setShowResults(false);
+		setUploaded(false);
+	}, []);
+
+	const handleSearch = useCallback(() => {
+		setShowResults(true);
+	}, []);
+
+	// Memoize Dropzone hooks
 	const { getRootProps, getInputProps, isDragActive } = useDropzone({
 		onDrop,
 		accept: {
@@ -34,10 +55,6 @@ const PrescriptionExplainer = () => {
 		},
 		multiple: true,
 	});
-
-	const handleSearch = () => {
-		setShowResults(true);
-	};
 
 	return (
 		<div className="prescription-explainer-container">
@@ -67,10 +84,16 @@ const PrescriptionExplainer = () => {
 
 			{/* Buttons */}
 			<div className="button-container">
-				<button className="primary-btn upload-btn" onClick={() => alert("Files uploaded successfully!")}>
-					Upload
-				</button>
-				<button className="primary-btn search-btn" onClick={handleSearch} disabled={files.length === 0}>
+				{uploaded ? (
+					<button className="primary-btn reset-btn" onClick={handleReset}>
+						Reset
+					</button>
+				) : (
+					<button className="primary-btn upload-btn" onClick={handleUpload} disabled={files.length === 0}>
+						Upload
+					</button>
+				)}
+				<button className="primary-btn search-btn" onClick={handleSearch} disabled={!uploaded}>
 					Search
 				</button>
 			</div>
