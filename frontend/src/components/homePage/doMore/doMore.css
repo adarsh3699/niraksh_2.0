@@ -73,7 +73,7 @@
     box-sizing: border-box;
 }
 
-.card-title {
+.DoMore-container .card-title {
     font-size: 32px;
     font-weight: bold;
     color: white;
@@ -112,7 +112,7 @@
         grid-template-columns: 1fr;
     }
 
-    .card-title {
+    .DoMore-container .card-title {
         font-size: 24px;
     }
 

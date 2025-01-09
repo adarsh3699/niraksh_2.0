@@ -57,7 +57,7 @@ const PrescriptionExplainer = () => {
 	});
 
 	return (
-		<div className="prescription-explainer-container">
+		<div className="prescriptionExplainer">
 			<h1 className="title">Upload and Analyze Your Prescription</h1>
 			<p className="subtitle">Upload your prescriptions to get detailed medicine information and suggestions.</p>
 

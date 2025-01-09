@@ -1,5 +1,5 @@
 /* General Styles */
-.prescription-explainer-container {
+.prescriptionExplainer {
     font-family: 'Poppins', sans-serif;
     max-width: 800px;
     margin: 40px auto;
@@ -24,7 +24,7 @@
 }
 
 /* Dropzone Styles */
-.dropzone {
+.prescriptionExplainer .dropzone {
     border: 2px dashed #448e94;
     background-color: #f9f9f9;
     padding: 40px;
@@ -35,12 +35,12 @@
     font-size: 16px;
 }
 
-.dropzone.active {
+.prescriptionExplainer .dropzone.active {
     background-color: #f7e7e7;
     border-color: #2a98a1;
 }
 
-.dropzone p {
+.prescriptionExplainer .dropzone p {
     margin: 0;
     font-size: 16px;
 }
@@ -59,7 +59,7 @@
     font-size: 20px;
     font-weight: bold;
     color: #212121;
-    margin-bottom: 10px;
+    margin: 5px 0 0 0;
 }
 
 .file-item {
@@ -136,7 +136,7 @@
 .prescription-details {
     margin-top: 30px;
     text-align: left;
-    background-color: #fafafa;
+    background-color: #F5E6D3;
     border-radius: 10px;
     padding: 20px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -169,7 +169,7 @@
 
 /* Responsive Styles */
 @media (max-width: 768px) {
-    .prescription-explainer-container {
+    .prescriptionExplainer {
         padding: 15px;
         margin: 20px auto;
     }
@@ -182,7 +182,7 @@
         font-size: 14px;
     }
 
-    .dropzone {
+    .prescriptionExplainer .dropzone {
         padding: 30px;
         font-size: 14px;
     }
@@ -227,7 +227,7 @@
 }
 
 @media (max-width: 480px) {
-    .prescription-explainer-container {
+    .prescriptionExplainer {
         padding: 10px;
         margin: 10px auto;
     }
@@ -240,7 +240,7 @@
         font-size: 12px;
     }
 
-    .dropzone {
+    .prescriptionExplainer .dropzone {
         padding: 20px;
         font-size: 12px;
     }
