@@ -101,7 +101,10 @@ const MedicineSearch = () => {
 								{file.preview ? (
 									<img src={file.preview} width="100px" alt="Preview" />
 								) : (
-									<div className="pdf-preview">PDF</div>
+									<>
+										<div className="pdf-preview">PDF</div>
+										<span className="file-name">{file.file.name}</span>
+									</>
 								)}
 								<button
 									className="remove-file"
@@ -110,7 +113,6 @@ const MedicineSearch = () => {
 								>
 									×
 								</button>
-								<span className="file-name">{file.file.name}</span>
 							</div>
 						))}
 					</div>

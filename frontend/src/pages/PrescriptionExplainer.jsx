@@ -3,7 +3,7 @@ import { useDropzone } from "react-dropzone";
 import "../styles/prescriptionExplainer.css";
 
 const PrescriptionExplainer = () => {
-	const [files, setFiles] = useState([]);
+	const [uploadedFiles, setUploadedFiles] = useState([]);
 	const [showResults, setShowResults] = useState(false);
 	const [uploaded, setUploaded] = useState(false);
 
@@ -23,9 +23,13 @@ const PrescriptionExplainer = () => {
 	};
 
 	// Memoize the onDrop handler to avoid re-creation on every render
+	// Handle file drop
 	const onDrop = useCallback((acceptedFiles) => {
-		setFiles((prevFiles) => [...prevFiles, ...acceptedFiles]);
-		setShowResults(false); // Reset results when new files are uploaded
+		const newFiles = acceptedFiles.map((file) => ({
+			file,
+			preview: file.type.startsWith("image/") ? URL.createObjectURL(file) : null,
+		}));
+		setUploadedFiles((prev) => [...prev, ...newFiles]);
 	}, []);
 
 	// Memoize the handleUpload function
@@ -36,7 +40,7 @@ const PrescriptionExplainer = () => {
 
 	// Memoize the handleReset function
 	const handleReset = useCallback(() => {
-		setFiles([]);
+		setUploadedFiles([]);
 		setShowResults(false);
 		setUploaded(false);
 	}, []);
@@ -45,8 +49,19 @@ const PrescriptionExplainer = () => {
 		setShowResults(true);
 	}, []);
 
+	const removeFile = (index) => {
+		setUploadedFiles((uploadedFiles) => {
+			const newFiles = [...uploadedFiles];
+			if (newFiles[index].preview) {
+				URL.revokeObjectURL(newFiles[index].preview);
+			}
+			newFiles.splice(index, 1);
+			return newFiles;
+		});
+	};
+
 	// Memoize Dropzone hooks
-	const { getRootProps, getInputProps, isDragActive } = useDropzone({
+	const { getRootProps, getInputProps, open, isDragActive } = useDropzone({
 		onDrop,
 		accept: {
 			"image/jpeg": [],
@@ -54,31 +69,43 @@ const PrescriptionExplainer = () => {
 			"application/pdf": [],
 		},
 		multiple: true,
+		noClick: true, // Disable click upload globally
 	});
 
 	return (
-		<div className="prescriptionExplainer">
+		<div id="prescriptionExplainer" {...getRootProps()}>
 			<h1 className="title">Upload and Analyze Your Prescription</h1>
 			<p className="subtitle">Upload your prescriptions to get detailed medicine information and suggestions.</p>
 
 			{/* Dropzone */}
-			<div {...getRootProps()} className={`dropzone ${isDragActive ? "active" : ""}`}>
+			<div
+				className={`dropzone ${isDragActive ? "active" : ""}`}
+				onClick={(e) => {
+					e.stopPropagation(); // Prevent triggering dropzone onClick
+					open(); // Open file dialog
+				}}
+			>
 				<input {...getInputProps()} />
 				{isDragActive ? <p>Drop your files here...</p> : <p>Drag & drop files here or click to select them</p>}
 			</div>
 
-			{/* Uploaded Files */}
-			{files.length > 0 && (
+			{uploadedFiles.length > 0 && (
 				<div className="uploaded-files">
-					<h3>Uploaded Files:</h3>
-					<ul>
-						{files.map((file, index) => (
-							<li key={index} className="file-item">
-								<span className="file-name">{file.name}</span>{" "}
-								<span className="file-size">({(file.size / 1024).toFixed(2)} KB)</span>
-							</li>
-						))}
-					</ul>
+					{uploadedFiles.map((file, index) => (
+						<div key={index} className="file-preview">
+							{file.preview ? (
+								<img src={file.preview} width="100px" alt="Preview" />
+							) : (
+								<>
+									<div className="pdf-preview">PDF</div>
+									<span className="file-name">{file.file.name}</span>
+								</>
+							)}
+							<button className="remove-file" onClick={() => removeFile(index)} aria-label="Remove file">
+								×
+							</button>
+						</div>
+					))}
 				</div>
 			)}
 
@@ -89,7 +116,11 @@ const PrescriptionExplainer = () => {
 						Reset
 					</button>
 				) : (
-					<button className="primary-btn upload-btn" onClick={handleUpload} disabled={files.length === 0}>
+					<button
+						className="primary-btn upload-btn"
+						onClick={handleUpload}
+						disabled={uploadedFiles.length === 0}
+					>
 						Upload
 					</button>
 				)}

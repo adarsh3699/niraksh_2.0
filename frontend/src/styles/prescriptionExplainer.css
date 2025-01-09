@@ -1,6 +1,5 @@
 /* General Styles */
-.prescriptionExplainer {
-    font-family: 'Poppins', sans-serif;
+#prescriptionExplainer {
     max-width: 800px;
     margin: 40px auto;
     text-align: center;
@@ -15,75 +14,121 @@
     font-weight: 700;
     color: #212121;
     margin-bottom: 10px;
+    font-family: 'Poppins', sans-serif;
 }
 
 .subtitle {
     font-size: 16px;
     color: #757575;
+    font-family: 'Poppins', sans-serif;
     margin-bottom: 25px;
 }
 
 /* Dropzone Styles */
-.prescriptionExplainer .dropzone {
+#prescriptionExplainer .dropzone {
     border: 2px dashed #448e94;
     background-color: #f9f9f9;
     padding: 40px;
     border-radius: 10px;
-    transition: 0.3s ease;
     cursor: pointer;
     color: #448e94;
     font-size: 16px;
+    transition: all 0.2s ease;
 }
 
-.prescriptionExplainer .dropzone.active {
-    background-color: #f7e7e7;
+#prescriptionExplainer .dropzone:hover,
+#prescriptionExplainer .dropzone.active {
+    background-color: rgba(68, 142, 148, 0.2);
+    font-weight: bold;
     border-color: #2a98a1;
 }
 
-.prescriptionExplainer .dropzone p {
+
+#prescriptionExplainer .dropzone p {
     margin: 0;
-    font-size: 16px;
 }
 
 /* Uploaded Files Section */
-.uploaded-files {
-    margin-top: 20px;
-    text-align: left;
-    background-color: #fafafa;
+#prescriptionExplainer .uploaded-files {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 1rem;
+    margin: 1rem 0;
+    margin-bottom: 2rem;
+}
+
+#prescriptionExplainer .file-preview {
+
+    position: relative;
+    border: 1px solid #448e94;
     border-radius: 10px;
-    padding: 15px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    aspect-ratio: 1;
+    background: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.uploaded-files h3 {
-    font-size: 20px;
-    font-weight: bold;
-    color: #212121;
-    margin: 5px 0 0 0;
+#prescriptionExplainer .file-preview:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
-.file-item {
+#prescriptionExplainer .file-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+#prescriptionExplainer .pdf-preview {
+    width: 100%;
+    height: 100%;
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    margin-bottom: 8px;
-    padding: 8px 10px;
-    border-bottom: 1px solid #eeeeee;
+    justify-content: center;
+    background-color: #f8f9fa;
+    color: #448e94;
+    font-weight: bold;
+    font-size: 1.2rem;
 }
 
-.file-item:last-child {
-    border-bottom: none;
+#prescriptionExplainer .remove-file {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.9);
+    color: #e74c3c;
+    border: 1px solid #e74c3c;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    transition: all 0.2s ease;
+    z-index: 2;
 }
 
-.file-name {
-    font-size: 14px;
-    color: #333333;
-    font-weight: 500;
+#prescriptionExplainer .remove-file:hover {
+    background-color: #e74c3c;
+    color: white;
 }
 
-.file-size {
-    font-size: 12px;
-    color: #999999;
+#prescriptionExplainer .file-name {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 0.75rem;
+    background-color: rgba(255, 255, 255, 0.9);
+    color: #2C3E50;
+    font-size: 0.9rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    border-top: 1px solid rgba(68, 142, 148, 0.2);
+    backdrop-filter: blur(4px);
 }
 
 /* Button Styles */
@@ -169,7 +214,7 @@
 
 /* Responsive Styles */
 @media (max-width: 768px) {
-    .prescriptionExplainer {
+    #prescriptionExplainer {
         padding: 15px;
         margin: 20px auto;
     }
@@ -182,7 +227,7 @@
         font-size: 14px;
     }
 
-    .prescriptionExplainer .dropzone {
+    #prescriptionExplainer .dropzone {
         padding: 30px;
         font-size: 14px;
     }
@@ -191,9 +236,6 @@
         padding: 10px;
     }
 
-    .uploaded-files h3 {
-        font-size: 18px;
-    }
 
     .file-item {
         padding: 6px 8px;
@@ -227,7 +269,7 @@
 }
 
 @media (max-width: 480px) {
-    .prescriptionExplainer {
+    #prescriptionExplainer {
         padding: 10px;
         margin: 10px auto;
     }
@@ -236,21 +278,12 @@
         font-size: 24px;
     }
 
-    .subtitle {
-        font-size: 12px;
-    }
-
-    .prescriptionExplainer .dropzone {
+    #prescriptionExplainer .dropzone {
         padding: 20px;
-        font-size: 12px;
     }
 
     .uploaded-files {
         padding: 8px;
-    }
-
-    .uploaded-files h3 {
-        font-size: 16px;
     }
 
     .file-item {
@@ -263,11 +296,6 @@
 
     .file-size {
         font-size: 8px;
-    }
-
-    .primary-btn {
-        padding: 6px 12px;
-        font-size: 12px;
     }
 
     .prescription-details {
