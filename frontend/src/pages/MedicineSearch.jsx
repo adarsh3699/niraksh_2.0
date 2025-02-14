@@ -1,11 +1,15 @@
-import { useEffect, useState, useCallback, memo } from "react";
-import { useDropzone } from "react-dropzone";
-import captureIcon from "../assets/icons/capture.svg";
-import "../styles/medicineSearch.css";
+import { useEffect, useState, useCallback, memo } from 'react';
+import { useDropzone } from 'react-dropzone';
+import axios from 'axios';
+
+import captureIcon from '../assets/icons/capture.svg';
+import '../styles/medicineSearch.css';
 
 const MedicineSearch = () => {
-	const [searchQuery, setSearchQuery] = useState("");
+	const [searchQuery, setSearchQuery] = useState('');
 	const [uploadedFiles, setUploadedFiles] = useState([]);
+	const [selectedFile, setSelectedFile] = useState(null); // Store file but don't upload immediately
+	const [description, setDescription] = useState(''); // Store API response
 
 	// Initialize Dropzone
 	const { getRootProps, getInputProps, isDragActive, open } = useDropzone({
@@ -13,37 +17,62 @@ const MedicineSearch = () => {
 			const newFile = acceptedFiles[0];
 			const fileWithPreview = {
 				file: newFile,
-				preview: newFile.type.startsWith("image/") ? URL.createObjectURL(newFile) : null,
+				preview: newFile.type.startsWith('image/') ? URL.createObjectURL(newFile) : null,
 			};
-			setUploadedFiles([fileWithPreview]); // Replace the existing file with the new one
+			setUploadedFiles([fileWithPreview]); // Update UI with selected file
+			setSelectedFile(newFile); // Store file for later search
 		}, []),
 		accept: {
-			"image/*": [".jpeg", ".jpg", ".png"],
-			"application/pdf": [".pdf"],
+			'image/*': ['.jpeg', '.jpg', '.png'],
+			'application/pdf': ['.pdf'],
 		},
 		maxSize: 5242880, // 5MB
 		noClick: true, // Disable click upload globally
 		multiple: false, // Allow only one file at a time
 	});
 
-	const handleSearch = useCallback(
-		(e) => {
-			e.preventDefault();
-			console.log("Searching for:", searchQuery);
-		},
-		[searchQuery]
-	);
+	// Handle search when clicking the button
+	const handleSearch = async (e) => {
+		e.preventDefault();
 
-	const removeFile = useCallback((index) => {
-		setUploadedFiles((files) => {
-			const newFiles = [...files];
-			if (newFiles[index].preview) {
-				URL.revokeObjectURL(newFiles[index].preview);
+		if (!searchQuery && !selectedFile) {
+			alert('Please enter a medicine name or upload a file.');
+			return;
+		}
+
+		// If a file is uploaded, send it to the API
+		if (selectedFile) {
+			const formData = new FormData();
+			formData.append('file', selectedFile);
+
+			try {
+				const response = await axios.post('http://localhost:4000/medicine', formData, {
+					headers: { 'Content-Type': 'multipart/form-data' },
+				});
+				setDescription(response.data.description); // Set API response
+			} catch (error) {
+				console.error('Error uploading file:', error);
 			}
-			newFiles.splice(index, 1);
-			return newFiles;
-		});
-	}, []);
+		} else if (searchQuery) {
+			// If no file is uploaded, send the search query to the API
+			try {
+				const response = await axios.post('http://localhost:4000/medicine', { name: searchQuery });
+
+				setDescription(response.data.description); // Set API response
+			} catch (error) {
+				console.error('Error searching for medicine:', error);
+			}
+		}
+	};
+
+	const removeFile = useCallback(() => {
+		if (uploadedFiles.length > 0 && uploadedFiles[0].preview) {
+			URL.revokeObjectURL(uploadedFiles[0].preview);
+		}
+		setUploadedFiles([]);
+		setSelectedFile(null);
+		setDescription(''); // Clear description when file is removed
+	}, [uploadedFiles]);
 
 	useEffect(() => {
 		return () => {
@@ -83,7 +112,7 @@ const MedicineSearch = () => {
 				</form>
 
 				<div
-					className={`dropzone-content ${isDragActive ? "active" : ""}`}
+					className={`dropzone-content ${isDragActive ? 'active' : ''}`}
 					onClick={(e) => {
 						e.stopPropagation(); // Prevent triggering dropzone onClick
 						open(); // Open file dialog
@@ -109,15 +138,18 @@ const MedicineSearch = () => {
 										<span className="file-name">{file.file.name}</span>
 									</>
 								)}
-								<button
-									className="remove-file"
-									onClick={() => removeFile(index)}
-									aria-label="Remove file"
-								>
+								<button className="remove-file" onClick={removeFile} aria-label="Remove file">
 									×
 								</button>
 							</div>
 						))}
+					</div>
+				)}
+
+				{description && (
+					<div className="medicine-description">
+						<h3>Extracted Description:</h3>
+						<p>{description}</p>
 					</div>
 				)}
 			</div>

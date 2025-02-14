@@ -2,47 +2,76 @@ const express = require('express');
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 const fs = require('fs');
 const axios = require('axios');
+const multer = require("multer");
+const cors = require('cors');
+
+const allowlist = [
+	'https://comparison.bhemu.me/',
+	'http://localhost:3000/',
+	'http://localhost:3001/',
+	'https://price-comparison-web.vercel.app/',
+	'http://localhost:5173/'
+];
 
 
 
 const port = 4000;
 const app = express();
+
 app.use(express.json());
+app.use(cors(allowlist));
+
+// Configure multer for file uploads
+const upload = multer({ dest: "uploads/" });
+
+function fileToGenerativePart(path, mimeType) {
+	return {
+		inlineData: {
+			data: Buffer.from(fs.readFileSync(path)).toString("base64"),
+			mimeType,
+		},
+	};
+}
 
 const genAI = new GoogleGenerativeAI("AIzaSyC7jSBWnP8zMq3qgndwbTM4nMH3hUTCyWM");
 
 app.post('/medicine', async (req, res) => {
 	const name = req.body.name
 
-	const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+	if (name) {
+		const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
-	const prompt = "tell me about" + name;
-	const result = await model.generateContent(prompt);
-	const response = result.response
+		const prompt = "tell me about" + name;
+		const result = await model.generateContent(prompt);
+		const response = result.response
 
-	res.send(response.text());
-});
+		res.json({ description: result.response.text() });
+	} else {
+		try {
+			if (!req.file) {
+				return res.status(400).json({ error: "No file uploaded" });
+			}
 
-app.get('/describe', async (req, res) => {
-	const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+			const filePath = req.file.path;
+			const mimeType = req.file.mimetype;
 
-	function fileToGenerativePart(path, mimeType) {
-		return {
-			inlineData: {
-				data: Buffer.from(fs.readFileSync(path)).toString("base64"),
-				mimeType,
-			},
-		};
+			const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+			const prompt = "Describe about this medicine.";
+			const filePart = fileToGenerativePart(filePath, mimeType);
+
+			const result = await model.generateContent([prompt, filePart]);
+
+			res.json({ description: result.response.text() });
+
+			// Cleanup: Delete uploaded file after processing
+			fs.unlinkSync(filePath);
+		} catch (error) {
+			console.log(error);
+			res.status(500).json({ error: error.message });
+		}
 	}
-
-	const prompt = "Describe This Image";
-	const imagePart = fileToGenerativePart("/path/to/image.png", "image/png");
-
-	const result = await model.generateContent([prompt, imagePart]);
-
-	res.send(result.response.text());
-
 });
+
 
 
 app.get('/adarsh', async (req, res) => {
