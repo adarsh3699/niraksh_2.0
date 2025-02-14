@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback, memo } from 'react';
 import { useDropzone } from 'react-dropzone';
 import axios from 'axios';
+import ReactMarkdown from 'react-markdown';
 
 import captureIcon from '../assets/icons/capture.svg';
 import '../styles/medicineSearch.css';
@@ -145,35 +146,13 @@ const MedicineSearch = () => {
 						))}
 					</div>
 				)}
-
-				{description && (
-					<div className="medicine-description">
-						<h3>Extracted Description:</h3>
-						<p>{description}</p>
-					</div>
-				)}
 			</div>
-
-			<div className="medicine-card">
-				<h2 className="card-title">Medicine Details</h2>
-
-				<section className="card-section">
-					<h3>Uses</h3>
-					<p>This medicine is used to treat high blood pressure and heart-related issues.</p>
-				</section>
-
-				<section className="card-section">
-					<h3>Side Effects</h3>
-					<p>Common side effects include nausea, dizziness, and headache.</p>
-				</section>
-
-				<section className="card-section">
-					<h3>Dosage Information</h3>
-					<p>The recommended dosage is 50mg once daily.</p>
-				</section>
-			</div>
-
-			<button className="compare-button">Compare Prices with Other Websites</button>
+			{description && (
+				<div className="medicine-card">
+					<h2 className="card-title">Medicine Details</h2>
+					<ReactMarkdown className="card-content">{description}</ReactMarkdown>
+				</div>
+			)}
 		</div>
 	);
 };
