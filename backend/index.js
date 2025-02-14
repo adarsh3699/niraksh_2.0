@@ -35,7 +35,7 @@ function fileToGenerativePart(path, mimeType) {
 
 const genAI = new GoogleGenerativeAI("AIzaSyC7jSBWnP8zMq3qgndwbTM4nMH3hUTCyWM");
 
-app.post('/medicine', async (req, res) => {
+app.post('/medicine', upload.single('file'), async (req, res) => {
 	const name = req.body.name
 
 	if (name) {
@@ -43,6 +43,7 @@ app.post('/medicine', async (req, res) => {
 
 		const prompt = "tell me about" + name;
 		const result = await model.generateContent(prompt);
+
 
 		res.json({ description: result.response.text() });
 	} else {
