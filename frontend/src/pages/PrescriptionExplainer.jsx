@@ -1,52 +1,61 @@
-import { memo, useState, useCallback } from "react";
-import { useDropzone } from "react-dropzone";
-import "../styles/prescriptionExplainer.css";
+import { memo, useState, useCallback } from 'react';
+import { useDropzone } from 'react-dropzone';
+import ReactMarkdown from 'react-markdown';
+
+import { DNA } from 'react-loader-spinner';
+
+import '../styles/prescriptionExplainer.css';
 
 const PrescriptionExplainer = () => {
 	const [uploadedFiles, setUploadedFiles] = useState([]);
-	const [showResults, setShowResults] = useState(false);
 	const [uploaded, setUploaded] = useState(false);
+	const [loading, setLoading] = useState(false);
 
-	const dummyData = {
-		name: "Dolo 650 Tablet",
-		uses: [
-			"Relief of mild to moderate pain such as headaches, muscle pain, arthritis, backache, toothaches, and menstrual cramps.",
-			"Reduction of fever.",
-		],
-		sideEffects: ["Nausea", "Vomiting", "Stomach pain", "Allergic reactions (rare)"],
-		dosage: "As prescribed by the physician. Do not exceed 4 grams (4000 mg) per day.",
-		precautions: [
-			"Avoid consuming alcohol while taking this medication.",
-			"Consult a doctor if you have liver or kidney issues.",
-			"Not recommended for use in patients with severe liver impairment.",
-		],
-	};
+	const [description, setDescription] = useState('');
 
 	// Memoize the onDrop handler to avoid re-creation on every render
 	// Handle file drop
 	const onDrop = useCallback((acceptedFiles) => {
 		const newFiles = acceptedFiles.map((file) => ({
 			file,
-			preview: file.type.startsWith("image/") ? URL.createObjectURL(file) : null,
+			preview: file.type.startsWith('image/') ? URL.createObjectURL(file) : null,
 		}));
 		setUploadedFiles((prev) => [...prev, ...newFiles]);
 	}, []);
 
 	// Memoize the handleUpload function
-	const handleUpload = useCallback(() => {
-		setUploaded(true);
-		alert("Files uploaded successfully!");
-	}, []);
+	const handleSearch = useCallback(async () => {
+		if (uploadedFiles.length === 0) return;
+
+		const formData = new FormData();
+		uploadedFiles.forEach((fileObj) => formData.append('files', fileObj.file));
+
+		try {
+			setLoading(true);
+			const response = await fetch('http://localhost:4000/prescription', {
+				method: 'POST',
+				body: formData,
+			});
+
+			if (!response.ok) {
+				throw new Error('Failed to upload prescription.');
+			}
+			const data = await response.json();
+			setDescription(data.description); // Update UI with API response
+			setUploaded(true);
+		} catch (error) {
+			console.error('Upload Error:', error);
+			alert('Error uploading files. Please try again.');
+		} finally {
+			setLoading(false);
+		}
+	}, [uploadedFiles]);
 
 	// Memoize the handleReset function
 	const handleReset = useCallback(() => {
 		setUploadedFiles([]);
-		setShowResults(false);
+		setDescription('');
 		setUploaded(false);
-	}, []);
-
-	const handleSearch = useCallback(() => {
-		setShowResults(true);
 	}, []);
 
 	const removeFile = (index) => {
@@ -64,9 +73,9 @@ const PrescriptionExplainer = () => {
 	const { getRootProps, getInputProps, open, isDragActive } = useDropzone({
 		onDrop,
 		accept: {
-			"image/jpeg": [],
-			"image/png": [],
-			"application/pdf": [],
+			'image/jpeg': [],
+			'image/png': [],
+			'application/pdf': [],
 		},
 		multiple: true,
 		noClick: true, // Disable click upload globally
@@ -79,7 +88,7 @@ const PrescriptionExplainer = () => {
 
 			{/* Dropzone */}
 			<div
-				className={`dropzone ${isDragActive ? "active" : ""}`}
+				className={`dropzone ${isDragActive ? 'active' : ''}`}
 				onClick={(e) => {
 					e.stopPropagation(); // Prevent triggering dropzone onClick
 					open(); // Open file dialog
@@ -118,48 +127,29 @@ const PrescriptionExplainer = () => {
 				) : (
 					<button
 						className="primary-btn upload-btn"
-						onClick={handleUpload}
-						disabled={uploadedFiles.length === 0}
+						onClick={handleSearch}
+						disabled={uploadedFiles.length === 0 || loading}
 					>
-						Upload
+						Search
 					</button>
 				)}
-				<button className="primary-btn search-btn" onClick={handleSearch} disabled={!uploaded}>
-					Search
-				</button>
+			</div>
+
+			<div className="loading-spinner" style={{ textAlign: 'center' }}>
+				<DNA
+					visible={loading}
+					height="180"
+					width="180"
+					ariaLabel="dna-loading"
+					wrapperStyle={{}}
+					wrapperClass="dna-wrapper"
+				/>
 			</div>
 
 			{/* Prescription Details */}
-			{showResults && (
+			{description && (
 				<div className="prescription-details">
-					<h3>{dummyData.name}</h3>
-					<p>
-						<strong>Uses:</strong>
-					</p>
-					<ul>
-						{dummyData.uses.map((use, index) => (
-							<li key={index}>{use}</li>
-						))}
-					</ul>
-					<p>
-						<strong>Side Effects:</strong>
-					</p>
-					<ul>
-						{dummyData.sideEffects.map((sideEffect, index) => (
-							<li key={index}>{sideEffect}</li>
-						))}
-					</ul>
-					<p>
-						<strong>Dosage:</strong> {dummyData.dosage}
-					</p>
-					<p>
-						<strong>Precautions:</strong>
-					</p>
-					<ul>
-						{dummyData.precautions.map((precaution, index) => (
-							<li key={index}>{precaution}</li>
-						))}
-					</ul>
+					<ReactMarkdown className="card-content">{description}</ReactMarkdown>
 				</div>
 			)}
 		</div>

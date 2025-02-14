@@ -73,6 +73,33 @@ app.post('/medicine', upload.single('file'), async (req, res) => {
 });
 
 
+app.post('/prescription', upload.array('files', 5), async (req, res) => {
+	try {
+		if (!req.files || req.files.length === 0) {
+			return res.status(400).json({ error: "No files uploaded" });
+		}
+
+		const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+		const prompt = "Describe the prescription in the uploaded images.";
+
+		// Convert files to generative parts
+		const imageParts = req.files.map(file => fileToGenerativePart(file.path, file.mimetype));
+
+		// Generate content with multiple files
+		const result = await model.generateContent([prompt, ...imageParts]);
+		const response = await result.response;
+		const text = response.text();
+
+		// Cleanup: Delete uploaded files after processing
+		req.files.forEach(file => fs.unlinkSync(file.path));
+
+		res.json({ description: text });
+
+	} catch (error) {
+		console.error(error);
+		res.status(500).json({ error: error.message });
+	}
+});
 
 app.get('/adarsh', async (req, res) => {
 	// import { GoogleGenerativeAI } from "@google/generative-ai";
