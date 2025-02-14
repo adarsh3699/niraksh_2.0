@@ -3,11 +3,13 @@ import { useDropzone } from 'react-dropzone';
 import axios from 'axios';
 import ReactMarkdown from 'react-markdown';
 
+import { DNA } from 'react-loader-spinner';
 import captureIcon from '../assets/icons/capture.svg';
 import '../styles/medicineSearch.css';
 
 const MedicineSearch = () => {
 	const [searchQuery, setSearchQuery] = useState('');
+	const [loading, setLoading] = useState(false);
 	const [uploadedFiles, setUploadedFiles] = useState([]);
 	const [selectedFile, setSelectedFile] = useState(null); // Store file but don't upload immediately
 	const [description, setDescription] = useState(''); // Store API response
@@ -41,6 +43,7 @@ const MedicineSearch = () => {
 			return;
 		}
 
+		setLoading(true);
 		// If a file is uploaded, send it to the API
 		if (selectedFile) {
 			const formData = new FormData();
@@ -53,6 +56,8 @@ const MedicineSearch = () => {
 				setDescription(response.data.description); // Set API response
 			} catch (error) {
 				console.error('Error uploading file:', error);
+			} finally {
+				setLoading(false);
 			}
 		} else if (searchQuery) {
 			// If no file is uploaded, send the search query to the API
@@ -62,6 +67,8 @@ const MedicineSearch = () => {
 				setDescription(response.data.description); // Set API response
 			} catch (error) {
 				console.error('Error searching for medicine:', error);
+			} finally {
+				setLoading(false);
 			}
 		}
 	};
@@ -107,7 +114,11 @@ const MedicineSearch = () => {
 							}}
 						/>
 					</div>
-					<button type="submit" className="searchBtn">
+					<button
+						type="submit"
+						className={loading ? 'searchBtn searchBtnLoading' : 'searchBtn'}
+						disabled={loading}
+					>
 						Search
 					</button>
 				</form>
@@ -146,6 +157,16 @@ const MedicineSearch = () => {
 						))}
 					</div>
 				)}
+			</div>
+			<div className="loading-spinner" style={{ textAlign: 'center' }}>
+				<DNA
+					visible={loading}
+					height="180"
+					width="180"
+					ariaLabel="dna-loading"
+					wrapperStyle={{}}
+					wrapperClass="dna-wrapper"
+				/>
 			</div>
 			{description && (
 				<div className="medicine-card">

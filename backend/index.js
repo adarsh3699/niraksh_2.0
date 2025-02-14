@@ -43,7 +43,6 @@ app.post('/medicine', async (req, res) => {
 
 		const prompt = "tell me about" + name;
 		const result = await model.generateContent(prompt);
-		const response = result.response
 
 		res.json({ description: result.response.text() });
 	} else {
