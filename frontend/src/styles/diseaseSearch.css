@@ -6,24 +6,24 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh;
+    min-height: 20vh;
     /* min-width: 50%; */
 }
 
-.container {
+#DiseaseSearch .container {
     width: 100%;
-    max-width: 50%;
+    max-width: 60%;
     padding: 20px;
 }
 
-.chat-card {
+#DiseaseSearch .chat-card {
     /* background-color: #ffffff; */
     /* border-radius: 12px; */
     /* box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1); */
     overflow: hidden;
 }
 
-.chat-header {
+#DiseaseSearch .chat-header {
     background-color: rgb(223, 137, 52);
     border-radius: 12px;
 
@@ -32,12 +32,12 @@
     text-align: center;
 }
 
-.chat-header h1 {
+#DiseaseSearch .chat-header h1 {
     margin: 0;
     font-size: 28px;
 }
 
-.chat-header p {
+#DiseaseSearch .chat-header p {
     margin: 10px 0 0;
     font-size: 16px;
 }

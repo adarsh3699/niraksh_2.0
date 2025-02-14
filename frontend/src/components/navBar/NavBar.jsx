@@ -28,10 +28,10 @@ const menuItems = [
 		name: "Prescription Explainer",
 		path: "/prescription_Explainer",
 	},
-	// {
-	// name: "Price Comp.",
-	// path: "/price-comparison",
-	// },
+	{
+		name: "Drug Drug Interaction",
+		path: "/drug_drug_interaction",
+	},
 	{
 		name: "Diseases",
 		path: "/diseases",

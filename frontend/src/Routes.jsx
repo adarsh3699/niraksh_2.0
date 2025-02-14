@@ -9,6 +9,7 @@ const HomePage = lazy(() => import("./pages/HomePage"));
 const PrescriptionExplainer = lazy(() => import("./pages/PrescriptionExplainer"));
 const MedicineSearch = lazy(() => import("./pages/MedicineSearch"));
 const DiseaseSearch = lazy(() => import("./pages/DiseaseSearch"));
+const DrugDrugInteraction = lazy(() => import("./pages/DrugDrugInteraction"));
 const HospitalLogin = lazy(() => import("./pages/HospitalLogin"));
 const HospitalRegPage = lazy(() => import("./pages/HospitalRegPage"));
 const HospitalDashboard = lazy(() => import("./pages/HospitalDashboard"));
@@ -76,6 +77,17 @@ function Routes() {
 						<>
 							<NavBar />
 							<MedicineSearch />
+						</>
+					}
+				/>
+
+				<Route
+					exact
+					path="/drug_drug_interaction"
+					element={
+						<>
+							<NavBar />
+							<DrugDrugInteraction />
 						</>
 					}
 				/>
