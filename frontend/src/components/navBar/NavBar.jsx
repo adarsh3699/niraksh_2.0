@@ -17,6 +17,10 @@ import menuIcon from "../../assets/icons/menu.svg";
 
 const menuItems = [
 	{
+		name: "Home",
+		path: "/",
+	},
+	{
 		name: "Medicine",
 		path: "/medicine_search",
 	},
@@ -24,10 +28,10 @@ const menuItems = [
 		name: "Prescription Explainer",
 		path: "/prescription_Explainer",
 	},
-	{
-		name: "Price Comp.",
-		path: "/price-comparison",
-	},
+	// {
+	// name: "Price Comp.",
+	// path: "/price-comparison",
+	// },
 	{
 		name: "Diseases",
 		path: "/diseases",
@@ -117,13 +121,7 @@ function MobileNavBar({ navigate, menuName, isMenuOpen, setIsMenuOpen }) {
 				</NavLink>
 			</div>
 			<MenuBar
-				menuItems={[
-					{
-						name: "Home",
-						path: "/",
-					},
-					...menuItems,
-				]}
+				menuItems={menuItems}
 				navigate={navigate}
 				menuName={menuName}
 				isMenuOpen={isMenuOpen}

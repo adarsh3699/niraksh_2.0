@@ -58,6 +58,8 @@
     border-radius: 10px;
     padding: 0 1rem;
     margin: 1rem 0;
+    color: #448e94;
+
     text-align: center;
     cursor: pointer;
     transition: all 0.2s ease;
@@ -152,7 +154,7 @@
     backdrop-filter: blur(4px);
 }
 
-.medicine-card {
+#medicineSearch .medicine-card {
     background-color: #F5E6D3;
     border-radius: 12px;
     padding: 2rem;

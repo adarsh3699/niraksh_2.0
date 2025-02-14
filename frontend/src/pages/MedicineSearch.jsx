@@ -9,14 +9,14 @@ const MedicineSearch = () => {
 
 	// Initialize Dropzone
 	const { getRootProps, getInputProps, isDragActive, open } = useDropzone({
-		onDrop: (acceptedFiles) => {
+		onDrop: useCallback((acceptedFiles) => {
 			const newFile = acceptedFiles[0];
 			const fileWithPreview = {
 				file: newFile,
 				preview: newFile.type.startsWith("image/") ? URL.createObjectURL(newFile) : null,
 			};
 			setUploadedFiles([fileWithPreview]); // Replace the existing file with the new one
-		},
+		}, []),
 		accept: {
 			"image/*": [".jpeg", ".jpg", ".png"],
 			"application/pdf": [".pdf"],
@@ -26,12 +26,15 @@ const MedicineSearch = () => {
 		multiple: false, // Allow only one file at a time
 	});
 
-	const handleSearch = (e) => {
-		e.preventDefault();
-		console.log("Searching for:", searchQuery);
-	};
+	const handleSearch = useCallback(
+		(e) => {
+			e.preventDefault();
+			console.log("Searching for:", searchQuery);
+		},
+		[searchQuery]
+	);
 
-	const removeFile = (index) => {
+	const removeFile = useCallback((index) => {
 		setUploadedFiles((files) => {
 			const newFiles = [...files];
 			if (newFiles[index].preview) {
@@ -40,7 +43,7 @@ const MedicineSearch = () => {
 			newFiles.splice(index, 1);
 			return newFiles;
 		});
-	};
+	}, []);
 
 	useEffect(() => {
 		return () => {
