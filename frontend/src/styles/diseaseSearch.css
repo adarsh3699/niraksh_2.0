@@ -1,0 +1,173 @@
+#DiseaseSearch {
+    font-family: "Arial", sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f0f0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    /* min-width: 50%; */
+}
+
+.container {
+    width: 100%;
+    max-width: 50%;
+    padding: 20px;
+}
+
+.chat-card {
+    /* background-color: #ffffff; */
+    /* border-radius: 12px; */
+    /* box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1); */
+    overflow: hidden;
+}
+
+.chat-header {
+    background-color: rgb(223, 137, 52);
+    border-radius: 12px;
+
+    color: #ffffff;
+    padding: 20px;
+    text-align: center;
+}
+
+.chat-header h1 {
+    margin: 0;
+    font-size: 28px;
+}
+
+.chat-header p {
+    margin: 10px 0 0;
+    font-size: 16px;
+}
+
+#DiseaseSearch .chat-content {
+    height: 400px;
+    overflow-y: auto;
+    padding: 20px;
+}
+
+#DiseaseSearch .message {
+    margin-bottom: 15px;
+    padding: 12px;
+    border-radius: 18px;
+    max-width: 80%;
+    animation: fadeIn 0.5s;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+#DiseaseSearch .message.system {
+    background-color: #f1f1f1;
+    align-self: flex-start;
+    border-bottom-left-radius: 4px;
+    background-color: #ffffff;
+}
+
+#DiseaseSearch .message.user {
+    background-color: rgb(223, 137, 52);
+    color: #ffffff;
+    align-self: flex-end;
+    margin-left: auto;
+    border-bottom-right-radius: 4px;
+}
+
+#DiseaseSearch .chat-footer {
+    padding: 20px;
+    border-top: 1px solid #e0e0e0;
+}
+
+#DiseaseSearch .chat-form {
+    display: flex;
+    gap: 10px;
+}
+
+#DiseaseSearch .chat-input {
+    flex-grow: 1;
+    padding: 12px;
+    border: 2px solid #e0e0e0;
+
+    border-radius: 24px;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+}
+
+#DiseaseSearch .chat-input:focus {
+    outline: none;
+    border-color: rgb(223, 137, 52);
+}
+
+#DiseaseSearch .chat-button {
+    background-color: rgb(223, 137, 52);
+    color: #ffffff;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 24px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+#DiseaseSearch .chat-button:hover {
+    background-color: rgb(223, 137, 52);
+}
+
+#DiseaseSearch .quick-actions {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 10px 20px 20px;
+}
+
+#DiseaseSearch .quick-action-btn {
+    background-color: #f1f1f1;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+#DiseaseSearch .quick-action-btn:hover {
+    background-color: #e0e0e0;
+}
+
+@media (max-width: 480px) {
+    #DiseaseSearch .container {
+        padding: 10px;
+    }
+
+    #DiseaseSearch .chat-header {
+        padding: 15px;
+    }
+
+    #DiseaseSearch .chat-header h1 {
+        font-size: 24px;
+    }
+
+    #DiseaseSearch .chat-content {
+        height: 350px;
+        padding: 15px;
+    }
+
+    #DiseaseSearch .chat-footer {
+        padding: 15px;
+    }
+
+    #DiseaseSearch .quick-actions {
+        padding: 10px 15px 15px;
+    }
+}
