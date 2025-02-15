@@ -36,6 +36,10 @@ const menuItems = [
 		name: 'Diseases',
 		path: '/diseases',
 	},
+	{
+		name: 'Doctor Suggest',
+		path: '/doctor_suggest',
+	},
 ];
 
 const NabBar = () => {
