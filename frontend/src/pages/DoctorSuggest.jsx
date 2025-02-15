@@ -58,7 +58,8 @@ const DoctorFinder = () => {
 	};
 
 	return (
-		<div className={darkMode ? 'dark-mode' : ''}>
+
+		<div id='DiseaseSearch' className={darkMode ? 'dark-mode' : ''}>
 			<div className="toggle-switch" onClick={() => setDarkMode(!darkMode)}>
 				{darkMode ? '☀️' : '🌙'}
 			</div>

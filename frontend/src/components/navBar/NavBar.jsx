@@ -67,7 +67,7 @@ const NabBar = () => {
 	// };
 
 	return (
-		<nav>
+		<nav id='navbar'>
 			{userDeviceType().mobile ? (
 				<MobileNavBar
 					navigate={navigate}

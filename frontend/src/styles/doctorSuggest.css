@@ -1,4 +1,4 @@
-body {
+#doctorSuggest body {
     font-family: 'Poppins', sans-serif;
     text-align: center;
     margin: 0;
@@ -8,12 +8,12 @@ body {
 }
 
 /* Dark Mode */
-body.dark-mode {
+#doctorSuggest body.dark-mode {
     background-color: #1e1e2e;
     color: #fff;
 }
 
-.container {
+#doctorSuggest .container {
     max-width: 600px;
     margin: 50px auto;
     padding: 20px;
@@ -22,21 +22,21 @@ body.dark-mode {
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-body.dark-mode .container {
+#doctorSuggest body.dark-mode .container {
     background: #2a2a3b;
     box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.1);
 }
 
-h2 {
+#doctorSuggest h2 {
     color: rgb(223, 137, 52);
 }
 
-body.dark-mode h2 {
+#doctorSuggest body.dark-mode h2 {
     color: #63b3ed;
 }
 
 /* Inputs & Buttons */
-select,
+#doctorSuggest select,
 input {
     width: 90%;
     padding: 12px;
@@ -48,19 +48,19 @@ input {
     transition: 0.3s;
 }
 
-body.dark-mode select,
+#doctorSuggest body.dark-mode select,
 body.dark-mode input {
     border-color: #63b3ed;
     background: #333;
     color: white;
 }
 
-select:focus,
+#doctorSuggest select:focus,
 input:focus {
     border-color: rgb(223, 137, 52);
 }
 
-button {
+#doctorSuggest button {
     width: 95%;
     padding: 12px;
     background: #f3c690;
@@ -72,12 +72,12 @@ button {
     transition: 0.3s;
 }
 
-button:hover {
+#doctorSuggest button:hover {
     background: rgb(223, 137, 52);
 }
 
 /* Dark Mode Toggle */
-.toggle-switch {
+#doctorSuggest .toggle-switch {
     position: absolute;
     top: 20px;
     right: 20px;
@@ -86,7 +86,7 @@ button:hover {
 }
 
 /* Doctor Card Grid */
-.doctor-grid {
+#doctorSuggest .doctor-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 20px;
@@ -94,7 +94,7 @@ button:hover {
     margin-top: 20px;
 }
 
-.doctor-card {
+#doctorSuggest .doctor-card {
     background: #ffffff;
     padding: 15px;
     border-radius: 10px;
@@ -103,24 +103,24 @@ button:hover {
     transition: 0.3s;
 }
 
-body.dark-mode .doctor-card {
+#doctorSuggest body.dark-mode .doctor-card {
     background: #333;
     color: white;
 }
 
-.doctor-card:hover {
+#doctorSuggest .doctor-card:hover {
     transform: translateY(-5px);
 }
 
-.doctor-card p {
+#doctorSuggest .doctor-card p {
     margin: 5px 0;
 }
 
-.doctor-card strong {
+#doctorSuggest .doctor-card strong {
     color: rgb(223, 137, 52);
 }
 
-body.dark-mode .doctor-card strong {
+#doctorSuggest body.dark-mode .doctor-card strong {
     color: #63b3ed;
 }
 

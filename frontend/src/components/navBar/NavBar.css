@@ -1,4 +1,4 @@
-nav {
+#navbar nav {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
@@ -11,12 +11,12 @@ nav {
 	z-index: 1000;
 }
 
-.nav-logo {
+#navbar .nav-logo {
 	display: flex;
 	align-items: center;
 }
 
-.nav-links a:hover {
+#navbar .nav-links a:hover {
 	/* color: white; */
 	transition-duration: .3s;
 	background-color: bisque;
@@ -27,59 +27,59 @@ nav {
 	/* width: 100%; */
 }
 
-.nav-logo img {
+#navbar .nav-logo img {
 	width: 50px;
 	height: 50px;
 }
 
-.nav-icon img {
+#navbar .nav-icon img {
 	width: 30px;
 	height: 30px;
 }
 
-.nav-links {
+#navbar .nav-links {
 	display: flex;
 	align-items: center;
 	flex: 1;
 	gap: 5%;
 }
 
-.nav-links a {
+#navbar .nav-links a {
 	text-decoration: none;
 	color: #333;
 	/* font-weight: 500; */
 }
 
-.nav_login {
+#navbar .nav_login {
 	border: 1px solid #333;
 	padding: 7px 15px;
 	border-radius: 10px;
 	background-color: unset;
 }
 
-.nav-links_2 {
+#navbar .nav-links_2 {
 	display: flex;
 	align-items: center;
 	gap: 20px;
 }
 
-.phone-nav-links {
+#navbar .phone-nav-links {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
 	flex: 1;
 }
 
-.phoneBrandLogo {
+#navbar .phoneBrandLogo {
 	display: flex;
 	align-items: center;
 }
 
-.phoneBrandLogo img {
+#navbar.phoneBrandLogo img {
 	margin-right: 10px;
 }
 
-.phone-nav-links a {
+#navbar .phone-nav-links a {
 	text-decoration: none;
 	color: #448e94;
 	font-weight: bold;
