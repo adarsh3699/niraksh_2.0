@@ -1,13 +1,4 @@
-* {
-    box-sizing: border-box;
-}
-
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f7f7f7;
-}
-
-header {
+#drugDrugInteraction header {
     background-color: #fff;
     padding: 10px 20px;
     display: flex;
@@ -15,28 +6,28 @@ header {
     justify-content: space-between;
 }
 
-.logo {
+#drugDrugInteraction .logo {
     display: flex;
     align-items: center;
 }
 
-.logo img {
+#drugDrugInteraction .logo img {
     height: 40px;
     margin-right: 10px;
 }
 
-nav ul {
+#drugDrugInteraction nav ul {
     list-style: none;
     display: flex;
     gap: 20px;
 }
 
-nav a {
+#drugDrugInteraction nav a {
     text-decoration: none;
     color: #333;
 }
 
-.container {
+#drugDrugInteraction .container {
     max-width: 600px;
     margin: 50px auto;
     padding: 20px;
@@ -46,14 +37,14 @@ nav a {
     text-align: center;
 }
 
-h1 {
+#drugDrugInteraction h1 {
     margin-bottom: 20px;
     font-size: 24px;
     font-weight: bold;
 }
 
-input[type="text"],
-input[type="file"] {
+#drugDrugInteraction input[type="text"],
+#drugDrugInteraction input[type="file"] {
     width: calc(100% - 20px);
     padding: 10px;
     margin: 10px 0;
@@ -61,7 +52,7 @@ input[type="file"] {
     border-radius: 5px;
 }
 
-button {
+#drugDrugInteraction button {
     padding: 10px 20px;
     background-color: #ff8c00;
     border: none;
@@ -71,6 +62,6 @@ button {
     margin: 10px 5px;
 }
 
-button:hover {
+#drugDrugInteraction button:hover {
     background-color: #ff7000;
 }
