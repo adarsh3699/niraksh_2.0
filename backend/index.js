@@ -69,7 +69,7 @@ app.post('/medicine', upload.single('file'), async (req, res) => {
             const mimeType = req.file.mimetype;
 
             const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-            const prompt = "Describe about this medicine.";
+            const prompt = "Describe about this medicine. format must be write the only name of the medicine in first line like '_name_' and then tell me all about that medicine";
             const filePart = fileToGenerativePart(filePath, mimeType);
 
             const result = await model.generateContent([prompt, filePart]);
@@ -127,6 +127,38 @@ app.post('/drug-interaction', upload.single('file'), async (req, res) => {
     res.json({ description: result.response.text() });
 
 });
+
+
+app.post('/disease', async (req, res) => {
+    const history = req.body.history
+    const msg = req.body.msg
+
+    try {
+
+        const chat = model.startChat({
+            history: [
+                {
+                    role: "user",
+                    parts: [{ text: "Only talk about diseases and medicines" }],
+                },
+                {
+                    role: "model",
+                    parts: [{ text: "Great Sure!" }],
+                },
+
+                ...history
+            ],
+        });
+
+
+        let result = await chat.sendMessage(msg);
+        res.json({ description: result.text });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
 
 
 

@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import { apiCall, extractEncryptedToken } from '../utils';
 import ShowMsg from '../components/showMsg/ShowMsg';
@@ -7,6 +7,13 @@ import '../styles/userLogin.css';
 
 const UserLogin = () => {
 	const [msg, setMsg] = useState({ text: '', type: '' });
+
+	useEffect(() => {
+		const user_details = localStorage.getItem('user_details');
+		if (user_details) {
+			document.location.href = '/';
+		}
+	}, []);
 
 	const handleMsgShown = useCallback((msgText, type) => {
 		if (msgText) {

@@ -7,7 +7,7 @@ import captureIcon from '../assets/icons/capture.svg';
 import '../styles/drugDrugInteraction.css';
 
 const DrugDrugInteraction = () => {
-	const [medications, setMedications] = useState(['', '']); // Start with 2 input fields
+	const [medications, setMedications] = useState(JSON.parse(localStorage.getItem('medicine')) || ['', '']); // Start with 2 input fields
 	const [loading, setLoading] = useState(false);
 	const [description, setDescription] = useState('');
 

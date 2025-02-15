@@ -10,10 +10,10 @@ const PrescriptionExplainer = lazy(() => import('./pages/PrescriptionExplainer')
 const MedicineSearch = lazy(() => import('./pages/MedicineSearch'));
 const DiseaseSearch = lazy(() => import('./pages/DiseaseSearch'));
 const DrugDrugInteraction = lazy(() => import('./pages/DrugDrugInteraction'));
-const PatientPortal = lazy(() => import('./pages/PatientPortal'));
 const UserLogin = lazy(() => import('./pages/UserLogin'));
 const UserSignup = lazy(() => import('./pages/UserSignup'));
 const UserForgetPass = lazy(() => import('./pages/UserForgetPass'));
+const DoctorSuggest = lazy(() => import('./pages/DoctorSuggest'));
 const AboutUs = lazy(() => import('./pages/AboutUs'));
 
 function Routes() {
@@ -98,11 +98,11 @@ function Routes() {
 
 				<Route
 					exact
-					path="/user-dashboard"
+					path="/doctor_suggest"
 					element={
 						<>
 							<NavBar />
-							<PatientPortal />
+							<DoctorSuggest />
 						</>
 					}
 				/>
