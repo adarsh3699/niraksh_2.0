@@ -1,17 +1,17 @@
-import { memo } from "react";
-import "./doMore.css";
+import { memo } from 'react';
+import './doMore.css';
 
-import bookBedsImg from "../../../assets/bookBeds.avif";
-import prescription from "../../../assets/prescription.webp";
+import bookBedsImg from '../../../assets/bookBeds.avif';
+import prescription from '../../../assets/prescription.webp';
 
 function DoMore() {
 	const handleSearch = () => {
-		console.log("Searching for diseases...");
+		console.log('Searching for diseases...');
 		// Add search functionality here
 	};
 
 	const handleBooking = () => {
-		console.log("Opening booking form...");
+		console.log('Opening booking form...');
 		// Add booking functionality here
 	};
 
@@ -39,8 +39,8 @@ function DoMore() {
 				<div className="search-card">
 					<img src={bookBedsImg} alt="Hospital bed" loading="lazy" className="card-background" />
 					<div className="card-overlay">
-						<h2 className="card-title">Book Hospital Beds</h2>
-						<p className="card-subtitle">Find and book hospital beds</p>
+						<h2 className="card-title">Drug Drug Interaction</h2>
+						<p className="card-subtitle">Find and Drug Interaction between multi Drug</p>
 						<button className="card-button" onClick={handleBooking}>
 							Book Now
 						</button>
