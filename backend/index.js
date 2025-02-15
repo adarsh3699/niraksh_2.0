@@ -134,6 +134,7 @@ app.post('/disease', async (req, res) => {
     const msg = req.body.msg
 
     try {
+        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
         const chat = model.startChat({
             history: [
