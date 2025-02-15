@@ -9,6 +9,7 @@ const multer = require("multer");
 const { getMongoDb } = require("./utils");
 
 const UserReg = require("./routes/UserReg");
+const { log } = require("console");
 
 
 const allowlist = [
@@ -133,6 +134,8 @@ app.post('/disease', async (req, res) => {
     const history = req.body.history
     const msg = req.body.msg
 
+
+
     try {
         const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
@@ -140,20 +143,22 @@ app.post('/disease', async (req, res) => {
             history: [
                 {
                     role: "user",
-                    parts: [{ text: "Only talk about diseases and medicines" }],
+                    parts: [{ text: "Hello" }],
                 },
                 {
                     role: "model",
-                    parts: [{ text: "Great Sure!" }],
+                    parts: [{ text: "Great to meet you. What would you like to know?" }],
                 },
-
-                ...history
             ],
         });
 
 
+
         let result = await chat.sendMessage(msg);
-        res.json({ description: result.text });
+
+        console.log(result.response.text());
+
+        res.json({ description: result.response.text() });
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: error.message });
