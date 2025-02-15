@@ -13,6 +13,7 @@ const DrugDrugInteraction = lazy(() => import('./pages/DrugDrugInteraction'));
 const UserLogin = lazy(() => import('./pages/UserLogin'));
 const UserSignup = lazy(() => import('./pages/UserSignup'));
 const UserForgetPass = lazy(() => import('./pages/UserForgetPass'));
+const DoctorSuggest = lazy(() => import('./pages/DoctorSuggest'));
 const AboutUs = lazy(() => import('./pages/AboutUs'));
 
 function Routes() {
@@ -91,6 +92,17 @@ function Routes() {
 						<>
 							<NavBar />
 							<DiseaseSearch />
+						</>
+					}
+				/>
+
+				<Route
+					exact
+					path="/doctor_suggest"
+					element={
+						<>
+							<NavBar />
+							<DoctorSuggest />
 						</>
 					}
 				/>
