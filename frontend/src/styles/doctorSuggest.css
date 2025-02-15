@@ -37,7 +37,7 @@
 
 /* Inputs & Buttons */
 #doctorSuggest select,
-input {
+#doctorSuggest input {
     width: 90%;
     padding: 12px;
     margin: 10px 0;
@@ -49,14 +49,14 @@ input {
 }
 
 #doctorSuggest body.dark-mode select,
-body.dark-mode input {
+#doctorSuggest body.dark-mode input {
     border-color: #63b3ed;
     background: #333;
     color: white;
 }
 
 #doctorSuggest select:focus,
-input:focus {
+#doctorSuggest input:focus {
     border-color: rgb(223, 137, 52);
 }
 
@@ -125,7 +125,7 @@ input:focus {
 }
 
 @media (max-width: 768px) {
-    .container {
+    #doctorSuggest .container {
         width: 90%;
     }
 }
