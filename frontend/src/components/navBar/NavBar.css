@@ -17,8 +17,14 @@ nav {
 }
 
 .nav-links a:hover {
-	color: #ff8c00;
+	/* color: white; */
 	transition-duration: .3s;
+	background-color: bisque;
+	border: #f3c690;
+	color: black;
+	border-radius: 30px;
+	padding: 10px;
+	/* width: 100%; */
 }
 
 .nav-logo img {
