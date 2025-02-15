@@ -54,7 +54,7 @@ app.post('/medicine', upload.single('file'), async (req, res) => {
     if (name) {
         const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
-        const prompt = "tell me about" + name;
+        const prompt = "tell me about this medicine named" + name;
         const result = await model.generateContent(prompt);
 
 
