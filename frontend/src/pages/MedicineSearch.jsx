@@ -12,7 +12,7 @@ const MedicineSearch = () => {
 	const [loading, setLoading] = useState(false);
 	const [uploadedFiles, setUploadedFiles] = useState([]);
 	const [selectedFile, setSelectedFile] = useState(null); // Store file but don't upload immediately
-	const [description, setDescription] = useState(''); // Store API response
+	const [description, setDescription] = useState(''); // Store API responsed
 
 	// Initialize Dropzone
 	const { getRootProps, getInputProps, isDragActive, open } = useDropzone({
@@ -54,6 +54,16 @@ const MedicineSearch = () => {
 					headers: { 'Content-Type': 'multipart/form-data' },
 				});
 				setDescription(response.data.description); // Set API response
+
+				const matches = response.data?.description.match(/_(.*?)_/g);
+				const extractedWords = matches ? matches.map((word) => word.replace(/_/g, '')) : [];
+
+				const localMeds = localStorage.getItem('medicine');
+
+				console.log('localMeds', localMeds);
+				console.log('extractedWords', extractedWords);
+
+				localStorage.setItem('medicine', JSON.stringify([...extractedWords]));
 			} catch (error) {
 				console.error('Error uploading file:', error);
 			} finally {
@@ -65,6 +75,15 @@ const MedicineSearch = () => {
 				const response = await axios.post('http://localhost:4000/medicine', { name: searchQuery });
 
 				setDescription(response.data.description); // Set API response
+
+				const localMeds = JSON.parse(localStorage.getItem('medicine')) || [];
+
+				console.log(localMeds);
+
+				if (!localMeds.includes(searchQuery)) {
+					localMeds.push(searchQuery);
+					localStorage.setItem('medicine', JSON.stringify(localMeds));
+				}
 			} catch (error) {
 				console.error('Error searching for medicine:', error);
 			} finally {
