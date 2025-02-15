@@ -1,21 +1,21 @@
-import React, { useCallback, useState } from "react";
-import { NavLink } from "react-router-dom";
-import { apiCall, extractEncryptedToken } from "../utils";
-import ShowMsg from "../components/showMsg/ShowMsg";
+import React, { useCallback, useState } from 'react';
+import { NavLink } from 'react-router-dom';
+import { apiCall, extractEncryptedToken } from '../utils';
+import ShowMsg from '../components/showMsg/ShowMsg';
 
-import "../styles/userLogin.css";
+import '../styles/userLogin.css';
 
 const UserLogin = () => {
-	const [msg, setMsg] = useState({ text: "", type: "" });
+	const [msg, setMsg] = useState({ text: '', type: '' });
 
 	const handleMsgShown = useCallback((msgText, type) => {
 		if (msgText) {
 			setMsg({ text: msgText, type: type });
 			setTimeout(() => {
-				setMsg({ text: "", type: "" });
+				setMsg({ text: '', type: '' });
 			}, 2500);
 		} else {
-			console.log("Please Provide Text Msg");
+			console.log('Please Provide Text Msg');
 		}
 	}, []);
 	const handleSubmit = useCallback(async (e) => {
@@ -25,21 +25,21 @@ const UserLogin = () => {
 			password: e.target.password.value,
 		};
 
-		const apiResp = await apiCall("user/signin", "post", formData);
+		const apiResp = await apiCall('user/signin', 'post', formData);
 
 		if (apiResp.statusCode === 200) {
 			const extractedToken = extractEncryptedToken(apiResp.jwt);
 			const userDetails = {
-				type: "user",
+				type: 'user',
 				email: extractedToken?.email,
 			};
 
-			localStorage.setItem("user_details", JSON.stringify(userDetails));
-			localStorage.setItem("JWT_token", apiResp.jwt);
-			localStorage.setItem("login_info", apiResp.loginInfo);
-			document.location.href = "/user-dashboard";
+			localStorage.setItem('user_details', JSON.stringify(userDetails));
+			localStorage.setItem('JWT_token', apiResp.jwt);
+			localStorage.setItem('login_info', apiResp.loginInfo);
+			document.location.href = '/';
 		} else {
-			handleMsgShown(apiResp.msg, "error");
+			handleMsgShown(apiResp.msg, 'error');
 		}
 	}, []);
 	return (
@@ -66,7 +66,7 @@ const UserLogin = () => {
 				</button>
 				<div className="links">
 					<NavLink to="/forgot-password">Forgot password?</NavLink>
-					<NavLink to="/register">Don't have an account? Sign up</NavLink>
+					<NavLink to="/register">Don&apos;t have an account? Sign up</NavLink>
 				</div>
 			</div>
 			{msg && <ShowMsg msgText={msg?.text} type={msg?.type} />}

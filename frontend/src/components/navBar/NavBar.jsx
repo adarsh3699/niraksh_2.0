@@ -1,15 +1,15 @@
-import { useState, memo } from "react";
-import PropTypes from "prop-types";
-import "./NavBar.css"; // Assuming you have a CSS file for styling
+import { useState, memo } from 'react';
+import PropTypes from 'prop-types';
+import './NavBar.css'; // Assuming you have a CSS file for styling
 
-import { NavLink, useNavigate } from "react-router-dom";
-import { extractEncryptedToken, userDeviceType } from "../../utils";
-import MenuBar from "../menuBar/MenuBar";
+import { NavLink, useNavigate } from 'react-router-dom';
+import { extractEncryptedToken, userDeviceType } from '../../utils';
+import MenuBar from '../menuBar/MenuBar';
 
-import brandLogo from "../../assets/brandLogo.png";
-import searchIcon from "../../assets/icons/search.svg";
-import profileIcon from "../../assets/icons/profile.svg";
-import menuIcon from "../../assets/icons/menu.svg";
+import brandLogo from '../../assets/brandLogo.png';
+import searchIcon from '../../assets/icons/search.svg';
+import profileIcon from '../../assets/icons/profile.svg';
+import menuIcon from '../../assets/icons/menu.svg';
 
 // const userLoggedIn = localStorage.getItem("JWT_token");
 
@@ -17,31 +17,31 @@ import menuIcon from "../../assets/icons/menu.svg";
 
 const menuItems = [
 	{
-		name: "Home",
-		path: "/",
+		name: 'Home',
+		path: '/',
 	},
 	{
-		name: "Medicine",
-		path: "/medicine_search",
+		name: 'Medicine',
+		path: '/medicine_search',
 	},
 	{
-		name: "Prescription Explainer",
-		path: "/prescription_Explainer",
+		name: 'Prescription Explainer',
+		path: '/prescription_Explainer',
 	},
 	{
-		name: "Drug Drug Interaction",
-		path: "/drug_drug_interaction",
+		name: 'Drug Drug Interaction',
+		path: '/drug_drug_interaction',
 	},
 	{
-		name: "Diseases",
-		path: "/diseases",
+		name: 'Diseases',
+		path: '/diseases',
 	},
 ];
 
 const NabBar = () => {
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-	const menuName = `/${location.pathname?.split("/")[1]}`;
+	const menuName = `/${location.pathname?.split('/')[1]}`;
 
 	const navigate = useNavigate();
 	// const [isLogged, setIsLogged] = useState(!!userEmail);
@@ -93,10 +93,10 @@ function DesktopNavBar() {
 				))}
 			</div>
 			<div className="nav-links_2">
-				<NavLink className="nav-icon" to="/">
+				{/* <NavLink className="nav-icon" to="/">
 					<img src={searchIcon} alt="sogo" />
-				</NavLink>
-				<NavLink className="nav-icon" to="/">
+				</NavLink> */}
+				<NavLink className="nav-icon" to="/login">
 					<img src={profileIcon} alt="Logo" />
 				</NavLink>
 			</div>
@@ -116,7 +116,7 @@ function MobileNavBar({ navigate, menuName, isMenuOpen, setIsMenuOpen }) {
 					Niraksh
 				</NavLink>
 
-				<NavLink className="nav-icon" to="/">
+				<NavLink className="nav-icon" to="/login">
 					<img src={profileIcon} alt="Logo" />
 				</NavLink>
 			</div>

@@ -49,10 +49,6 @@
     transition: background-color 0.2s;
 }
 
-/* #medicineSearch .searchForm .searchBtnLoading {
-    background-color: #D35400;
-} */
-
 #medicineSearch .searchForm .searchBtn:hover {
     background-color: #D35400;
 }
