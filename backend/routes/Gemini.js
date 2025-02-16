@@ -100,30 +100,40 @@ app.post('/drug-interaction', upload.single('file'), async (req, res) => {
 
 });
 
-
-app.get('/adarsh', async (req, res) => {
-    // import { GoogleGenerativeAI } from "@google/generative-ai";
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-    const chat = model.startChat({
-        history: [
-            {
-                role: "user",
-                parts: [{ text: "Hello" }],
-            },
-            {
-                role: "model",
-                parts: [{ text: "Great to meet you. What would you like to know?" }],
-            },
-        ],
-    });
-
-    let result = await chat.sendMessage("I have 2 dogs in my house.");
-    console.log(result.response.text());
-    let result2 = await chat.sendMessage("How many paws are in my house?");
-    console.log(result2.response.text());
+app.post('/disease', async (req, res) => {
+    const history = req.body.history
+    const msg = req.body.msg
 
 
-    res.send('Hello, Adarsh');
+
+    try {
+        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+
+        const chat = model.startChat({
+            history: [
+                {
+                    role: "user",
+                    parts: [{ text: "Hello" }],
+                },
+                {
+                    role: "model",
+                    parts: [{ text: "Great to meet you. What would you like to know?" }],
+                },
+            ],
+        });
+
+
+
+        let result = await chat.sendMessage(msg);
+
+        console.log(result.response.text());
+
+        res.json({ description: result.response.text() });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: error.message });
+    }
 });
+
 
 module.exports = app;

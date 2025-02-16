@@ -21,7 +21,7 @@ app.use(cors(allowlist));
 app.use(express.json());
 
 app.use("/user", UserReg);
-app.use("/gemini", Gemini);
+app.use("/ai", Gemini);
 
 const PORT = process.env.PORT || 4000;
 

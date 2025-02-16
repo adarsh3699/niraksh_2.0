@@ -1,39 +1,41 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import ReactMarkdown from 'react-markdown';
+import React, { useState } from "react";
+import axios from "axios";
+import ReactMarkdown from "react-markdown";
 
-import { DNA } from 'react-loader-spinner';
-import captureIcon from '../assets/icons/capture.svg';
-import '../styles/drugDrugInteraction.css';
+import { DNA } from "react-loader-spinner";
+import captureIcon from "../assets/icons/capture.svg";
+import "../styles/drugDrugInteraction.css";
+
+const API_URL = import.meta.env.VITE_API_URL;
 
 const DrugDrugInteraction = () => {
-	const [medications, setMedications] = useState(JSON.parse(localStorage.getItem('medicine')) || ['', '']); // Start with 2 input fields
+	const [medications, setMedications] = useState(JSON.parse(localStorage.getItem("medicine")) || ["", ""]); // Start with 2 input fields
 	const [loading, setLoading] = useState(false);
-	const [description, setDescription] = useState('');
+	const [description, setDescription] = useState("");
 
 	const handleAddMedication = () => {
-		setMedications([...medications, '']); // Add a new empty input field
+		setMedications([...medications, ""]); // Add a new empty input field
 	};
 
 	const handleInteractionCheck = async (e) => {
 		e.preventDefault();
 		// Send medications to the API
-		const temp = medications.join(', ');
+		const temp = medications.join(", ");
 		if (!temp) return;
 
 		setLoading(true);
 		try {
 			const response = await axios.post(
-				'http://localhost:4000/drug-interaction',
+				API_URL + "ai/drug-interaction",
 				{ medicines: temp },
 				{
-					headers: { 'Content-Type': 'multipart/form-data' },
+					headers: { "Content-Type": "multipart/form-data" },
 				}
 			);
 
 			setDescription(response.data.description); // Set API response
 		} catch (error) {
-			console.error('Error uploading file:', error);
+			console.error("Error uploading file:", error);
 		} finally {
 			setLoading(false);
 		}
@@ -86,7 +88,7 @@ const DrugDrugInteraction = () => {
 					</div>
 				</form>
 			</div>
-			<div className="loading-spinner" style={{ textAlign: 'center' }}>
+			<div className="loading-spinner" style={{ textAlign: "center" }}>
 				<DNA
 					visible={loading}
 					height="180"

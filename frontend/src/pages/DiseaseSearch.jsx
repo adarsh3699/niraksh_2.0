@@ -1,29 +1,31 @@
-import React, { useState } from 'react';
-import '../styles/diseaseSearch.css';
+import { useState } from "react";
+import "../styles/diseaseSearch.css";
 
 const DiseaseSearch = () => {
+	const API_URL = import.meta.env.VITE_API_URL;
+
 	const [messages, setMessages] = useState([
 		{
-			role: 'system',
+			role: "system",
 			text: "Welcome to the Smart Health System. Please describe your symptoms, and I'll provide some precautions and advice. Remember, this is not a substitute for professional medical advice.",
 		},
 	]);
-	const [userInput, setUserInput] = useState('');
+	const [userInput, setUserInput] = useState("");
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		if (!userInput.trim()) return;
 
-		const newMessage = { role: 'user', text: userInput };
+		const newMessage = { role: "user", text: userInput };
 
 		// Update UI immediately
 		setMessages((prevMessages) => [...prevMessages, newMessage]);
 
 		try {
-			const response = await fetch('http://localhost:4000/disease', {
-				method: 'POST',
+			const response = await fetch(API_URL + "ai/disease", {
+				method: "POST",
 				headers: {
-					'Content-Type': 'application/json',
+					"Content-Type": "application/json",
 				},
 				body: JSON.stringify({
 					history: messages,
@@ -33,13 +35,13 @@ const DiseaseSearch = () => {
 
 			const data = await response.json();
 
-			const botMessage = { role: 'bot', text: data.description };
+			const botMessage = { role: "bot", text: data.description };
 			setMessages((prevMessages) => [...prevMessages, botMessage]);
 		} catch (error) {
-			console.error('Error:', error);
+			console.error("Error:", error);
 		}
 
-		setUserInput('');
+		setUserInput("");
 	};
 
 	const handleQuickAction = (symptom) => {
@@ -78,7 +80,7 @@ const DiseaseSearch = () => {
 						</form>
 					</div>
 					<div className="quick-actions">
-						{['Headache', 'Fever', 'Cough', 'Fatigue'].map((symptom) => (
+						{["Headache", "Fever", "Cough", "Fatigue"].map((symptom) => (
 							<button
 								key={symptom}
 								className="quick-action-btn"

@@ -1,24 +1,26 @@
-import { memo, useState, useCallback } from 'react';
-import { useDropzone } from 'react-dropzone';
-import ReactMarkdown from 'react-markdown';
+import { memo, useState, useCallback } from "react";
+import { useDropzone } from "react-dropzone";
+import ReactMarkdown from "react-markdown";
 
-import { DNA } from 'react-loader-spinner';
+import { DNA } from "react-loader-spinner";
 
-import '../styles/prescriptionExplainer.css';
+import "../styles/prescriptionExplainer.css";
+
+const API_URL = import.meta.env.VITE_API_URL;
 
 const PrescriptionExplainer = () => {
 	const [uploadedFiles, setUploadedFiles] = useState([]);
 	const [uploaded, setUploaded] = useState(false);
 	const [loading, setLoading] = useState(false);
 
-	const [description, setDescription] = useState('');
+	const [description, setDescription] = useState("");
 
 	// Memoize the onDrop handler to avoid re-creation on every render
 	// Handle file drop
 	const onDrop = useCallback((acceptedFiles) => {
 		const newFiles = acceptedFiles.map((file) => ({
 			file,
-			preview: file.type.startsWith('image/') ? URL.createObjectURL(file) : null,
+			preview: file.type.startsWith("image/") ? URL.createObjectURL(file) : null,
 		}));
 		setUploadedFiles((prev) => [...prev, ...newFiles]);
 	}, []);
@@ -28,24 +30,24 @@ const PrescriptionExplainer = () => {
 		if (uploadedFiles.length === 0) return;
 
 		const formData = new FormData();
-		uploadedFiles.forEach((fileObj) => formData.append('files', fileObj.file));
+		uploadedFiles.forEach((fileObj) => formData.append("files", fileObj.file));
 
 		try {
 			setLoading(true);
-			const response = await fetch('http://localhost:4000/prescription', {
-				method: 'POST',
+			const response = await fetch(API_URL + "ai/prescription", {
+				method: "POST",
 				body: formData,
 			});
 
 			if (!response.ok) {
-				throw new Error('Failed to upload prescription.');
+				throw new Error("Failed to upload prescription.");
 			}
 			const data = await response.json();
 			setDescription(data.description); // Update UI with API response
 			setUploaded(true);
 		} catch (error) {
-			console.error('Upload Error:', error);
-			alert('Error uploading files. Please try again.');
+			console.error("Upload Error:", error);
+			alert("Error uploading files. Please try again.");
 		} finally {
 			setLoading(false);
 		}
@@ -54,7 +56,7 @@ const PrescriptionExplainer = () => {
 	// Memoize the handleReset function
 	const handleReset = useCallback(() => {
 		setUploadedFiles([]);
-		setDescription('');
+		setDescription("");
 		setUploaded(false);
 	}, []);
 
@@ -73,9 +75,9 @@ const PrescriptionExplainer = () => {
 	const { getRootProps, getInputProps, open, isDragActive } = useDropzone({
 		onDrop,
 		accept: {
-			'image/jpeg': [],
-			'image/png': [],
-			'application/pdf': [],
+			"image/jpeg": [],
+			"image/png": [],
+			"application/pdf": [],
 		},
 		multiple: true,
 		noClick: true, // Disable click upload globally
@@ -88,7 +90,7 @@ const PrescriptionExplainer = () => {
 
 			{/* Dropzone */}
 			<div
-				className={`dropzone ${isDragActive ? 'active' : ''}`}
+				className={`dropzone ${isDragActive ? "active" : ""}`}
 				onClick={(e) => {
 					e.stopPropagation(); // Prevent triggering dropzone onClick
 					open(); // Open file dialog
@@ -135,7 +137,7 @@ const PrescriptionExplainer = () => {
 				)}
 			</div>
 
-			<div className="loading-spinner" style={{ textAlign: 'center' }}>
+			<div className="loading-spinner" style={{ textAlign: "center" }}>
 				<DNA
 					visible={loading}
 					height="180"

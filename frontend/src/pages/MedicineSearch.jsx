@@ -1,18 +1,20 @@
-import { useEffect, useState, useCallback, memo } from 'react';
-import { useDropzone } from 'react-dropzone';
-import axios from 'axios';
-import ReactMarkdown from 'react-markdown';
+import { useEffect, useState, useCallback, memo } from "react";
+import { useDropzone } from "react-dropzone";
+import axios from "axios";
+import ReactMarkdown from "react-markdown";
 
-import { DNA } from 'react-loader-spinner';
-import captureIcon from '../assets/icons/capture.svg';
-import '../styles/medicineSearch.css';
+import { DNA } from "react-loader-spinner";
+import captureIcon from "../assets/icons/capture.svg";
+import "../styles/medicineSearch.css";
+
+const API_URL = import.meta.env.VITE_API_URL;
 
 const MedicineSearch = () => {
-	const [searchQuery, setSearchQuery] = useState('');
+	const [searchQuery, setSearchQuery] = useState("");
 	const [loading, setLoading] = useState(false);
 	const [uploadedFiles, setUploadedFiles] = useState([]);
 	const [selectedFile, setSelectedFile] = useState(null); // Store file but don't upload immediately
-	const [description, setDescription] = useState(''); // Store API responsed
+	const [description, setDescription] = useState(""); // Store API responsed
 
 	// Initialize Dropzone
 	const { getRootProps, getInputProps, isDragActive, open } = useDropzone({
@@ -20,14 +22,14 @@ const MedicineSearch = () => {
 			const newFile = acceptedFiles[0];
 			const fileWithPreview = {
 				file: newFile,
-				preview: newFile.type.startsWith('image/') ? URL.createObjectURL(newFile) : null,
+				preview: newFile.type.startsWith("image/") ? URL.createObjectURL(newFile) : null,
 			};
 			setUploadedFiles([fileWithPreview]); // Update UI with selected file
 			setSelectedFile(newFile); // Store file for later search
 		}, []),
 		accept: {
-			'image/*': ['.jpeg', '.jpg', '.png'],
-			'application/pdf': ['.pdf'],
+			"image/*": [".jpeg", ".jpg", ".png"],
+			"application/pdf": [".pdf"],
 		},
 		maxSize: 5242880, // 5MB
 		noClick: true, // Disable click upload globally
@@ -39,7 +41,7 @@ const MedicineSearch = () => {
 		e.preventDefault();
 
 		if (!searchQuery && !selectedFile) {
-			alert('Please enter a medicine name or upload a file.');
+			alert("Please enter a medicine name or upload a file.");
 			return;
 		}
 
@@ -47,45 +49,45 @@ const MedicineSearch = () => {
 		// If a file is uploaded, send it to the API
 		if (selectedFile) {
 			const formData = new FormData();
-			formData.append('file', selectedFile);
+			formData.append("file", selectedFile);
 
 			try {
-				const response = await axios.post('http://localhost:4000/medicine', formData, {
-					headers: { 'Content-Type': 'multipart/form-data' },
+				const response = await axios.post(API_URL + "ai/medicine", formData, {
+					headers: { "Content-Type": "multipart/form-data" },
 				});
 				setDescription(response.data.description); // Set API response
 
 				const matches = response.data?.description.match(/_(.*?)_/g);
-				const extractedWords = matches ? matches.map((word) => word.replace(/_/g, '')) : [];
+				const extractedWords = matches ? matches.map((word) => word.replace(/_/g, "")) : [];
 
-				const localMeds = localStorage.getItem('medicine');
+				const localMeds = localStorage.getItem("medicine");
 
-				console.log('localMeds', localMeds);
-				console.log('extractedWords', extractedWords);
+				console.log("localMeds", localMeds);
+				console.log("extractedWords", extractedWords);
 
-				localStorage.setItem('medicine', JSON.stringify([...extractedWords]));
+				localStorage.setItem("medicine", JSON.stringify([...extractedWords]));
 			} catch (error) {
-				console.error('Error uploading file:', error);
+				console.error("Error uploading file:", error);
 			} finally {
 				setLoading(false);
 			}
 		} else if (searchQuery) {
 			// If no file is uploaded, send the search query to the API
 			try {
-				const response = await axios.post('http://localhost:4000/medicine', { name: searchQuery });
+				const response = await axios.post(API_URL + "ai/medicine", { name: searchQuery });
 
 				setDescription(response.data.description); // Set API response
 
-				const localMeds = JSON.parse(localStorage.getItem('medicine')) || [];
+				const localMeds = JSON.parse(localStorage.getItem("medicine")) || [];
 
 				console.log(localMeds);
 
 				if (!localMeds.includes(searchQuery)) {
 					localMeds.push(searchQuery);
-					localStorage.setItem('medicine', JSON.stringify(localMeds));
+					localStorage.setItem("medicine", JSON.stringify(localMeds));
 				}
 			} catch (error) {
-				console.error('Error searching for medicine:', error);
+				console.error("Error searching for medicine:", error);
 			} finally {
 				setLoading(false);
 			}
@@ -98,7 +100,7 @@ const MedicineSearch = () => {
 		}
 		setUploadedFiles([]);
 		setSelectedFile(null);
-		setDescription(''); // Clear description when file is removed
+		setDescription(""); // Clear description when file is removed
 	}, [uploadedFiles]);
 
 	useEffect(() => {
@@ -135,7 +137,7 @@ const MedicineSearch = () => {
 					</div>
 					<button
 						type="submit"
-						className={loading ? 'searchBtn searchBtnLoading' : 'searchBtn'}
+						className={loading ? "searchBtn searchBtnLoading" : "searchBtn"}
 						disabled={loading}
 					>
 						Search
@@ -143,7 +145,7 @@ const MedicineSearch = () => {
 				</form>
 
 				<div
-					className={`dropzone-content ${isDragActive ? 'active' : ''}`}
+					className={`dropzone-content ${isDragActive ? "active" : ""}`}
 					onClick={(e) => {
 						e.stopPropagation(); // Prevent triggering dropzone onClick
 						open(); // Open file dialog
@@ -177,7 +179,7 @@ const MedicineSearch = () => {
 					</div>
 				)}
 			</div>
-			<div className="loading-spinner" style={{ textAlign: 'center' }}>
+			<div className="loading-spinner" style={{ textAlign: "center" }}>
 				<DNA
 					visible={loading}
 					height="180"
