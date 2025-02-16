@@ -7,7 +7,7 @@ import { extractEncryptedToken, userDeviceType } from '../../utils';
 import MenuBar from '../menuBar/MenuBar';
 
 import brandLogo from '../../assets/brandLogo.png';
-import searchIcon from '../../assets/icons/search.svg';
+// import searchIcon from '../../assets/icons/search.svg';
 import profileIcon from '../../assets/icons/profile.svg';
 import menuIcon from '../../assets/icons/menu.svg';
 

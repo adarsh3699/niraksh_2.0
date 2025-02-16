@@ -9,7 +9,7 @@ const HeroSection = () => {
 		<div className="hero-section">
 			<div className="text-content">
 				<h1 className="hero-title">
-					Find <span className="emergency-call">best doctor</span> on the basics of disease.
+					Find the <span className="emergency-call">best doctor</span> on your symptoms.
 				</h1>
 				<p className="hero_desc">Search for any symptoms or disease.</p>
 				<form className="searchArea">
