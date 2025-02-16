@@ -1,18 +1,17 @@
 const express = require("express");
-const jwt = require("jsonwebtoken");
+// const jwt = require("jsonwebtoken");
 const axios = require("axios");
 const { JWT_SECRET, md5Hash, sendMail, encryptText, decryptText, createTokens } = require("../utils");
 const User = require("../models/userRegModels");
 
-const router = express.Router();
 const app = express();
 
-router.get("/", (req, res) => {
+app.get("/", (req, res) => {
     res.send("Hello World");
 });
 
 // normal-auth
-router.post("/signin", async (req, res) => {
+app.post("/signin", async (req, res) => {
     const email = req.body?.email?.trim();
     const password = req.body?.password?.trim();
 
@@ -61,7 +60,7 @@ router.post("/signin", async (req, res) => {
 });
 
 // google-auth
-router.post("/signin/google", async (req, res) => {
+app.post("/signin/google", async (req, res) => {
     const googleAccessToken = req.body.googleAccessToken;
     const createdOn = new Date(Date.now());
 
@@ -160,7 +159,7 @@ router.post("/signin/google", async (req, res) => {
 });
 
 // create new User
-router.post("/signup", async (req, res) => {
+app.post("/signup", async (req, res) => {
     // normal form signup
     const email = req.body?.email?.trim();
     const password = req.body?.password?.trim();
@@ -204,7 +203,7 @@ router.post("/signup", async (req, res) => {
     }
 });
 
-router.post("/forget_password", function (req, res) {
+app.post("/forget_password", function (req, res) {
     const email = req.body.email ? req.body.email.trim() : req.body.email;
     try {
         if (email) {
@@ -228,7 +227,7 @@ router.post("/forget_password", function (req, res) {
     }
 });
 
-router.post("/change_password", async function (req, res) {
+app.post("/change_password", async function (req, res) {
     const email = req.body.email ? req.body.email.trim() : req.body.email;
     const password = req.body.password ? req.body.password.trim() : req.body.password;
     const otp = req.body.otp ? req.body.otp.trim() : req.body.otp;
@@ -264,4 +263,4 @@ router.post("/change_password", async function (req, res) {
     }
 });
 
-module.exports = router;
+module.exports = app;
