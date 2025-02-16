@@ -1,17 +1,17 @@
-import { memo } from "react";
-import "./heroSection.css";
+import { memo } from 'react';
+import './heroSection.css';
 
-import professional from "../../../assets/professionalImg.svg";
-import captureIcon from "../../../assets/icons/capture.svg";
+import professional from '../../../assets/professionalImg.svg';
+import captureIcon from '../../../assets/icons/capture.svg';
 
 const HeroSection = () => {
 	return (
 		<div className="hero-section">
 			<div className="text-content">
 				<h1 className="hero-title">
-					Find <span className="emergency-call">detailed information</span> about your medicines
+					Find <span className="emergency-call">best doctor</span> on the basics of disease.
 				</h1>
-				<p className="hero_desc">Search for medicines by name, brand or active</p>
+				<p className="hero_desc">Search for any symptoms or disease.</p>
 				<form className="searchArea">
 					<div className="searchbar">
 						<input type="text" placeholder="Search for medicines" />
