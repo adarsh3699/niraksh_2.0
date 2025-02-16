@@ -1,9 +1,9 @@
 import { useState } from "react";
+
+import { apiCall } from "../utils";
 import "../styles/diseaseSearch.css";
 
 const DiseaseSearch = () => {
-	const API_URL = import.meta.env.VITE_API_URL;
-
 	const [messages, setMessages] = useState([
 		{
 			role: "system",
@@ -22,20 +22,12 @@ const DiseaseSearch = () => {
 		setMessages((prevMessages) => [...prevMessages, newMessage]);
 
 		try {
-			const response = await fetch(API_URL + "ai/disease", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify({
-					history: messages,
-					msg: userInput,
-				}),
+			const response = await apiCall("ai/disease", "POST", {
+				history: messages,
+				msg: userInput,
 			});
 
-			const data = await response.json();
-
-			const botMessage = { role: "bot", text: data.description };
+			const botMessage = { role: "bot", text: response?.data.description };
 			setMessages((prevMessages) => [...prevMessages, botMessage]);
 		} catch (error) {
 			console.error("Error:", error);

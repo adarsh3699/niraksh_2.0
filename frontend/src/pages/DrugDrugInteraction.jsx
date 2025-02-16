@@ -1,15 +1,18 @@
-import React, { useState } from "react";
-import axios from "axios";
+import { useState } from "react";
 import ReactMarkdown from "react-markdown";
+
+import { apiCall } from "../utils";
 
 import { DNA } from "react-loader-spinner";
 import captureIcon from "../assets/icons/capture.svg";
 import "../styles/drugDrugInteraction.css";
 
-const API_URL = import.meta.env.VITE_API_URL;
-
 const DrugDrugInteraction = () => {
-	const [medications, setMedications] = useState(JSON.parse(localStorage.getItem("medicine")) || ["", ""]); // Start with 2 input fields
+	const [medications, setMedications] = useState(
+		JSON.parse(localStorage.getItem("medicine"))?.length > 0
+			? JSON.parse(localStorage.getItem("medicine"))
+			: ["", ""]
+	); // Start with 2 input fields
 	const [loading, setLoading] = useState(false);
 	const [description, setDescription] = useState("");
 
@@ -25,15 +28,9 @@ const DrugDrugInteraction = () => {
 
 		setLoading(true);
 		try {
-			const response = await axios.post(
-				API_URL + "ai/drug-interaction",
-				{ medicines: temp },
-				{
-					headers: { "Content-Type": "multipart/form-data" },
-				}
-			);
+			const response = await apiCall("ai/drug-interaction", "POST", { medicines: temp });
 
-			setDescription(response.data.description); // Set API response
+			setDescription(response?.data.description); // Set API response
 		} catch (error) {
 			console.error("Error uploading file:", error);
 		} finally {
@@ -98,7 +95,7 @@ const DrugDrugInteraction = () => {
 					wrapperClass="dna-wrapper"
 				/>
 			</div>
-			{description && (
+			{description && !loading && (
 				<div className="medicine-card">
 					<h2 className="card-title">Medicine Details</h2>
 					<ReactMarkdown className="card-content">{description}</ReactMarkdown>

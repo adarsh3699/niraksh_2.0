@@ -1,13 +1,12 @@
 import { useEffect, useState, useCallback, memo } from "react";
 import { useDropzone } from "react-dropzone";
-import axios from "axios";
 import ReactMarkdown from "react-markdown";
+
+import { apiCall } from "../utils";
 
 import { DNA } from "react-loader-spinner";
 import captureIcon from "../assets/icons/capture.svg";
 import "../styles/medicineSearch.css";
-
-const API_URL = import.meta.env.VITE_API_URL;
 
 const MedicineSearch = () => {
 	const [searchQuery, setSearchQuery] = useState("");
@@ -52,10 +51,9 @@ const MedicineSearch = () => {
 			formData.append("file", selectedFile);
 
 			try {
-				const response = await axios.post(API_URL + "ai/medicine", formData, {
-					headers: { "Content-Type": "multipart/form-data" },
-				});
-				setDescription(response.data.description); // Set API response
+				const response = await apiCall("ai/medicine", "POST", formData, true);
+
+				setDescription(response?.data.description); // Set API response
 
 				const matches = response.data?.description.match(/_(.*?)_/g);
 				const extractedWords = matches ? matches.map((word) => word.replace(/_/g, "")) : [];
@@ -74,13 +72,11 @@ const MedicineSearch = () => {
 		} else if (searchQuery) {
 			// If no file is uploaded, send the search query to the API
 			try {
-				const response = await axios.post(API_URL + "ai/medicine", { name: searchQuery });
+				const response = await apiCall("ai/medicine", "POST", { name: searchQuery });
 
-				setDescription(response.data.description); // Set API response
+				setDescription(response?.data.description); // Set API response
 
 				const localMeds = JSON.parse(localStorage.getItem("medicine")) || [];
-
-				console.log(localMeds);
 
 				if (!localMeds.includes(searchQuery)) {
 					localMeds.push(searchQuery);
@@ -91,6 +87,8 @@ const MedicineSearch = () => {
 			} finally {
 				setLoading(false);
 			}
+		} else {
+			console.log("No search query or file uploaded");
 		}
 	};
 
@@ -189,7 +187,7 @@ const MedicineSearch = () => {
 					wrapperClass="dna-wrapper"
 				/>
 			</div>
-			{description && (
+			{description && !loading && (
 				<div className="medicine-card">
 					<h2 className="card-title">Medicine Details</h2>
 					<ReactMarkdown className="card-content">{description}</ReactMarkdown>

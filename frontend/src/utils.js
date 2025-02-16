@@ -2,42 +2,44 @@
 // const cookies = new Cookies();
 
 // const apiBaseUrl = 'https://bhemu-notes-api.onrender.com/';
-const apiBaseUrl = 'http://localhost:4000/';
+const apiBaseUrl = import.meta.env.VITE_API_URL || 'http://localhost:4000/';
 
 // variables for setting cookie expiratiom tym
 const COOKIE_EXPIRATION_MINS = 30 * 24 * 60; // 30 days
 
 let COOKIE_EXPIRATION_TYM = new Date();
 COOKIE_EXPIRATION_TYM.setTime(COOKIE_EXPIRATION_TYM.getTime() + COOKIE_EXPIRATION_MINS * 60 * 1000);
-// const COOKIE_EXPIRATION_TIME = COOKIE_EXPIRATION_TYM;
 
-async function apiCall(endpoint, method, body) {
+
+async function apiCall(endpoint, method = 'GET', body = null, file = false) {
 	const apiUrl = apiBaseUrl + endpoint;
+	const authorization = localStorage.getItem('JWT_token');
+
+	const headers = {
+		Authorization: `Bearer ${authorization}`,
+	};
+
+	if (!file && body) {
+		headers['Content-Type'] = 'application/json';
+	}
+
 	try {
-		let apiCallResp;
-		const authorization = localStorage.getItem('JWT_token');
+		const response = await fetch(apiUrl, {
+			method,
+			headers,
+			body: file ? body : body ? JSON.stringify(body) : null,
+		});
 
-		if (method === 'GET' || method === undefined) {
-			apiCallResp = await fetch(apiUrl, {
-				headers: { Authorization: 'Bearer ' + authorization },
-			});
-		} else {
-			apiCallResp = await fetch(apiUrl, {
-				method: method,
-				headers: {
-					'Content-Type': 'application/json',
-					Authorization: 'Bearer ' + authorization,
-				},
-				body: JSON.stringify(body),
-			});
-		}
+		const statusCode = response.status;
+		const data = await response.json();
 
-		const apiJsonResp = await apiCallResp.json();
-		return apiJsonResp;
+		return { data, statusCode };
 	} catch (error) {
+		console.error("Error in apiCall:", error);
 		return { msg: 'Something went wrong', statusCode: 500 };
 	}
 }
+
 
 function extractEncryptedToken(token) {
 	try {

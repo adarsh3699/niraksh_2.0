@@ -1,12 +1,11 @@
 import { memo, useState, useCallback } from "react";
 import { useDropzone } from "react-dropzone";
 import ReactMarkdown from "react-markdown";
+import { apiCall } from "../utils";
 
 import { DNA } from "react-loader-spinner";
 
 import "../styles/prescriptionExplainer.css";
-
-const API_URL = import.meta.env.VITE_API_URL;
 
 const PrescriptionExplainer = () => {
 	const [uploadedFiles, setUploadedFiles] = useState([]);
@@ -34,17 +33,9 @@ const PrescriptionExplainer = () => {
 
 		try {
 			setLoading(true);
-			const response = await fetch(API_URL + "ai/prescription", {
-				method: "POST",
-				body: formData,
-			});
+			const response = await apiCall("ai/prescription", "POST", formData, true);
 
-			if (!response.ok) {
-				throw new Error("Failed to upload prescription.");
-			}
-			const data = await response.json();
-			setDescription(data.description); // Update UI with API response
-			setUploaded(true);
+			setDescription(response.data?.description); // Update UI with API response
 		} catch (error) {
 			console.error("Upload Error:", error);
 			alert("Error uploading files. Please try again.");
