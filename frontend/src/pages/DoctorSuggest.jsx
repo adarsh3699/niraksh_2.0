@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 
 import "../styles/doctorSuggest.css";
 
@@ -11,7 +11,7 @@ const DoctorFinder = () => {
 
 	useEffect(() => {
 		fetch("../../jsonData/symptoms_to_category.json")
-			.then((response) => response.json())
+			.then((response) => response?.json())
 			.then((data) => setSymptomsToCategory(data))
 			.catch((error) => console.error("Error loading symptoms data:", error));
 	}, []);
@@ -38,7 +38,7 @@ const DoctorFinder = () => {
 			await Promise.all(
 				searchCategories.map(async (cat) => {
 					const response = await fetch(`../../jsonData/${cat}.json`);
-					const data = await response.json();
+					const data = await response?.json();
 					doctorResults.push(...data);
 				})
 			);
@@ -46,8 +46,8 @@ const DoctorFinder = () => {
 			doctorResults.sort((a, b) => {
 				let expA = parseInt(a["Years of Experience"]) || 0;
 				let expB = parseInt(b["Years of Experience"]) || 0;
-				let feeA = parseInt(a["Consult Fee"].replace("₹", "")) || 0;
-				let feeB = parseInt(b["Consult Fee"].replace("₹", "")) || 0;
+				let feeA = parseInt(a["Consult Fee"]?.replace("₹", "")) || 0;
+				let feeB = parseInt(b["Consult Fee"]?.replace("₹", "")) || 0;
 
 				return expB - expA || feeA - feeB;
 			});
