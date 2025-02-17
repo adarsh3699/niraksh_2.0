@@ -1,29 +1,38 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
+
+import symptomsToCategory from "../../jsonData/symptoms_to_category.json";
+
+import Dermatologist from "../../jsonData/Dermatologist.json";
+import Orthopedic_surgeon from "../../jsonData/Orthopedic_surgeon.json";
+import General_Physician from "../../jsonData/General_Physician.json";
+import Gynecologist from "../../jsonData/Gynecologist.json";
+import Obstetrician from "../../jsonData/Obstetrician.json";
+import Sexologist from "../../jsonData/Sexologist.json";
+import Cosmetic_Aesthetic_Dentist from "../../jsonData/Cosmetic_Aesthetic_Dentist.json";
+import Periodontist from "../../jsonData/Periodontist.json";
+import Dental_Surgeon from "../../jsonData/Dental_Surgeon.json";
+import AYUSHHomoeopath from "../../jsonData/AYUSHHomoeopath.json";
 
 import "../styles/doctorSuggest.css";
+
+const DoctoreCategories = {
+	Dermatologist,
+	Orthopedic_surgeon,
+	General_Physician,
+	Gynecologist,
+	Obstetrician,
+	Sexologist,
+	Cosmetic_Aesthetic_Dentist,
+	Periodontist,
+	Dental_Surgeon,
+	AYUSHHomoeopath,
+};
 
 const DoctorFinder = () => {
 	const [darkMode, setDarkMode] = useState(false);
 	const [category, setCategory] = useState("");
 	const [symptoms, setSymptoms] = useState("");
-	const [symptomsToCategory, setSymptomsToCategory] = useState({});
 	const [doctors, setDoctors] = useState([]);
-
-	useEffect(() => {
-		try {
-			fetch("../../jsonData/symptoms_to_category.json", {
-				headers: {
-					"Content-Type": "application/json",
-					Accept: "application/json",
-				},
-			})
-				.then((response) => response?.json())
-				.then((data) => setSymptomsToCategory(data))
-				.catch((error) => console.error("Error loading symptoms data:", error));
-		} catch (error) {
-			console.log("Error loading symptoms data:", error);
-		}
-	}, []);
 
 	const findDoctor = async () => {
 		let searchCategories = category ? [category] : [];
@@ -44,13 +53,12 @@ const DoctorFinder = () => {
 
 		try {
 			const doctorResults = [];
-			await Promise.all(
-				searchCategories.map(async (cat) => {
-					const response = await fetch(`../../jsonData/${cat}.json`);
-					const data = await response?.json();
-					doctorResults.push(...data);
-				})
-			);
+			console.log(searchCategories);
+
+			searchCategories.map(async (cat) => {
+				const data = DoctoreCategories[cat];
+				doctorResults.push(...data);
+			});
 
 			doctorResults.sort((a, b) => {
 				let expA = parseInt(a["Years of Experience"]) || 0;
@@ -77,18 +85,7 @@ const DoctorFinder = () => {
 				<label>Select Category:</label>
 				<select value={category} onChange={(e) => setCategory(e.target.value)}>
 					<option value="">Not Sure? Enter Symptoms Below</option>
-					{[
-						"Dermatologist",
-						"Orthopedic_surgeon",
-						"General_Physician",
-						"Gynecologist",
-						"Obstetrician",
-						"Sexologist",
-						"Cosmetic_Aesthetic_Dentist",
-						"Periodontist",
-						"Dental_Surgeon",
-						"AYUSHHomoeopath",
-					].map((cat) => (
+					{Object.keys(DoctoreCategories).map((cat) => (
 						<option key={cat} value={cat}>
 							{cat.replace(/_/g, " ")}
 						</option>
