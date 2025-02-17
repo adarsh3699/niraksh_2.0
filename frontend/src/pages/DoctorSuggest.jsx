@@ -2,30 +2,32 @@ import { useState } from "react";
 
 import symptomsToCategory from "../../jsonData/symptoms_to_category.json";
 
-import Dermatologist from "../../jsonData/Dermatologist.json";
-import Orthopedic_surgeon from "../../jsonData/Orthopedic_surgeon.json";
+import AYUSHHomoeopath from "../../jsonData/AYUSHHomoeopath.json";
+import Cosmetic_Aesthetic_Dentist from "../../jsonData/Cosmetic_Aesthetic_Dentist.json";
+import Dental_Surgeon from "../../jsonData/Dental_Surgeon.json";
+import Dentist from "../../jsonData/Dentist.json";
 import General_Physician from "../../jsonData/General_Physician.json";
 import Gynecologist from "../../jsonData/Gynecologist.json";
 import Obstetrician from "../../jsonData/Obstetrician.json";
-import Sexologist from "../../jsonData/Sexologist.json";
-import Cosmetic_Aesthetic_Dentist from "../../jsonData/Cosmetic_Aesthetic_Dentist.json";
+import Orthopedic_surgeon from "../../jsonData/Orthopedic_surgeon.json";
+import Dermatologist from "../../jsonData/Dermatologist.json";
 import Periodontist from "../../jsonData/Periodontist.json";
-import Dental_Surgeon from "../../jsonData/Dental_Surgeon.json";
-import AYUSHHomoeopath from "../../jsonData/AYUSHHomoeopath.json";
+import Sexologist from "../../jsonData/Sexologist.json";
 
 import "../styles/doctorSuggest.css";
 
 const DoctoreCategories = {
-	Dermatologist,
-	Orthopedic_surgeon,
+	AYUSHHomoeopath,
+	Cosmetic_Aesthetic_Dentist,
+	Dental_Surgeon,
+	Dentist,
 	General_Physician,
 	Gynecologist,
 	Obstetrician,
-	Sexologist,
-	Cosmetic_Aesthetic_Dentist,
+	Orthopedic_surgeon,
+	Dermatologist,
 	Periodontist,
-	Dental_Surgeon,
-	AYUSHHomoeopath,
+	Sexologist,
 };
 
 const DoctorFinder = () => {
