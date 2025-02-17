@@ -36,7 +36,9 @@ const DoctorFinder = () => {
 	const [symptoms, setSymptoms] = useState("");
 	const [doctors, setDoctors] = useState([]);
 
-	const findDoctor = async () => {
+	const findDoctor = async (e) => {
+		e.preventDefault();
+
 		let searchCategories = category ? [category] : [];
 
 		if (!category && symptoms) {
@@ -55,7 +57,7 @@ const DoctorFinder = () => {
 
 		try {
 			const doctorResults = [];
-			console.log(searchCategories);
+			// console.log(searchCategories);
 
 			searchCategories.map(async (cat) => {
 				const data = DoctoreCategories[cat];
@@ -82,8 +84,8 @@ const DoctorFinder = () => {
 			<div className="toggle-switch" onClick={() => setDarkMode(!darkMode)}>
 				{darkMode ? "☀️" : "🌙"}
 			</div>
-			<div className="container">
-				<h2>Find the Right Doctor</h2>
+			<form className="container" onSubmit={findDoctor}>
+				<h1>Find the Right Doctor</h1>
 				<label>Select Category:</label>
 				<select value={category} onChange={(e) => setCategory(e.target.value)}>
 					<option value="">Not Sure? Enter Symptoms Below</option>
@@ -97,10 +99,11 @@ const DoctorFinder = () => {
 				<input
 					type="text"
 					value={symptoms}
+					disabled={category}
 					onChange={(e) => setSymptoms(e.target.value)}
 					placeholder="Enter symptoms (e.g., 'I have a headache for 3 days')"
 				/>
-				<button onClick={findDoctor}>Search</button>
+				<button>Search</button>
 
 				<div className="doctor-grid">
 					{doctors.length > 0 ? (
@@ -118,7 +121,7 @@ const DoctorFinder = () => {
 						<p>No doctors found.</p>
 					)}
 				</div>
-			</div>
+			</form>
 		</div>
 	);
 };

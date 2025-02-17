@@ -5,7 +5,8 @@
 }
 
 #doctorSuggest .container {
-    max-width: 600px;
+
+    width: 50%;
     margin: 50px auto;
     padding: 20px;
     background: white;
@@ -18,21 +19,22 @@
     box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.1);
 }
 
-#doctorSuggest h2 {
+#doctorSuggest h1 {
     color: rgb(223, 137, 52);
 }
 
-#doctorSuggest body.dark-mode h2 {
+#doctorSuggest body.dark-mode h1 {
     color: #63b3ed;
 }
 
 /* Inputs & Buttons */
 #doctorSuggest select,
 #doctorSuggest input {
-    width: 90%;
+    width: 100%;
+    box-sizing: border-box;
     padding: 12px;
     margin: 10px 0;
-    border: 2px solid #f3c690;
+    border: 2px solid rgb(249, 137, 25);
     border-radius: 5px;
     font-size: 16px;
     outline: none;
@@ -46,13 +48,20 @@
     color: white;
 }
 
+#doctorSuggest input:disabled {
+    background: #f1f1f1;
+    border-color: rgb(163, 88, 12);
+
+}
+
 #doctorSuggest select:focus,
 #doctorSuggest input:focus {
     border-color: rgb(223, 137, 52);
 }
 
 #doctorSuggest button {
-    width: 95%;
+    width: 100%;
+    box-sizing: border-box;
     padding: 12px;
     background: rgb(249, 137, 25);
     color: white;
