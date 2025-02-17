@@ -10,10 +10,14 @@ const DoctorFinder = () => {
 	const [doctors, setDoctors] = useState([]);
 
 	useEffect(() => {
-		fetch("../../jsonData/symptoms_to_category.json")
-			.then((response) => response?.json())
-			.then((data) => setSymptomsToCategory(data))
-			.catch((error) => console.error("Error loading symptoms data:", error));
+		try {
+			fetch("../../jsonData/symptoms_to_category.json")
+				.then((response) => response?.json())
+				.then((data) => setSymptomsToCategory(data))
+				.catch((error) => console.error("Error loading symptoms data:", error));
+		} catch (error) {
+			console.log("Error loading symptoms data:", error);
+		}
 	}, []);
 
 	const findDoctor = async () => {
