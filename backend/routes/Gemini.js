@@ -24,9 +24,9 @@ app.post('/medicine', upload.single('file'), async (req, res) => {
     const name = req.body.name
 
     if (name) {
-        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash", systemInstruction: "Only talk about medical and healthcare" });
 
-        const prompt = "tell me about" + name;
+        const prompt = "tell me about this medicine named" + name + " and its uses and side effects and everything about it. Give a small note at the end to consult doctor medical advice.";
         const result = await model.generateContent(prompt);
 
 
@@ -40,8 +40,8 @@ app.post('/medicine', upload.single('file'), async (req, res) => {
             const filePath = req.file.path;
             const mimeType = req.file.mimetype;
 
-            const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-            const prompt = "Describe about this medicine.";
+            const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash", systemInstruction: "Only talk about medical and healthcare" });
+            const prompt = "Tell me about this medicine and its uses and side effects and everything about it. Give a small note at the end to consult doctor medical advice.";
             const filePart = fileToGenerativePart(filePath, mimeType);
 
             const result = await model.generateContent([prompt, filePart]);
@@ -64,8 +64,8 @@ app.post('/prescription', upload.array('files', 5), async (req, res) => {
             return res.status(400).json({ error: "No files uploaded" });
         }
 
-        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-        const prompt = "Describe the medical prescription in the uploaded images and give detailed information of medicine and suggestions.";
+        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash", systemInstruction: "Only talk about medical and healthcare" });
+        const prompt = "Describe the medical prescription in the uploaded images and explain it and give detailed information on medicine and give suggestions or advice.";
 
         // Convert files to generative parts
         const imageParts = req.files.map(file => fileToGenerativePart(file.path, file.mimetype));
@@ -90,7 +90,7 @@ app.post('/prescription', upload.array('files', 5), async (req, res) => {
 app.post('/drug-interaction', upload.single('file'), async (req, res) => {
     const medicines = req.body.medicines?.trim();
 
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash", systemInstruction: "Only talk about medical and healthcare" });
 
     const prompt = "Tell me about Drug Drug Interaction of these medicine" + medicines;
     const result = await model.generateContent(prompt);

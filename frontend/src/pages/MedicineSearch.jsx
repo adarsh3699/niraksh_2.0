@@ -114,6 +114,10 @@ const MedicineSearch = () => {
 	return (
 		<div {...getRootProps()} id="medicineSearch">
 			<div className="search-section">
+				<h1 className="pageTitle">Medicine Search</h1>
+				<p className="pageSubtitle">
+					Search for medicines by name or upload an image/PDF to get detailed information.
+				</p>
 				<form className="searchForm" onSubmit={handleSearch}>
 					<div className="searchbar">
 						<input

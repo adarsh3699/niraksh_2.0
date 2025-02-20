@@ -1,7 +1,9 @@
 #medicineSearch {
     max-width: 800px;
-    margin: 2rem auto;
-    padding: 0 1rem;
+    margin: 40px auto;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 #medicineSearch .searchForm {
@@ -204,7 +206,12 @@
     transform: translateY(-1px);
 }
 
-@media (max-width: 640px) {
+@media (max-width: 768px) {
+    #medicineSearch {
+        padding: 15px;
+        margin: 20px auto;
+    }
+
     #medicineSearch .searchForm {
         flex-direction: column;
     }
@@ -215,5 +222,13 @@
 
     #medicineSearch .uploaded-files {
         grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    }
+}
+
+
+@media (max-width: 480px) {
+    #medicineSearch {
+        padding: 10px;
+        margin: 10px auto;
     }
 }

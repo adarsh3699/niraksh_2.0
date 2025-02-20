@@ -32,3 +32,40 @@ code {
 #pageNotFound a:hover {
 	text-decoration: underline;
 }
+
+/* --------------Universal Styles---------------- */
+
+.pageTitle {
+	font-size: 32px;
+	font-weight: 700;
+	color: #212121;
+	margin-bottom: 10px;
+	font-family: 'Poppins', sans-serif;
+	text-align: center;
+}
+
+.pageSubtitle {
+	font-size: 16px;
+	color: #757575;
+	font-family: 'Poppins', sans-serif;
+	margin-bottom: 25px;
+	text-align: center;
+}
+
+
+@media (max-width: 768px) {
+	.pageTitle {
+		font-size: 28px;
+	}
+
+	.pageSubtitle {
+		font-size: 14px;
+	}
+
+}
+
+@media (max-width: 480px) {
+	.pageTitle {
+		font-size: 24px;
+	}
+}

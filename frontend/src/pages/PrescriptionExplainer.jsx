@@ -76,8 +76,10 @@ const PrescriptionExplainer = () => {
 
 	return (
 		<div id="prescriptionExplainer" {...getRootProps()}>
-			<h1 className="title">Upload and Analyze Your Prescription</h1>
-			<p className="subtitle">Upload your prescriptions to get detailed medicine information and suggestions.</p>
+			<h1 className="pageTitle">Upload and Analyze Your Prescription</h1>
+			<p className="pageSubtitle">
+				Upload your prescriptions to get detailed medicine information and suggestions.
+			</p>
 
 			{/* Dropzone */}
 			<div
@@ -140,7 +142,7 @@ const PrescriptionExplainer = () => {
 			</div>
 
 			{/* Prescription Details */}
-			{description && (
+			{description && !loading && (
 				<div className="prescription-details">
 					<ReactMarkdown className="card-content">{description}</ReactMarkdown>
 				</div>

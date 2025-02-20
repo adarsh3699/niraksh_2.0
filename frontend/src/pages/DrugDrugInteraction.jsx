@@ -45,11 +45,12 @@ const DrugDrugInteraction = () => {
 	return (
 		<div id="drugDrugInteraction">
 			<div className="container">
-				<h1>Drug Drug Interaction Checker</h1>
-				<p className="subtitle">
+				<h1 className="pageTitle">Drug Drug Interaction Checker</h1>
+				<p className="pageSubtitle">
 					Enter the names of the medicines you are taking to check drug interactions or side effect with other
 					medicines.
 				</p>
+
 				<form id="interactionForm" onSubmit={handleInteractionCheck}>
 					<div id="medicationInputs">
 						{medications.map((med, index) => (
@@ -105,8 +106,7 @@ const DrugDrugInteraction = () => {
 				/>
 			</div>
 			{description && !loading && (
-				<div className="medicine-card">
-					<h2 className="card-title">Medicine Details</h2>
+				<div className="medicineInteractionDetails">
 					<ReactMarkdown className="card-content">{description}</ReactMarkdown>
 				</div>
 			)}
