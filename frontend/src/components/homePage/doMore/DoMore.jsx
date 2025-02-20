@@ -1,20 +1,11 @@
-import { memo } from 'react';
-import './doMore.css';
+import { memo } from "react";
+import { NavLink } from "react-router-dom";
+import "./doMore.css";
 
-import bookBedsImg from '../../../assets/bookBeds.avif';
-import prescription from '../../../assets/prescription.webp';
+import bookBedsImg from "../../../assets/bookBeds.avif";
+import prescription from "../../../assets/prescription.webp";
 
 function DoMore() {
-	const handleSearch = () => {
-		console.log('Searching for diseases...');
-		// Add search functionality here
-	};
-
-	const handleBooking = () => {
-		console.log('Opening booking form...');
-		// Add booking functionality here
-	};
-
 	return (
 		<div className="DoMore-container">
 			<header className="search-header">
@@ -29,10 +20,10 @@ function DoMore() {
 					<img src={prescription} alt="Medical storage facility" loading="lazy" className="card-background" />
 					<div className="card-overlay">
 						<h2 className="card-title">Prescription Explainer</h2>
-						<p className="card-subtitle">Get detailed info and treatment</p>
-						<button className="card-button" onClick={handleSearch}>
+						<p className="card-subtitle">Get detailed info and suggestions.</p>
+						<NavLink to="prescription_Explainer" className="card-button">
 							Search Now
-						</button>
+						</NavLink>
 					</div>
 				</div>
 
@@ -41,9 +32,10 @@ function DoMore() {
 					<div className="card-overlay">
 						<h2 className="card-title">Drug Drug Interaction</h2>
 						<p className="card-subtitle">Find and Drug Interaction between multi Drug</p>
-						<button className="card-button" onClick={handleBooking}>
-							Book Now
-						</button>
+
+						<NavLink to="drug_drug_interaction" className="card-button">
+							Check Now
+						</NavLink>
 					</div>
 				</div>
 			</div>

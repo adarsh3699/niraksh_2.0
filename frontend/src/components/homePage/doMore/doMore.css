@@ -96,6 +96,7 @@
     font-size: 18px;
     font-weight: 500;
     cursor: pointer;
+    text-decoration: unset;
     transition: background-color 0.2s ease;
 }
 
