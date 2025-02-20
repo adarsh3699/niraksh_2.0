@@ -65,7 +65,7 @@ app.post('/prescription', upload.array('files', 5), async (req, res) => {
         }
 
         const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-        const prompt = "Describe the prescription in the uploaded images.";
+        const prompt = "Describe the medical prescription in the uploaded images and give detailed information of medicine and suggestions.";
 
         // Convert files to generative parts
         const imageParts = req.files.map(file => fileToGenerativePart(file.path, file.mimetype));
