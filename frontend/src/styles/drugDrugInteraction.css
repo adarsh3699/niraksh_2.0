@@ -68,11 +68,11 @@
     outline: none;
 }
 
-#drugDrugInteraction .captureBtn {
-    height: 30px;
-    color: white;
+#drugDrugInteraction .removeBtn {
+    background-color: unset;
+    font-size: 30px;
     padding: 6px 20px;
-    border-radius: 0 8px 8px 0;
+    border: unset;
     cursor: pointer;
 }
 

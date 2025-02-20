@@ -4,7 +4,6 @@ import ReactMarkdown from "react-markdown";
 import { apiCall } from "../utils";
 
 import { DNA } from "react-loader-spinner";
-import captureIcon from "../assets/icons/capture.svg";
 import "../styles/drugDrugInteraction.css";
 
 const DrugDrugInteraction = () => {
@@ -42,6 +41,10 @@ const DrugDrugInteraction = () => {
 		<div id="drugDrugInteraction">
 			<div className="container">
 				<h1>Drug Drug Interaction Checker</h1>
+				<p className="subtitle">
+					Enter the names of the medicines you are taking to check drug interactions or side effect with other
+					medicines.
+				</p>
 				<form id="interactionForm" onSubmit={handleInteractionCheck}>
 					<div id="medicationInputs">
 						{medications.map((med, index) => (
@@ -56,16 +59,17 @@ const DrugDrugInteraction = () => {
 										setMedications(newMeds);
 									}}
 								/>
-								<img
-									src={captureIcon}
-									className="captureBtn"
-									loading="lazy"
-									alt="Capture Icon"
-									onClick={(e) => {
-										e.stopPropagation(); // Prevent triggering dropzone onClick
-										// Add logic to open file dialog if required
+
+								<button
+									type="button"
+									className="removeBtn"
+									onClick={() => {
+										const newMeds = medications.filter((_, medIndex) => medIndex !== index);
+										setMedications(newMeds);
 									}}
-								/>
+								>
+									&times;
+								</button>
 							</div>
 						))}
 					</div>
