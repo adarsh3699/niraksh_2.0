@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
 
 import { apiCall } from "../utils";
@@ -7,13 +7,16 @@ import { DNA } from "react-loader-spinner";
 import "../styles/drugDrugInteraction.css";
 
 const DrugDrugInteraction = () => {
-	const [medications, setMedications] = useState(
-		JSON.parse(localStorage.getItem("medicine"))?.length > 0
-			? JSON.parse(localStorage.getItem("medicine"))
-			: ["", ""]
-	); // Start with 2 input fields
+	const [medications, setMedications] = useState(["", ""]); // Start with 2 input fields
 	const [loading, setLoading] = useState(false);
 	const [description, setDescription] = useState("");
+
+	useEffect(() => {
+		document.title = "Drug Drug Interaction | Niraksh";
+		const temp = JSON.parse(localStorage.getItem("medicine"));
+
+		setMedications(temp?.length > 0 ? (temp.length == 1 ? [...temp, ""] : temp) : ["", ""]);
+	}, []);
 
 	const handleAddMedication = () => {
 		setMedications([...medications, ""]); // Add a new empty input field
