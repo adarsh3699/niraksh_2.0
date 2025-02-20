@@ -9,7 +9,7 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.title {
+#prescriptionExplainer .title {
     font-size: 32px;
     font-weight: 700;
     color: #212121;
@@ -17,7 +17,7 @@
     font-family: 'Poppins', sans-serif;
 }
 
-.subtitle {
+#prescriptionExplainer .subtitle {
     font-size: 16px;
     color: #757575;
     font-family: 'Poppins', sans-serif;
@@ -219,11 +219,11 @@
         margin: 20px auto;
     }
 
-    .title {
+    #prescriptionExplainer .title {
         font-size: 28px;
     }
 
-    .subtitle {
+    #prescriptionExplainer .subtitle {
         font-size: 14px;
     }
 
