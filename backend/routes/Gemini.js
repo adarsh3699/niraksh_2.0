@@ -107,26 +107,18 @@ app.post('/disease', async (req, res) => {
 
 
     try {
-        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash", systemInstruction: "Only talk about medical and healthcare", });
 
         const chat = model.startChat({
             history: [
                 {
                     role: "user",
-                    parts: [{ text: "Hello" }],
-                },
-                {
-                    role: "model",
-                    parts: [{ text: "Great to meet you. What would you like to know?" }],
-                },
-            ],
+                    parts: [{ text: "Tell me only about healthcare. if any question outside dont answer it." }],
+                }, ...history]
+            ,
         });
 
-
-
         let result = await chat.sendMessage(msg);
-
-        console.log(result.response.text());
 
         res.json({ description: result.response.text() });
     } catch (error) {

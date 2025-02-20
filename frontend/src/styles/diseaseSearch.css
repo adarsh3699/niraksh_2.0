@@ -64,7 +64,7 @@
     }
 }
 
-#DiseaseSearch .message.system {
+#DiseaseSearch .message.model {
     background-color: #f1f1f1;
     align-self: flex-start;
     border-bottom-left-radius: 4px;

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import ReactMarkdown from "react-markdown";
 
 import { apiCall } from "../utils";
 import "../styles/diseaseSearch.css";
@@ -6,17 +7,23 @@ import "../styles/diseaseSearch.css";
 const DiseaseSearch = () => {
 	const [messages, setMessages] = useState([
 		{
-			role: "system",
-			text: "Welcome to the Smart Health System. Please describe your symptoms, and I'll provide some precautions and advice. Remember, this is not a substitute for professional medical advice.",
+			role: "model",
+			parts: [
+				{
+					text: "Ask any doubt regrading your health, and I'll provide some precautions and advice. Remember, this is not a substitute for professional medical advice.",
+				},
+			],
 		},
 	]);
 	const [userInput, setUserInput] = useState("");
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
+		setUserInput("");
+
 		if (!userInput.trim()) return;
 
-		const newMessage = { role: "user", text: userInput };
+		const newMessage = { role: "user", parts: [{ text: userInput }] };
 
 		// Update UI immediately
 		setMessages((prevMessages) => [...prevMessages, newMessage]);
@@ -27,7 +34,9 @@ const DiseaseSearch = () => {
 				msg: userInput,
 			});
 
-			const botMessage = { role: "bot", text: response?.data.description };
+			console.log(response);
+
+			const botMessage = { role: "model", parts: [{ text: response?.data.description }] };
 			setMessages((prevMessages) => [...prevMessages, botMessage]);
 		} catch (error) {
 			console.error("Error:", error);
@@ -52,9 +61,9 @@ const DiseaseSearch = () => {
 					</div>
 					<div className="chat-content" id="chatContent">
 						{messages.map((msg, index) => (
-							<div key={index} className={`message ${msg.role}`}>
-								{msg.text}
-							</div>
+							<ReactMarkdown key={index} className={`message ${msg.role}`}>
+								{msg.parts[0].text}
+							</ReactMarkdown>
 						))}
 					</div>
 					<div className="chat-footer">
@@ -63,6 +72,7 @@ const DiseaseSearch = () => {
 								type="text"
 								placeholder="Describe your symptoms..."
 								className="chat-input"
+								name="userInput"
 								value={userInput}
 								onChange={(e) => setUserInput(e.target.value)}
 							/>
