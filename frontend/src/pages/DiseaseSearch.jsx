@@ -46,7 +46,7 @@ const DiseaseSearch = () => {
 				<div className="chat-card">
 					<div className="chat-header">
 						<h1>
-							<i className="fas fa-heartbeat"></i> Smart Health System
+							<i className="fas fa-heartbeat"></i> Smart Healthcare Assistant
 						</h1>
 						<p>Describe your symptoms to get precautions and advice</p>
 					</div>
