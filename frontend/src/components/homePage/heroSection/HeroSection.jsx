@@ -1,8 +1,8 @@
-import { memo } from 'react';
-import './heroSection.css';
+import { memo } from "react";
+import "./heroSection.css";
 
-import professional from '../../../assets/professionalImg.svg';
-import captureIcon from '../../../assets/icons/capture.svg';
+import professional from "../../../assets/professionalImg.svg";
+import captureIcon from "../../../assets/icons/capture.svg";
 
 const HeroSection = () => {
 	return (
@@ -14,7 +14,7 @@ const HeroSection = () => {
 				<p className="hero_desc">Search for any symptoms or disease.</p>
 				<form className="searchArea">
 					<div className="searchbar">
-						<input type="text" placeholder="Search for medicines" />
+						<input type="text" placeholder="Search Your symptoms here" />
 						<img src={captureIcon} className="captureBtn" loading="lazy" alt="Capture Icon" />
 					</div>
 					<button className="searchBtn">Search</button>
