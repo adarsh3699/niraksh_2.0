@@ -25,6 +25,8 @@ const DrugDrugInteraction = () => {
 	const handleInteractionCheck = async (e) => {
 		e.preventDefault();
 		// Send medications to the API
+		if (medications.length < 2 || medications[0] == "" || medications[1] == "")
+			return alert("Please enter at least two medicine name.");
 		const temp = medications.join(", ");
 		if (!temp) return;
 

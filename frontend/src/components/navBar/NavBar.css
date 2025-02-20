@@ -18,7 +18,7 @@
 
  .nav-links a:hover {
  	/* color: white; */
- 	transition-duration: .3s;
+ 	transition-duration: .5s;
  	background-color: bisque;
  	border: #f3c690;
  	color: black;
