@@ -1,20 +1,20 @@
-import { memo, Suspense, lazy, useEffect } from 'react';
-import { DNA } from 'react-loader-spinner';
-import { Navigate, useLocation, Routes as Switch, Route } from 'react-router-dom';
+import { memo, Suspense, lazy, useEffect } from "react";
+import { DNA } from "react-loader-spinner";
+import { Navigate, useLocation, Routes as Switch, Route } from "react-router-dom";
 
-import NavBar from './components/navBar/NavBar';
+import NavBar from "./components/navBar/NavBar";
 
 //lazy loading split the main bundle into many chunks
-const HomePage = lazy(() => import('./pages/HomePage'));
-const PrescriptionExplainer = lazy(() => import('./pages/PrescriptionExplainer'));
-const MedicineSearch = lazy(() => import('./pages/MedicineSearch'));
-const DiseaseSearch = lazy(() => import('./pages/DiseaseSearch'));
-const DrugDrugInteraction = lazy(() => import('./pages/DrugDrugInteraction'));
-const UserLogin = lazy(() => import('./pages/UserLogin'));
-const UserSignup = lazy(() => import('./pages/UserSignup'));
-const UserForgetPass = lazy(() => import('./pages/UserForgetPass'));
-const DoctorSuggest = lazy(() => import('./pages/DoctorSuggest'));
-const AboutUs = lazy(() => import('./pages/AboutUs'));
+const HomePage = lazy(() => import("./pages/HomePage"));
+const PrescriptionExplainer = lazy(() => import("./pages/PrescriptionExplainer"));
+const MedicineSearch = lazy(() => import("./pages/MedicineSearch"));
+const DiseaseSearch = lazy(() => import("./pages/DiseaseSearch"));
+const DrugDrugInteraction = lazy(() => import("./pages/DrugDrugInteraction"));
+const UserLogin = lazy(() => import("./pages/UserLogin"));
+const UserSignup = lazy(() => import("./pages/UserSignup"));
+const UserForgetPass = lazy(() => import("./pages/UserForgetPass"));
+const DoctorSuggest = lazy(() => import("./pages/DoctorSuggest"));
+const AboutUs = lazy(() => import("./pages/AboutUs"));
 
 function Routes() {
 	const { pathname } = useLocation();
