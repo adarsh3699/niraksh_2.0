@@ -2,6 +2,7 @@ const express = require("express");
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 const fs = require('fs');
 const multer = require("multer");
+require('dotenv').config();
 
 const app = express();
 
@@ -18,7 +19,7 @@ function fileToGenerativePart(path, mimeType) {
     };
 }
 
-const genAI = new GoogleGenerativeAI("AIzaSyC7jSBWnP8zMq3qgndwbTM4nMH3hUTCyWM");
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "AIzaSyC7jSBWnP8zMq3qgndwbTM4nMH3hUTCyWM");
 
 app.post('/medicine', upload.single('file'), async (req, res) => {
     const name = req.body.name

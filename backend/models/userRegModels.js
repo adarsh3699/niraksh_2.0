@@ -9,6 +9,8 @@ const userSchema = mongoose.Schema({
     linkWithPassword: { type: Boolean, required: true },
     createdOn: { type: Date, required: true },
     lastLogin: { type: Date, required: false },
+    refreshToken: { type: String, required: false },
+    refreshTokenExpiresAt: { type: Date, required: false }
 });
 
 module.exports = mongoose.model("User", userSchema);

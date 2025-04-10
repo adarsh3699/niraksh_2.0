@@ -1,7 +1,7 @@
 const express = require("express");
 // const jwt = require("jsonwebtoken");
 const axios = require("axios");
-const { JWT_SECRET, md5Hash, sendMail, encryptText, decryptText, createTokens } = require("../utils");
+const { JWT_SECRET, md5Hash, sendMail, encryptText, decryptText, createTokens, createRefreshToken, verifyRefreshToken } = require("../utils");
 const User = require("../models/userRegModels");
 
 const app = express();
@@ -30,11 +30,35 @@ app.post("/signin", async (req, res) => {
                 return res.status(400).json({ statusCode: 400, msg: "Invalid credintials!" });
             }
 
+            // Generate access token
             const token = createTokens({
                 userId: existingUser._id,
                 email: existingUser.email,
                 type: "user",
             });
+
+            // Generate refresh token
+            const refreshToken = createRefreshToken({
+                userId: existingUser._id,
+                tokenVersion: Date.now()
+            });
+
+            // Calculate expiration date for refresh token
+            const refreshExpires = new Date();
+            refreshExpires.setDate(refreshExpires.getDate() + 30); // 30 days from now
+
+            // Update user's refresh token in database
+            await User.updateOne(
+                { _id: existingUser._id },
+                {
+                    $set: {
+                        refreshToken: refreshToken,
+                        refreshTokenExpiresAt: refreshExpires,
+                        lastLogin: new Date()
+                    }
+                }
+            );
+
             const loginInfo = createTokens({
                 verified: existingUser?.verified,
                 linkWithGoogle: existingUser?.linkWithGoogle,
@@ -44,13 +68,14 @@ app.post("/signin", async (req, res) => {
             res.status(200).json({
                 statusCode: 200,
                 jwt: token,
+                refreshToken: refreshToken,
                 loginInfo,
                 msg: "Login Successfully",
             });
         } else {
             return res.status(400).json({
                 statusCode: 400,
-                msg: "You have an account using Google Login. So,Please login through the Google button ",
+                msg: "You have an account using Google Login. So,Please login through the Google button ",
             });
         }
     } catch (err) {
@@ -96,6 +121,29 @@ app.post("/signin/google", async (req, res) => {
                             userId: result?._id,
                             email: result?.email,
                         });
+
+                        // Generate refresh token
+                        const refreshToken = createRefreshToken({
+                            userId: result?._id,
+                            tokenVersion: Date.now()
+                        });
+
+                        // Calculate expiration date for refresh token
+                        const refreshExpires = new Date();
+                        refreshExpires.setDate(refreshExpires.getDate() + 30); // 30 days from now
+
+                        // Update user's refresh token in database
+                        await User.updateOne(
+                            { _id: result?._id },
+                            {
+                                $set: {
+                                    refreshToken: refreshToken,
+                                    refreshTokenExpiresAt: refreshExpires,
+                                    lastLogin: new Date()
+                                }
+                            }
+                        );
+
                         const loginInfo = createTokens({
                             verified: result?.verified,
                             linkWithGoogle: result?.linkWithGoogle,
@@ -111,6 +159,7 @@ app.post("/signin/google", async (req, res) => {
                             statusCode: 200,
                             details,
                             jwt: token,
+                            refreshToken: refreshToken,
                             loginInfo,
                             msg: "Login Successfully",
                         });
@@ -119,6 +168,29 @@ app.post("/signin/google", async (req, res) => {
                             userId: existingUser._id,
                             email: existingUser.email,
                         });
+
+                        // Generate refresh token
+                        const refreshToken = createRefreshToken({
+                            userId: existingUser._id,
+                            tokenVersion: Date.now()
+                        });
+
+                        // Calculate expiration date for refresh token
+                        const refreshExpires = new Date();
+                        refreshExpires.setDate(refreshExpires.getDate() + 30); // 30 days from now
+
+                        // Update user's refresh token in database
+                        await User.updateOne(
+                            { _id: existingUser._id },
+                            {
+                                $set: {
+                                    refreshToken: refreshToken,
+                                    refreshTokenExpiresAt: refreshExpires,
+                                    lastLogin: new Date()
+                                }
+                            }
+                        );
+
                         const loginInfo = createTokens({
                             verified: existingUser?.verified,
                             linkWithGoogle: existingUser?.linkWithGoogle,
@@ -135,6 +207,7 @@ app.post("/signin/google", async (req, res) => {
                             statusCode: 200,
                             details,
                             jwt: token,
+                            refreshToken: refreshToken,
                             loginInfo,
                             msg: "Login Successfully",
                         });
@@ -260,6 +333,104 @@ app.post("/change_password", async function (req, res) {
             msg: "Something went wrong",
             error: e.message,
         });
+    }
+});
+
+// Refresh token endpoint
+app.post("/refresh-token", async (req, res) => {
+    const refreshToken = req.body?.refreshToken?.trim();
+
+    if (!refreshToken) {
+        return res.status(400).json({ statusCode: 400, msg: "Refresh token is required" });
+    }
+
+    try {
+        // Verify the refresh token
+        const tokenResult = verifyRefreshToken(refreshToken);
+        if (!tokenResult.authorization) {
+            return res.status(401).json({ statusCode: 401, msg: "Invalid or expired refresh token" });
+        }
+
+        // Find the user with this refresh token
+        const user = await User.findOne({ refreshToken });
+
+        if (!user) {
+            return res.status(401).json({ statusCode: 401, msg: "Invalid refresh token" });
+        }
+
+        // Check if the token is expired in our database
+        if (user.refreshTokenExpiresAt && new Date() > user.refreshTokenExpiresAt) {
+            return res.status(401).json({ statusCode: 401, msg: "Refresh token expired" });
+        }
+
+        // Generate new tokens
+        const accessToken = createTokens({
+            userId: user._id,
+            email: user.email,
+            type: "user",
+        });
+
+        const newRefreshToken = createRefreshToken({
+            userId: user._id,
+            tokenVersion: Date.now()
+        });
+
+        // Calculate expiration date for refresh token
+        const refreshExpires = new Date();
+        refreshExpires.setDate(refreshExpires.getDate() + 30); // 30 days from now
+
+        // Update the user's refresh token in the database
+        await User.updateOne(
+            { _id: user._id },
+            {
+                $set: {
+                    refreshToken: newRefreshToken,
+                    refreshTokenExpiresAt: refreshExpires,
+                    lastLogin: new Date()
+                }
+            }
+        );
+
+        // Send the new tokens
+        res.status(200).json({
+            statusCode: 200,
+            jwt: accessToken,
+            refreshToken: newRefreshToken,
+            msg: "Tokens refreshed successfully",
+        });
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ statusCode: 500, msg: "Something went wrong!" });
+    }
+});
+
+// Logout endpoint
+app.post("/logout", async (req, res) => {
+    const refreshToken = req.body?.refreshToken?.trim();
+
+    if (!refreshToken) {
+        return res.status(400).json({ statusCode: 400, msg: "Refresh token is required" });
+    }
+
+    try {
+        // Clear the refresh token in the database
+        await User.updateOne(
+            { refreshToken },
+            {
+                $set: {
+                    refreshToken: null,
+                    refreshTokenExpiresAt: null
+                }
+            }
+        );
+
+        res.status(200).json({
+            statusCode: 200,
+            msg: "Logged out successfully",
+        });
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ statusCode: 500, msg: "Something went wrong!" });
     }
 });
 

@@ -3,6 +3,7 @@ import { DNA } from "react-loader-spinner";
 import { Navigate, useLocation, Routes as Switch, Route } from "react-router-dom";
 
 import NavBar from "./components/navBar/NavBar";
+import AuthGuard from "./components/authGuard/AuthGuard";
 
 //lazy loading split the main bundle into many chunks
 const HomePage = lazy(() => import("./pages/HomePage"));
@@ -58,7 +59,9 @@ function Routes() {
 					element={
 						<>
 							<NavBar />
-							<PrescriptionExplainer />
+							<AuthGuard>
+								<PrescriptionExplainer />
+							</AuthGuard>
 						</>
 					}
 				/>
@@ -69,7 +72,9 @@ function Routes() {
 					element={
 						<>
 							<NavBar />
-							<MedicineSearch />
+							<AuthGuard>
+								<MedicineSearch />
+							</AuthGuard>
 						</>
 					}
 				/>
@@ -80,7 +85,9 @@ function Routes() {
 					element={
 						<>
 							<NavBar />
-							<DrugDrugInteraction />
+							<AuthGuard>
+								<DrugDrugInteraction />
+							</AuthGuard>
 						</>
 					}
 				/>
@@ -91,7 +98,9 @@ function Routes() {
 					element={
 						<>
 							<NavBar />
-							<DiseaseSearch />
+							<AuthGuard>
+								<DiseaseSearch />
+							</AuthGuard>
 						</>
 					}
 				/>
@@ -102,7 +111,9 @@ function Routes() {
 					element={
 						<>
 							<NavBar />
-							<DoctorSuggest />
+							<AuthGuard>
+								<DoctorSuggest />
+							</AuthGuard>
 						</>
 					}
 				/>

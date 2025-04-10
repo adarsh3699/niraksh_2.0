@@ -3,28 +3,41 @@ const { google } = require("googleapis");
 const nodemailer = require("nodemailer");
 var createError = require("http-errors");
 const JWT = require("jsonwebtoken");
+require('dotenv').config();
 
-const encryptionKey = "bhemu_is_kutta";
-const JWT_SECRET = "bhemu_is_kutta";
+const encryptionKey = process.env.JWT_SECRET || "bhemu_is_kutta";
+const JWT_SECRET = process.env.JWT_SECRET || "bhemu_is_kutta";
 
-const CLIENT_ID = "238415785154-hlq2rg2psoi9cikjqdop740k7i5pjlgf.apps.googleusercontent.com";
-const CLEINT_SECRET = "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";
-const REDIRECT_URI = "https://developers.google.com/oauthplayground";
-const REFRESH_TOKEN =
-    "1//04XTT9t6VEjv5CgYIARAAGAQSNwF-L9Ir3J2Yz2y5cMcz4J8S20EAFcM9XTKWdrLbXmc9ukETxzpv4q78CdzAgV_dzKVx5zO1ttU";
+const CLIENT_ID = process.env.EMAIL_CLIENT_ID || "238415785154-hlq2rg2psoi9cikjqdop740k7i5pjlgf.apps.googleusercontent.com";
+const CLEINT_SECRET = process.env.EMAIL_CLIENT_SECRET || "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";
+const REDIRECT_URI = process.env.EMAIL_REDIRECT_URI || "https://developers.google.com/oauthplayground";
+const REFRESH_TOKEN = process.env.EMAIL_REFRESH_TOKEN || "1//04XTT9t6VEjv5CgYIARAAGAQSNwF-L9Ir3J2Yz2y5cMcz4J8S20EAFcM9XTKWdrLbXmc9ukETxzpv4q78CdzAgV_dzKVx5zO1ttU";
 
 const oAuth2Client = new google.auth.OAuth2(CLIENT_ID, CLEINT_SECRET, REDIRECT_URI);
 oAuth2Client.setCredentials({ refresh_token: REFRESH_TOKEN });
 
 function getMongoDb() {
-    // return 'mongodb://localhost/bhemu-notes';
-    return "mongodb+srv://adarsh3699:adarsh123@cluster0.6gfam.mongodb.net/Niraksh-Guardian";
+    return process.env.MONGODB_URI || "mongodb+srv://adarsh3699:adarsh123@cluster0.6gfam.mongodb.net/Niraksh-Guardian";
 }
 
 function createTokens(payload) {
     try {
         const options = {
-            expiresIn: "240h",
+            expiresIn: process.env.JWT_EXPIRATION || "240h",
+        };
+
+        const token = JWT.sign(payload, JWT_SECRET, options);
+        return token;
+    } catch (err) {
+        console.log(err);
+        return createError.InternalServerError().message;
+    }
+}
+
+function createRefreshToken(payload) {
+    try {
+        const options = {
+            expiresIn: process.env.REFRESH_TOKEN_EXPIRATION || "30d",
         };
 
         const token = JWT.sign(payload, JWT_SECRET, options);
@@ -43,7 +56,7 @@ function signLoginInfoToken(verified, linkWithGoogle, linkWithPassword) {
             linkWithPassword: linkWithPassword,
         };
         const options = {
-            expiresIn: "240h",
+            expiresIn: process.env.JWT_EXPIRATION || "240h",
         };
 
         const token = JWT.sign(payload, JWT_SECRET, options);
@@ -78,6 +91,25 @@ function verifyAccessToken(req) {
 }
 
 function verifyLoginInfoToken(token) {
+    try {
+        if (!token) return { authorization: false, message: "Please provide Token" };
+
+        const isTokenValid = JWT.verify(token, JWT_SECRET, (err, payload) => {
+            if (err) {
+                const message = err.name === "JsonWebTokenError" ? "Unauthorized" : err.message;
+                return { authorization: false, message };
+            }
+
+            return { authorization: true, payload };
+        });
+        return isTokenValid;
+    } catch (err) {
+        console.log(err);
+        return { authorization: false, message: "Internal server error" };
+    }
+}
+
+function verifyRefreshToken(token) {
     try {
         if (!token) return { authorization: false, message: "Please provide Token" };
 
@@ -134,7 +166,7 @@ async function sendMail(mailTo, mailSubject, title, object) {
             service: "gmail",
             auth: {
                 type: "OAuth2",
-                user: "bhemu3699@gmail.com",
+                user: process.env.EMAIL_USER || "bhemu3699@gmail.com",
                 clientId: CLIENT_ID,
                 clientSecret: CLEINT_SECRET,
                 refreshToken: REFRESH_TOKEN,
@@ -143,7 +175,7 @@ async function sendMail(mailTo, mailSubject, title, object) {
         });
 
         const mailOptions = {
-            from: "Bhemu Notes" + " <bhemu3699@gmail.com>",
+            from: "Niraksh Guardian" + " <" + (process.env.EMAIL_USER || "bhemu3699@gmail.com") + ">",
             to: mailTo,
             subject: mailSubject,
             text: title + "/n" + object,
@@ -175,4 +207,6 @@ module.exports = {
     verifyAccessToken,
     signLoginInfoToken,
     verifyLoginInfoToken,
+    createRefreshToken,
+    verifyRefreshToken,
 };

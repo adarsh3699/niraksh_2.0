@@ -1,15 +1,16 @@
-import { useState, memo } from 'react';
-import PropTypes from 'prop-types';
-import './NavBar.css'; // Assuming you have a CSS file for styling
+import { useState, memo } from "react";
+import PropTypes from "prop-types";
+import "./NavBar.css"; // Assuming you have a CSS file for styling
 
-import { NavLink, useNavigate } from 'react-router-dom';
-import { extractEncryptedToken, userDeviceType } from '../../utils';
-import MenuBar from '../menuBar/MenuBar';
+import { NavLink, useNavigate } from "react-router-dom";
+import { userDeviceType } from "../../utils";
+import { useAuthContext } from "../../contexts/AuthContext";
+import MenuBar from "../menuBar/MenuBar";
 
-import brandLogo from '../../assets/brandLogo.png';
+import brandLogo from "../../assets/brandLogo.png";
 // import searchIcon from '../../assets/icons/search.svg';
-import profileIcon from '../../assets/icons/profile.svg';
-import menuIcon from '../../assets/icons/menu.svg';
+import profileIcon from "../../assets/icons/profile.svg";
+import menuIcon from "../../assets/icons/menu.svg";
 
 // const userLoggedIn = localStorage.getItem("JWT_token");
 
@@ -17,54 +18,46 @@ import menuIcon from '../../assets/icons/menu.svg';
 
 const menuItems = [
 	{
-		name: 'Home',
-		path: '/',
+		name: "Home",
+		path: "/",
 	},
 	{
-		name: 'Medicine',
-		path: '/medicine_search',
+		name: "Medicine",
+		path: "/medicine_search",
 	},
 	{
-		name: 'Prescription Explainer',
-		path: '/prescription_Explainer',
+		name: "Prescription Explainer",
+		path: "/prescription_Explainer",
 	},
 	{
-		name: 'Drug Drug Interaction',
-		path: '/drug_drug_interaction',
+		name: "Drug Drug Interaction",
+		path: "/drug_drug_interaction",
 	},
 	{
-		name: 'Diseases',
-		path: '/diseases',
+		name: "Diseases",
+		path: "/diseases",
 	},
 	{
-		name: 'Doctor Suggest',
-		path: '/doctor_suggest',
+		name: "Doctor Suggest",
+		path: "/doctor_suggest",
 	},
 ];
 
 const NabBar = () => {
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
+	const { isAuthenticated, userProfile, logout } = useAuthContext();
 
-	const menuName = `/${location.pathname?.split('/')[1]}`;
-
+	const menuName = `/${location.pathname?.split("/")[1]}`;
 	const navigate = useNavigate();
-	// const [isLogged, setIsLogged] = useState(!!userEmail);
 
-	// const handleSignInOut = () => {
-	// 	localStorage.removeItem('JWT_token');
-	// 	localStorage.removeItem('user_details');
-	// 	localStorage.removeItem('login_info');
-
-	// 	if (userEmail) {
-	// 		localStorage.removeItem('JWT_token');
-	// 		localStorage.removeItem('user_details');
-	// 		localStorage.removeItem('login_info');
-	// 		navigate('/');
-	// 		setIsLogged(false);
-	// 	} else {
-	// 		navigate('/');
-	// 	}
-	// };
+	const handleSignOut = async () => {
+		try {
+			await logout();
+			navigate("/");
+		} catch (error) {
+			console.error("Error during logout:", error);
+		}
+	};
 
 	return (
 		<nav>
@@ -74,15 +67,22 @@ const NabBar = () => {
 					menuName={menuName}
 					isMenuOpen={isMenuOpen}
 					setIsMenuOpen={setIsMenuOpen}
+					isAuthenticated={isAuthenticated}
+					userProfile={userProfile}
+					handleSignOut={handleSignOut}
 				/>
 			) : (
-				<DesktopNavBar />
+				<DesktopNavBar
+					isAuthenticated={isAuthenticated}
+					userProfile={userProfile}
+					handleSignOut={handleSignOut}
+				/>
 			)}
 		</nav>
 	);
 };
 
-function DesktopNavBar() {
+function DesktopNavBar({ isAuthenticated, userProfile, handleSignOut }) {
 	return (
 		<>
 			<div className="nav-links">
@@ -100,15 +100,30 @@ function DesktopNavBar() {
 				{/* <NavLink className="nav-icon" to="/">
 					<img src={searchIcon} alt="sogo" />
 				</NavLink> */}
-				<NavLink className="nav-icon" to="/login">
-					<img src={profileIcon} alt="Logo" />
-				</NavLink>
+				{isAuthenticated ? (
+					<div className="profile-container">
+						<span className="user-email">{userProfile?.email || "User"}</span>
+						<button className="logout-btn" onClick={handleSignOut}>
+							Logout
+						</button>
+					</div>
+				) : (
+					<NavLink className="nav-icon" to="/login">
+						<img src={profileIcon} alt="Login" />
+					</NavLink>
+				)}
 			</div>
 		</>
 	);
 }
 
-function MobileNavBar({ navigate, menuName, isMenuOpen, setIsMenuOpen }) {
+DesktopNavBar.propTypes = {
+	isAuthenticated: PropTypes.bool.isRequired,
+	userProfile: PropTypes.object,
+	handleSignOut: PropTypes.func.isRequired,
+};
+
+function MobileNavBar({ navigate, menuName, isMenuOpen, setIsMenuOpen, isAuthenticated, userProfile, handleSignOut }) {
 	return (
 		<>
 			<div className="phone-nav-links">
@@ -120,9 +135,17 @@ function MobileNavBar({ navigate, menuName, isMenuOpen, setIsMenuOpen }) {
 					Niraksh
 				</NavLink>
 
-				<NavLink className="nav-icon" to="/login">
-					<img src={profileIcon} alt="Logo" />
-				</NavLink>
+				{isAuthenticated ? (
+					<div className="mobile-profile" onClick={handleSignOut}>
+						<span className="logout-text" title={userProfile?.email || "User"}>
+							Logout
+						</span>
+					</div>
+				) : (
+					<NavLink className="nav-icon" to="/login">
+						<img src={profileIcon} alt="Login" />
+					</NavLink>
+				)}
 			</div>
 			<MenuBar
 				menuItems={menuItems}
@@ -134,11 +157,15 @@ function MobileNavBar({ navigate, menuName, isMenuOpen, setIsMenuOpen }) {
 		</>
 	);
 }
+
 MobileNavBar.propTypes = {
 	navigate: PropTypes.func.isRequired,
 	menuName: PropTypes.string.isRequired,
 	isMenuOpen: PropTypes.bool.isRequired,
 	setIsMenuOpen: PropTypes.func.isRequired,
+	isAuthenticated: PropTypes.bool.isRequired,
+	userProfile: PropTypes.object,
+	handleSignOut: PropTypes.func.isRequired,
 };
 
 export default memo(NabBar);
