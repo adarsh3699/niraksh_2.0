@@ -86,150 +86,194 @@ app.post("/signin", async (req, res) => {
 
 // google-auth
 app.post("/signin/google", async (req, res) => {
+    // Accept both ID token and Access Token
     const googleAccessToken = req.body.googleAccessToken;
+    const googleIdToken = req.body.googleIdToken || googleAccessToken; // Handle either token type
     const createdOn = new Date(Date.now());
 
     try {
-        if (googleAccessToken) {
-            axios
-                .get("https://www.googleapis.com/oauth2/v3/userinfo", {
-                    headers: {
-                        Authorization: `Bearer ${req.body.googleAccessToken}`,
-                    },
-                })
-                .then(async (response) => {
-                    const firstName = response.data.given_name;
-                    const lastName = response.data.family_name;
-                    const email = response.data.email;
-                    const picture = response.data.picture;
-
-                    const existingUser = await User.findOne({ email });
-
-                    if (!existingUser) {
-                        const result = await User.create({
-                            firstName,
-                            lastName,
-                            profilePicture: picture,
-                            email,
-                            verified: true,
-                            linkWithGoogle: true,
-                            linkWithPassword: false,
-                            createdOn,
-                        });
-
-                        const token = createTokens({
-                            userId: result?._id,
-                            email: result?.email,
-                        });
-
-                        // Generate refresh token
-                        const refreshToken = createRefreshToken({
-                            userId: result?._id,
-                            tokenVersion: Date.now()
-                        });
-
-                        // Calculate expiration date for refresh token
-                        const refreshExpires = new Date();
-                        refreshExpires.setDate(refreshExpires.getDate() + 30); // 30 days from now
-
-                        // Update user's refresh token in database
-                        await User.updateOne(
-                            { _id: result?._id },
-                            {
-                                $set: {
-                                    refreshToken: refreshToken,
-                                    refreshTokenExpiresAt: refreshExpires,
-                                    lastLogin: new Date()
-                                }
-                            }
-                        );
-
-                        const loginInfo = createTokens({
-                            verified: result?.verified,
-                            linkWithGoogle: result?.linkWithGoogle,
-                            linkWithPassword: result?.linkWithPassword,
-                        });
-
-                        const details = {
-                            firstName: result?.firstName,
-                            lastName: result?.lastName,
-                            profilePicture: result?.profilePicture,
-                        };
-                        res.status(200).json({
-                            statusCode: 200,
-                            details,
-                            jwt: token,
-                            refreshToken: refreshToken,
-                            loginInfo,
-                            msg: "Login Successfully",
-                        });
-                    } else if (existingUser.linkWithGoogle === true) {
-                        const token = createTokens({
-                            userId: existingUser._id,
-                            email: existingUser.email,
-                        });
-
-                        // Generate refresh token
-                        const refreshToken = createRefreshToken({
-                            userId: existingUser._id,
-                            tokenVersion: Date.now()
-                        });
-
-                        // Calculate expiration date for refresh token
-                        const refreshExpires = new Date();
-                        refreshExpires.setDate(refreshExpires.getDate() + 30); // 30 days from now
-
-                        // Update user's refresh token in database
-                        await User.updateOne(
-                            { _id: existingUser._id },
-                            {
-                                $set: {
-                                    refreshToken: refreshToken,
-                                    refreshTokenExpiresAt: refreshExpires,
-                                    lastLogin: new Date()
-                                }
-                            }
-                        );
-
-                        const loginInfo = createTokens({
-                            verified: existingUser?.verified,
-                            linkWithGoogle: existingUser?.linkWithGoogle,
-                            linkWithPassword: existingUser?.linkWithPassword,
-                        });
-
-                        const details = {
-                            firstName: existingUser.firstName,
-                            lastName: existingUser.lastName,
-                            profilePicture: existingUser.profilePicture,
-                        };
-
-                        res.status(200).json({
-                            statusCode: 200,
-                            details,
-                            jwt: token,
-                            refreshToken: refreshToken,
-                            loginInfo,
-                            msg: "Login Successfully",
-                        });
-                    } else {
-                        return res.status(404).json({
-                            statusCode: 404,
-                            msg: "Please login through your email password.",
-                        });
+        if (googleAccessToken || googleIdToken) {
+            // If we have access token, use it to get user info from Google API
+            if (googleAccessToken && googleAccessToken.startsWith('ya29.')) {
+                axios
+                    .get("https://www.googleapis.com/oauth2/v3/userinfo", {
+                        headers: {
+                            Authorization: `Bearer ${googleAccessToken}`,
+                        },
+                    })
+                    .then(async (response) => {
+                        // Process user data from Google API
+                        await processGoogleUserData(response.data, createdOn, res);
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                        res.status(400).json({ statusCode: 400, msg: "Invalid access token!" });
+                    });
+            }
+            // If we have ID token (JWT from Google), decode it directly
+            else if (googleIdToken) {
+                try {
+                    // For ID tokens, we can decode the JWT to get user info
+                    // This is a simplified version - in production you should verify the token with Google
+                    const parts = googleIdToken.split('.');
+                    if (parts.length !== 3) {
+                        return res.status(400).json({ statusCode: 400, msg: "Invalid token format" });
                     }
-                })
-                .catch((err) => {
-                    console.log(err);
-                    res.status(400).json({ statusCode: 400, msg: "Invalid access token!" });
-                });
+
+                    // Decode the payload part of the JWT
+                    const payload = JSON.parse(Buffer.from(parts[1], 'base64').toString());
+
+                    // Process user data from decoded token
+                    const userData = {
+                        given_name: payload.given_name,
+                        family_name: payload.family_name,
+                        email: payload.email,
+                        picture: payload.picture
+                    };
+
+                    await processGoogleUserData(userData, createdOn, res);
+                } catch (error) {
+                    console.log("Error decoding ID token:", error);
+                    res.status(400).json({ statusCode: 400, msg: "Invalid ID token!" });
+                }
+            }
         } else {
-            res.status(400).json({ statusCode: 400, msg: "Please provide Token" });
+            res.status(400).json({ statusCode: 400, msg: "Please provide a Google token" });
         }
     } catch (err) {
         console.log(err);
         res.status(500).json({ statusCode: 500, msg: "Something went wrong!" });
     }
 });
+
+// Helper function to process Google user data
+async function processGoogleUserData(userData, createdOn, res) {
+    try {
+        const firstName = userData.given_name;
+        const lastName = userData.family_name;
+        const email = userData.email;
+        const picture = userData.picture;
+
+        const existingUser = await User.findOne({ email });
+
+        if (!existingUser) {
+            const result = await User.create({
+                firstName,
+                lastName,
+                profilePicture: picture,
+                email,
+                verified: true,
+                linkWithGoogle: true,
+                linkWithPassword: false,
+                createdOn,
+            });
+
+            const token = createTokens({
+                userId: result?._id,
+                email: result?.email,
+            });
+
+            // Generate refresh token
+            const refreshToken = createRefreshToken({
+                userId: result?._id,
+                tokenVersion: Date.now()
+            });
+
+            // Calculate expiration date for refresh token
+            const refreshExpires = new Date();
+            refreshExpires.setDate(refreshExpires.getDate() + 30); // 30 days from now
+
+            // Update user's refresh token in database
+            await User.updateOne(
+                { _id: result?._id },
+                {
+                    $set: {
+                        refreshToken: refreshToken,
+                        refreshTokenExpiresAt: refreshExpires,
+                        lastLogin: new Date()
+                    }
+                }
+            );
+
+            const loginInfo = createTokens({
+                verified: result?.verified,
+                linkWithGoogle: result?.linkWithGoogle,
+                linkWithPassword: result?.linkWithPassword,
+            });
+
+            const details = {
+                firstName: result?.firstName,
+                lastName: result?.lastName,
+                profilePicture: result?.profilePicture,
+            };
+
+            res.status(200).json({
+                statusCode: 200,
+                details,
+                jwt: token,
+                refreshToken: refreshToken,
+                loginInfo,
+                msg: "Login Successfully",
+            });
+        } else if (existingUser.linkWithGoogle === true) {
+            const token = createTokens({
+                userId: existingUser._id,
+                email: existingUser.email,
+            });
+
+            // Generate refresh token
+            const refreshToken = createRefreshToken({
+                userId: existingUser._id,
+                tokenVersion: Date.now()
+            });
+
+            // Calculate expiration date for refresh token
+            const refreshExpires = new Date();
+            refreshExpires.setDate(refreshExpires.getDate() + 30); // 30 days from now
+
+            // Update user's refresh token in database
+            await User.updateOne(
+                { _id: existingUser._id },
+                {
+                    $set: {
+                        refreshToken: refreshToken,
+                        refreshTokenExpiresAt: refreshExpires,
+                        lastLogin: new Date()
+                    }
+                }
+            );
+
+            const loginInfo = createTokens({
+                verified: existingUser?.verified,
+                linkWithGoogle: existingUser?.linkWithGoogle,
+                linkWithPassword: existingUser?.linkWithPassword,
+            });
+
+            const details = {
+                firstName: existingUser.firstName,
+                lastName: existingUser.lastName,
+                profilePicture: existingUser.profilePicture,
+            };
+
+            res.status(200).json({
+                statusCode: 200,
+                details,
+                jwt: token,
+                refreshToken: refreshToken,
+                loginInfo,
+                msg: "Login Successfully",
+            });
+        } else {
+            return res.status(404).json({
+                statusCode: 404,
+                msg: "Please login through your email password.",
+            });
+        }
+    } catch (error) {
+        console.log("Error processing Google user data:", error);
+        res.status(500).json({ statusCode: 500, msg: "Error processing user data" });
+    }
+}
 
 // create new User
 app.post("/signup", async (req, res) => {

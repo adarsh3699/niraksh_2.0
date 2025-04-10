@@ -6,12 +6,71 @@ import ShowMsg from "../components/showMsg/ShowMsg";
 
 import "../styles/userLogin.css";
 
+// Google OAuth client ID
+const GOOGLE_CLIENT_ID =
+	import.meta.env.VITE_GOOGLE_CLIENT_ID || "238415785154-hlq2rg2psoi9cikjqdop740k7i5pjlgf.apps.googleusercontent.com";
+
 const UserLogin = () => {
 	const [msg, setMsg] = useState({ text: "", type: "" });
 	const [googleLoading, setGoogleLoading] = useState(false);
 	const location = useLocation();
 	const navigate = useNavigate();
 	const { isAuthenticated, checkAuthStatus } = useAuthContext();
+
+	// Load Google API script
+	useEffect(() => {
+		// Load Google's auth script
+		const loadGoogleScript = () => {
+			// Check if script already exists
+			if (document.getElementById("google-auth-script")) return;
+
+			const script = document.createElement("script");
+			script.src = "https://accounts.google.com/gsi/client";
+			script.id = "google-auth-script";
+			script.async = true;
+			script.defer = true;
+			document.body.appendChild(script);
+
+			script.onload = initializeGoogleLogin;
+		};
+
+		loadGoogleScript();
+
+		return () => {
+			// Cleanup Google script and callbacks
+			const script = document.getElementById("google-auth-script");
+			if (script) {
+				document.body.removeChild(script);
+			}
+			// Remove the callback handler
+			window.handleGoogleCredentialResponse = undefined;
+		};
+	}, []);
+
+	// Initialize Google login
+	const initializeGoogleLogin = useCallback(() => {
+		if (!window.google) return;
+
+		// Define the callback handler for Google's response
+		window.handleGoogleCredentialResponse = async (response) => {
+			if (response.credential) {
+				await handleGoogleAuth(response.credential);
+			}
+		};
+
+		// Render the button
+		window.google.accounts.id.initialize({
+			client_id: GOOGLE_CLIENT_ID,
+			callback: window.handleGoogleCredentialResponse,
+			auto_select: false,
+		});
+
+		window.google.accounts.id.renderButton(document.getElementById("google-signin-button"), {
+			theme: "outline",
+			size: "large",
+			width: "100%",
+		});
+	}, []);
 
 	useEffect(() => {
 		// If user is already logged in, redirect to requested page or home
@@ -81,52 +140,53 @@ const UserLogin = () => {
 		[handleMsgShown, location, navigate, checkAuthStatus]
 	);
 
-	const handleGoogleLogin = useCallback(async () => {
-		setGoogleLoading(true);
-		// This is just a placeholder for Google OAuth integration
-		// You would need to implement the actual Google OAuth flow here
-		try {
-			// Mock Google OAuth response for now
-			const mockGoogleToken = "google_oauth_token";
+	const handleGoogleAuth = useCallback(
+		async (credential) => {
+			setGoogleLoading(true);
+			try {
+				// Call backend with the Google ID token
+				const apiResp = await apiCall("user/signin/google", "post", {
+					googleIdToken: credential,
+				});
+				console.log("Google login response:", apiResp);
 
-			const apiResp = await apiCall("user/signin/google", "post", { googleAccessToken: mockGoogleToken });
-			console.log("Google login response:", apiResp);
+				if (apiResp?.data?.statusCode === 200 && apiResp?.data?.jwt) {
+					const extractedToken = extractEncryptedToken(apiResp.data.jwt);
 
-			if (apiResp?.data?.statusCode === 200 && apiResp?.data?.jwt) {
-				const extractedToken = extractEncryptedToken(apiResp.data.jwt);
+					const userDetails = {
+						type: "user",
+						email: extractedToken?.email,
+						userId: extractedToken?.userId,
+						firstName: apiResp.data?.details?.firstName,
+						lastName: apiResp.data?.details?.lastName,
+						profilePicture: apiResp.data?.details?.profilePicture,
+					};
 
-				const userDetails = {
-					type: "user",
-					email: extractedToken?.email,
-					userId: extractedToken?.userId,
-					firstName: apiResp.data?.details?.firstName,
-					lastName: apiResp.data?.details?.lastName,
-					profilePicture: apiResp.data?.details?.profilePicture,
-				};
+					localStorage.setItem("user_details", JSON.stringify(userDetails));
+					localStorage.setItem("JWT_token", apiResp.data.jwt);
+					localStorage.setItem("refresh_token", apiResp.data.refreshToken);
+					localStorage.setItem("loginInfo", apiResp.data.loginInfo);
 
-				localStorage.setItem("user_details", JSON.stringify(userDetails));
-				localStorage.setItem("JWT_token", apiResp.data.jwt);
-				localStorage.setItem("refresh_token", apiResp.data.refreshToken);
-				localStorage.setItem("loginInfo", apiResp.data.loginInfo);
+					console.log("Google login successful!");
 
-				console.log("Google login successful!");
+					// Refresh auth state
+					checkAuthStatus();
 
-				// Refresh auth state
-				checkAuthStatus();
-
-				// Redirect to the page they were trying to access or home
-				const destination = location.state?.from?.pathname || "/";
-				navigate(destination, { replace: true });
-			} else {
-				handleMsgShown(apiResp?.data?.msg || "Google login failed", "error");
+					// Redirect to the page they were trying to access or home
+					const destination = location.state?.from?.pathname || "/";
+					navigate(destination, { replace: true });
+				} else {
+					handleMsgShown(apiResp?.data?.msg || "Google login failed", "error");
+				}
+			} catch (error) {
+				console.error("Google login error:", error);
+				handleMsgShown("Something went wrong during Google login", "error");
+			} finally {
+				setGoogleLoading(false);
 			}
-		} catch (error) {
-			console.error("Google login error:", error);
-			handleMsgShown("Something went wrong during Google login", "error");
-		} finally {
-			setGoogleLoading(false);
-		}
-	}, [handleMsgShown, location, navigate, checkAuthStatus]);
+		},
+		[handleMsgShown, location, navigate, checkAuthStatus]
+	);
 
 	return (
 		<div id="UserLogin">
@@ -142,15 +202,13 @@ const UserLogin = () => {
 
 					<button type="submit">Login</button>
 				</form>
-				<button className="google-btn" onClick={handleGoogleLogin} disabled={googleLoading}>
-					<img
-						src="https://www.freepnglogos.com/uploads/google-logo-png/google-logo-icon-png-transparent-background-osteopathy-16.png"
-						loading="lazy"
-						alt="Google"
-						width="20px"
-					/>
-					{googleLoading ? "Connecting..." : "Continue with Google"}
-				</button>
+
+				{/* Google Sign-in Button container */}
+				<div id="google-signin-container">
+					<div id="google-signin-button"></div>
+					{googleLoading && <div className="google-loading">Connecting to Google...</div>}
+				</div>
+
 				<div className="links">
 					<NavLink to="/forgot-password">Forgot password?</NavLink>
 					<NavLink to="/register">Don&apos;t have an account? Sign up</NavLink>

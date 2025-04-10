@@ -103,3 +103,22 @@
 	font-size: 14px;
 	text-align: left;
 }
+
+#google-signin-container {
+	margin: 20px 0;
+	position: relative;
+}
+
+#google-signin-button {
+	width: 100%;
+	display: flex;
+	justify-content: center;
+}
+
+.google-loading {
+	margin-top: 10px;
+	text-align: center;
+	font-size: 14px;
+	color: #555;
+	font-style: italic;
+}
