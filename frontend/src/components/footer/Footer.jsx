@@ -1,5 +1,5 @@
-import React, { memo } from 'react';
-import './footer.css';
+import React, { memo } from "react";
+import "./footer.css";
 
 function Footer() {
 	return (
@@ -9,9 +9,9 @@ function Footer() {
 					<svg className="brand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
 						<path d="M3 3h18v18H3z M3 9h18 M9 21V9" />
 					</svg>
-					<span className="brand-name">MediCompare</span>
+					<span className="brand-name">Niraksh Guardian</span>
 				</a>
-				<p className="tagline">Fast delivery of all medical products!</p>
+				<p className="tagline">Protecting your privacy and securing your data with advanced AI technology</p>
 				<div className="social-links">
 					<a href="https://instagram.com" className="social-link" aria-label="Follow us on Instagram">
 						<svg className="social-icon" viewBox="0 0 24 24" fill="currentColor">

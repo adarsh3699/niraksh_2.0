@@ -9,7 +9,7 @@ import AuthGuard from "./components/authGuard/AuthGuard";
 const HomePage = lazy(() => import("./pages/HomePage"));
 const PrescriptionExplainer = lazy(() => import("./pages/PrescriptionExplainer"));
 const MedicineSearch = lazy(() => import("./pages/MedicineSearch"));
-const DiseaseSearch = lazy(() => import("./pages/DiseaseSearch"));
+const Assistance = lazy(() => import("./pages/Assistance"));
 const DrugDrugInteraction = lazy(() => import("./pages/DrugDrugInteraction"));
 const UserLogin = lazy(() => import("./pages/UserLogin"));
 const UserSignup = lazy(() => import("./pages/UserSignup"));
@@ -94,12 +94,12 @@ function Routes() {
 
 				<Route
 					exact
-					path="/diseases"
+					path="/assistance"
 					element={
 						<>
 							<NavBar />
 							<AuthGuard>
-								<DiseaseSearch />
+								<Assistance />
 							</AuthGuard>
 						</>
 					}
