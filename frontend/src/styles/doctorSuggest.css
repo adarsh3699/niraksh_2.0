@@ -1,9 +1,3 @@
-/* Dark Mode */
-#doctorSuggest body.dark-mode {
-    background-color: #1e1e2e;
-    color: #fff;
-}
-
 #doctorSuggest .container {
 
     width: 50%;
@@ -14,18 +8,12 @@
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-#doctorSuggest body.dark-mode .container {
-    background: #2a2a3b;
-    box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.1);
-}
 
 #doctorSuggest h1 {
     color: rgb(223, 137, 52);
 }
 
-#doctorSuggest body.dark-mode h1 {
-    color: #63b3ed;
-}
+
 
 /* Inputs & Buttons */
 #doctorSuggest select,
@@ -42,12 +30,6 @@
     -webkit-appearance: none;
 }
 
-#doctorSuggest body.dark-mode select,
-#doctorSuggest body.dark-mode input {
-    border-color: #63b3ed;
-    background: #333;
-    color: white;
-}
 
 #doctorSuggest input:disabled {
     background: #f1f1f1;
@@ -78,14 +60,6 @@
 
 }
 
-/* Dark Mode Toggle */
-#doctorSuggest .toggle-switch {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    cursor: pointer;
-    font-size: 18px;
-}
 
 /* Doctor Card Grid */
 #doctorSuggest .doctor-grid {
@@ -124,20 +98,6 @@
     font-weight: 500;
 }
 
-#doctorSuggest body.dark-mode .doctor-card {
-    background: #333;
-    color: white;
-}
-
-#doctorSuggest body.dark-mode .primary-recommendation-card {
-    border-color: #4f46e5;
-    background-color: #1e293b;
-}
-
-#doctorSuggest body.dark-mode .recommendation-badge {
-    background-color: #4f46e5;
-}
-
 #doctorSuggest .doctor-card:hover {
     transform: translateY(-5px);
 }
@@ -150,9 +110,6 @@
     color: rgb(223, 137, 52);
 }
 
-#doctorSuggest body.dark-mode .doctor-card strong {
-    color: #63b3ed;
-}
 
 @media (max-width: 768px) {
     #doctorSuggest .container {
@@ -170,11 +127,7 @@
     font-weight: 500;
 }
 
-#doctorSuggest .dark-mode .from-chat-notice {
-    background-color: #1a237e;
-    color: #e3f2fd;
-    border-left: 4px solid #7986cb;
-}
+
 
 #doctorSuggest .from-homepage-notice {
     background-color: #f3f0ff;
@@ -189,16 +142,6 @@
 #doctorSuggest .from-homepage-notice strong {
     font-weight: 600;
     color: #4c1d95;
-}
-
-#doctorSuggest .dark-mode .from-homepage-notice {
-    background-color: #2e1065;
-    color: #ddd6fe;
-    border-left: 4px solid #7c3aed;
-}
-
-#doctorSuggest .dark-mode .from-homepage-notice strong {
-    color: #ede9fe;
 }
 
 #doctorSuggest .symptom-summary {
@@ -222,18 +165,7 @@
     color: #555;
 }
 
-#doctorSuggest .dark-mode .symptom-summary {
-    background-color: #2d3748;
-    border-color: #4a5568;
-}
 
-#doctorSuggest .dark-mode .symptom-summary h3 {
-    color: #e2e8f0;
-}
-
-#doctorSuggest .dark-mode .symptom-summary p {
-    color: #cbd5e0;
-}
 
 #doctorSuggest .analysis-error {
     background-color: #ffe0e0;
@@ -244,11 +176,6 @@
     border-left: 4px solid #e53e3e;
 }
 
-#doctorSuggest .dark-mode .analysis-error {
-    background-color: #742a2a;
-    color: #fed7d7;
-    border-left: 4px solid #f56565;
-}
 
 #doctorSuggest .recommended-specialists {
     background-color: #f0f9ff;
@@ -307,35 +234,7 @@
     line-height: 1.5;
 }
 
-#doctorSuggest .dark-mode .recommended-specialists {
-    background-color: #0c4a6e;
-    border-color: #075985;
-}
 
-#doctorSuggest .dark-mode .recommended-specialists h3 {
-    color: #bae6fd;
-}
-
-#doctorSuggest .dark-mode .recommended-specialists li {
-    color: #bae6fd;
-}
-
-#doctorSuggest .dark-mode .recommended-specialists .primary-recommendation {
-    background-color: #1e40af;
-    color: #dbeafe;
-}
-
-#doctorSuggest .dark-mode .recommended-specialists .reasoning {
-    border-top-color: #075985;
-}
-
-#doctorSuggest .dark-mode .recommended-specialists .reasoning h4 {
-    color: #bae6fd;
-}
-
-#doctorSuggest .dark-mode .recommended-specialists .reasoning p {
-    color: #e0f2fe;
-}
 
 #doctorSuggest .loading-container {
     display: flex;
@@ -352,9 +251,6 @@
     font-size: 14px;
 }
 
-#doctorSuggest .dark-mode .loading-container p {
-    color: #cbd5e0;
-}
 
 #doctorSuggest .loading-spinner {
     display: inline-block;

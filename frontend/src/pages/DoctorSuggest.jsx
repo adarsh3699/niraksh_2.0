@@ -32,7 +32,6 @@ const DoctoreCategories = {
 };
 
 const DoctorFinder = () => {
-	const [darkMode, setDarkMode] = useState(false);
 	const [category, setCategory] = useState("");
 	const [symptoms, setSymptoms] = useState("");
 	const [doctors, setDoctors] = useState([]);
@@ -235,10 +234,7 @@ const DoctorFinder = () => {
 	};
 
 	return (
-		<div id="doctorSuggest" className={darkMode ? "dark-mode" : ""}>
-			<div className="toggle-switch" onClick={() => setDarkMode(!darkMode)}>
-				{darkMode ? "☀️" : "🌙"}
-			</div>
+		<div id="doctorSuggest">
 			<form className="container" onSubmit={findDoctor}>
 				<h1>Find the Right Doctor</h1>
 				{fromChat && (
