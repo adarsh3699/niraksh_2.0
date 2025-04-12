@@ -46,7 +46,8 @@
     height: 50px;
     width: 100%;
     border: none;
-    border-radius: 10px 0 0 10px;
+    border-radius: 10px;
+    outline: none;
     padding: 0 10px;
     font-size: 1em;
 }

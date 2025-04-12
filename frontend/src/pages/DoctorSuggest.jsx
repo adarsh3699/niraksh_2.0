@@ -37,6 +37,7 @@ const DoctorFinder = () => {
 	const [symptoms, setSymptoms] = useState("");
 	const [doctors, setDoctors] = useState([]);
 	const [fromChat, setFromChat] = useState(false);
+	const [fromHomepage, setFromHomepage] = useState(false);
 	const [symptomSummary, setSymptomSummary] = useState("");
 	const [isAnalyzing, setIsAnalyzing] = useState(false);
 	const [analysisError, setAnalysisError] = useState("");
@@ -44,7 +45,9 @@ const DoctorFinder = () => {
 	const [recommendedCategories, setRecommendedCategories] = useState([]);
 
 	useEffect(() => {
-		// Check if we have the AI-generated symptom summary
+		// Check for data sources in order of priority
+
+		// 1. Check if we have the AI-generated symptom summary from chat assistant
 		const summary = sessionStorage.getItem("symptomSummary");
 		if (summary) {
 			setSymptoms(summary);
@@ -55,7 +58,21 @@ const DoctorFinder = () => {
 
 			// Use the enhanced semantic analysis instead of simple keyword matching
 			analyzeSymptomsSemantically(summary);
+			return; // Exit early if we found chat data
 		}
+
+		// 2. Check if we have symptoms from home page search
+		const homeSearchSymptoms = sessionStorage.getItem("homeSearchSymptoms");
+		if (homeSearchSymptoms) {
+			setSymptoms(homeSearchSymptoms);
+			setFromHomepage(true);
+			// Clear the session storage
+			sessionStorage.removeItem("homeSearchSymptoms");
+
+			// Analyze the symptoms from home page search
+			analyzeSymptomsSemantically(homeSearchSymptoms);
+		}
+
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
@@ -236,6 +253,12 @@ const DoctorFinder = () => {
 							</div>
 						)}
 					</>
+				)}
+
+				{fromHomepage && (
+					<div className="from-homepage-notice">
+						Analyzing your search: <strong>{symptoms}</strong>
+					</div>
 				)}
 
 				{analysisError && <div className="analysis-error">{analysisError}</div>}

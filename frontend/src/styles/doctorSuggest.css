@@ -176,6 +176,31 @@
     border-left: 4px solid #7986cb;
 }
 
+.from-homepage-notice {
+    background-color: #f3f0ff;
+    color: #5521b5;
+    padding: 10px 15px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    border-left: 4px solid #7c3aed;
+    font-weight: 500;
+}
+
+.from-homepage-notice strong {
+    font-weight: 600;
+    color: #4c1d95;
+}
+
+.dark-mode .from-homepage-notice {
+    background-color: #2e1065;
+    color: #ddd6fe;
+    border-left: 4px solid #7c3aed;
+}
+
+.dark-mode .from-homepage-notice strong {
+    color: #ede9fe;
+}
+
 .symptom-summary {
     background-color: #f5f5f5;
     border-radius: 8px;
