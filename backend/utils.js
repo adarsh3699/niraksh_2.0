@@ -8,10 +8,10 @@ require('dotenv').config();
 const encryptionKey = process.env.JWT_SECRET || "bhemu_is_kutta";
 const JWT_SECRET = process.env.JWT_SECRET || "bhemu_is_kutta";
 
-const CLIENT_ID = process.env.EMAIL_CLIENT_ID || "238415785154-hlq2rg2psoi9cikjqdop740k7i5pjlgf.apps.googleusercontent.com";
-const CLEINT_SECRET = process.env.EMAIL_CLIENT_SECRET || "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";
-const REDIRECT_URI = process.env.EMAIL_REDIRECT_URI || "https://developers.google.com/oauthplayground";
-const REFRESH_TOKEN = process.env.EMAIL_REFRESH_TOKEN || "1//04XTT9t6VEjv5CgYIARAAGAQSNwF-L9Ir3J2Yz2y5cMcz4J8S20EAFcM9XTKWdrLbXmc9ukETxzpv4q78CdzAgV_dzKVx5zO1ttU";
+const CLIENT_ID = process.env.EMAIL_CLIENT_ID;
+const CLEINT_SECRET = process.env.EMAIL_CLIENT_SECRET;
+const REDIRECT_URI = process.env.EMAIL_REDIRECT_URI;
+const REFRESH_TOKEN = process.env.EMAIL_REFRESH_TOKEN;
 
 const oAuth2Client = new google.auth.OAuth2(CLIENT_ID, CLEINT_SECRET, REDIRECT_URI);
 oAuth2Client.setCredentials({ refresh_token: REFRESH_TOKEN });
@@ -166,7 +166,7 @@ async function sendMail(mailTo, mailSubject, title, object) {
             service: "gmail",
             auth: {
                 type: "OAuth2",
-                user: process.env.EMAIL_USER || "bhemu3699@gmail.com",
+                user: process.env.EMAIL_USER || "bhemujee@gmail.com",
                 clientId: CLIENT_ID,
                 clientSecret: CLEINT_SECRET,
                 refreshToken: REFRESH_TOKEN,
@@ -175,16 +175,16 @@ async function sendMail(mailTo, mailSubject, title, object) {
         });
 
         const mailOptions = {
-            from: "Niraksh Guardian" + " <" + (process.env.EMAIL_USER || "bhemu3699@gmail.com") + ">",
+            from: "Niraksh Guardian" + " <" + (process.env.EMAIL_USER || "bhemujee@gmail.com") + ">",
             to: mailTo,
             subject: mailSubject,
             text: title + "/n" + object,
             html:
-                '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Document</title><style>#wrapper {background-color: rgb(32, 32, 32);text-align: center;min-height: 50vh;padding: 50px;}#title {color: lightgray;font-size: 30px;font-weight: bold;letter-spacing: 1px;Padding-top: 5vh;margin-bottom: 20px;}#object {background-color: #f1f1f1;width: fit-content;margin: auto;margin: 20px auto;color: black;padding: 15px 25px;font-size: 20px;}@media only screen and (max-width: 768px) {#wrapper {padding: unset;}}</style></head><body id="wrapper"><div id="title">' +
+                '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>' + mailSubject + '</title><style>body {font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;margin: 0;padding: 0;background-color: #f9f9f9;}#wrapper {max-width: 600px;margin: 0 auto;background-color: #ffffff;border-radius: 8px;overflow: hidden;box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);}#header {background-color: #2c3e50;padding: 30px 20px;text-align: center;}#title {color: white;font-size: 28px;font-weight: 600;margin: 0;}#content {padding: 30px 25px;}#object {background-color: #f7f7f7;border-left: 4px solid #2c3e50;color: #333;padding: 20px;font-size: 16px;line-height: 1.5;margin: 20px 0;border-radius: 0 4px 4px 0;}#footer {padding: 20px;text-align: center;font-size: 14px;color: #777;background-color: #f1f1f1;}.button {display: inline-block;background-color: #3498db;color: white;text-decoration: none;padding: 12px 25px;border-radius: 4px;font-weight: 500;margin-top: 15px;}.welcome-text {margin-bottom: 20px;line-height: 1.6;color: #444;}.additional-info {margin-top: 25px;padding-top: 20px;border-top: 1px solid #eee;color: #666;font-size: 14px;}.contact-info {margin-top: 20px;font-size: 14px;color: #666;}.highlight {color: #2c3e50;font-weight: 600;}</style></head><body><div id="wrapper"><div id="header"><h1 id="title">' +
                 title +
-                '</div><div id="object">' +
+                '</h1></div><div id="content"><p class="welcome-text">Thank you for using Niraksh Guardian, your trusted security companion. We\'re committed to keeping your information safe and secure.</p><div id="object">' +
                 object +
-                "</div></body></html>",
+                '</div><div class="additional-info"><p>Niraksh Guardian provides advanced security features to protect your data and privacy. If you have any questions about this notification or need assistance with your account, please don\'t hesitate to reach out to our support team.</p><p class="contact-info">For additional help: <span class="highlight">adarsh3699@gmail.com</span></p></div></div><div id="footer">© ' + new Date().getFullYear() + ' Niraksh Guardian. All rights reserved.</div></div></body></html>',
         };
 
         const result = await transport.sendMail(mailOptions);

@@ -58,10 +58,44 @@
 	border-radius: 15px;
 	cursor: pointer;
 	margin-top: 15px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
 #UserLogin button:hover {
 	background-color: #4a9e94;
+}
+
+#UserLogin button:disabled {
+	background-color: #a0d8d0;
+	cursor: not-allowed;
+}
+
+#UserLogin .loader-container {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+}
+
+#UserLogin .loader {
+	border: 2px solid rgba(255, 255, 255, 0.3);
+	border-radius: 50%;
+	border-top: 2px solid white;
+	width: 16px;
+	height: 16px;
+	animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+	0% {
+		transform: rotate(0deg);
+	}
+
+	100% {
+		transform: rotate(360deg);
+	}
 }
 
 #UserLogin .google-btn {
@@ -94,7 +128,18 @@
 /* Add these styles to the login page CSS */
 
 .login-message {
-	background-color: #ffe8e6;
+	background-color: #e3f2fd;
+	border-left: 4px solid #2196f3;
+	padding: 10px 15px;
+	margin-bottom: 20px;
+	border-radius: 4px;
+	color: #0d47a1;
+	font-size: 14px;
+	text-align: left;
+}
+
+.error-message {
+	background-color: #fdeaea;
 	border-left: 4px solid #f44336;
 	padding: 10px 15px;
 	margin-bottom: 20px;
@@ -120,5 +165,8 @@
 	text-align: center;
 	font-size: 14px;
 	color: #555;
-	font-style: italic;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
 }

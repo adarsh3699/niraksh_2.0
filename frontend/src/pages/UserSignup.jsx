@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import { useCallback, useState } from "react";
 
 import "../styles/userSignup.css";
 import { NavLink } from "react-router-dom";
@@ -7,6 +7,8 @@ import ShowMsg from "../components/showMsg/ShowMsg";
 
 const UserSignup = () => {
 	const [msg, setMsg] = useState({ text: "", type: "" });
+	const [isLoading, setIsLoading] = useState(false);
+	const [errorMsg, setErrorMsg] = useState("");
 	const [formData, setFormData] = useState({
 		username: "",
 		email: "",
@@ -35,13 +37,25 @@ const UserSignup = () => {
 	const handleSubmit = useCallback(
 		async (e) => {
 			e.preventDefault();
+			setIsLoading(true);
+			setErrorMsg("");
 
-			const apiResp = await apiCall("user/signup", "post", formData);
+			try {
+				const apiResp = await apiCall("user/signup", "post", formData);
 
-			if (apiResp.statusCode === 200) {
-				document.location.href = "/login";
-			} else {
-				handleMsgShown(apiResp.msg, "error");
+				if (apiResp.statusCode === 200) {
+					document.location.href = "/login";
+				} else {
+					setErrorMsg(apiResp.msg || "Signup failed. Please try again.");
+					handleMsgShown(apiResp.msg, "error");
+				}
+			} catch (error) {
+				console.error("Signup error:", error);
+				const errorMessage = error?.response?.data?.msg || "Something went wrong. Please try again.";
+				setErrorMsg(errorMessage);
+				handleMsgShown(errorMessage, "error");
+			} finally {
+				setIsLoading(false);
 			}
 		},
 		[formData, handleMsgShown]
@@ -51,6 +65,8 @@ const UserSignup = () => {
 		<div id="userSignup">
 			<div className="container">
 				<h1>Create an account</h1>
+				{errorMsg && <div className="error-message">{errorMsg}</div>}
+
 				<form id="signup-form" onSubmit={handleSubmit}>
 					<label htmlFor="email">Email</label>
 					<input
@@ -60,6 +76,7 @@ const UserSignup = () => {
 						onChange={handleChange}
 						required
 						placeholder="Enter email"
+						disabled={isLoading}
 					/>
 
 					<label htmlFor="username">Name</label>
@@ -70,6 +87,7 @@ const UserSignup = () => {
 						onChange={handleChange}
 						required
 						placeholder="Enter name"
+						disabled={isLoading}
 					/>
 
 					<label htmlFor="password">Set Password</label>
@@ -80,12 +98,21 @@ const UserSignup = () => {
 						onChange={handleChange}
 						required
 						placeholder="Enter password"
+						disabled={isLoading}
 					/>
 
 					<label>Sex</label>
 					<div className="gender-group">
 						<label>
-							<input type="radio" id="male" name="gender" onChange={handleChange} value="male" required />
+							<input
+								type="radio"
+								id="male"
+								name="gender"
+								onChange={handleChange}
+								value="male"
+								required
+								disabled={isLoading}
+							/>
 							Male
 						</label>
 						<label>
@@ -96,14 +123,24 @@ const UserSignup = () => {
 								onChange={handleChange}
 								value="female"
 								required
+								disabled={isLoading}
 							/>
 							Female
 						</label>
 					</div>
 
-					<button type="submit">Continue</button>
+					<button type="submit" disabled={isLoading}>
+						{isLoading ? (
+							<div className="loader-container">
+								<div className="loader"></div>
+								<span>Creating account...</span>
+							</div>
+						) : (
+							"Continue"
+						)}
+					</button>
 				</form>
-				<button className="google-btn">
+				<button className="google-btn" disabled={isLoading}>
 					<img
 						src="https://www.freepnglogos.com/uploads/google-logo-png/google-logo-icon-png-transparent-background-osteopathy-16.png"
 						loading="lazy"

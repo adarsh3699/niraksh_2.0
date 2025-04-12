@@ -13,6 +13,8 @@ const GOOGLE_CLIENT_ID =
 const UserLogin = () => {
 	const [msg, setMsg] = useState({ text: "", type: "" });
 	const [googleLoading, setGoogleLoading] = useState(false);
+	const [loginLoading, setLoginLoading] = useState(false);
+	const [errorMsg, setErrorMsg] = useState("");
 	const location = useLocation();
 	const navigate = useNavigate();
 	const { isAuthenticated, checkAuthStatus } = useAuthContext();
@@ -99,6 +101,9 @@ const UserLogin = () => {
 	const handleSubmit = useCallback(
 		async (e) => {
 			e.preventDefault();
+			setLoginLoading(true);
+			setErrorMsg("");
+
 			const formData = {
 				email: e.target.email.value,
 				password: e.target.password.value,
@@ -106,6 +111,7 @@ const UserLogin = () => {
 
 			try {
 				const apiResp = await apiCall("user/signin", "post", formData);
+				console.log("Login response:", apiResp);
 
 				if (apiResp?.data?.statusCode === 200 && apiResp?.data?.jwt) {
 					const extractedToken = extractEncryptedToken(apiResp.data.jwt);
@@ -129,11 +135,18 @@ const UserLogin = () => {
 					const destination = location.state?.from?.pathname || "/";
 					navigate(destination, { replace: true });
 				} else {
-					handleMsgShown(apiResp?.data?.msg || "Login failed", "error");
+					const error = apiResp?.data?.msg || "Login failed. Please check your credentials.";
+					setErrorMsg(error);
+					handleMsgShown(error, "error");
 				}
 			} catch (error) {
 				console.error("Login error:", error);
-				handleMsgShown("Something went wrong during login", "error");
+				const errorMessage =
+					error?.response?.data?.msg || "Something went wrong during login. Please try again.";
+				setErrorMsg(errorMessage);
+				handleMsgShown(errorMessage, "error");
+			} finally {
+				setLoginLoading(false);
 			}
 		},
 		[handleMsgShown, location, navigate, checkAuthStatus]
@@ -142,6 +155,8 @@ const UserLogin = () => {
 	const handleGoogleAuth = useCallback(
 		async (credential) => {
 			setGoogleLoading(true);
+			setErrorMsg("");
+
 			try {
 				// Call backend with the Google ID token
 				const apiResp = await apiCall("user/signin/google", "post", {
@@ -175,11 +190,16 @@ const UserLogin = () => {
 					const destination = location.state?.from?.pathname || "/";
 					navigate(destination, { replace: true });
 				} else {
-					handleMsgShown(apiResp?.data?.msg || "Google login failed", "error");
+					const error = apiResp?.data?.msg || "Google login failed. Please try again.";
+					setErrorMsg(error);
+					handleMsgShown(error, "error");
 				}
 			} catch (error) {
 				console.error("Google login error:", error);
-				handleMsgShown("Something went wrong during Google login", "error");
+				const errorMessage =
+					error?.response?.data?.msg || "Something went wrong during Google login. Please try again.";
+				setErrorMsg(errorMessage);
+				handleMsgShown(errorMessage, "error");
 			} finally {
 				setGoogleLoading(false);
 			}
@@ -192,6 +212,8 @@ const UserLogin = () => {
 			<div className="container">
 				<h1>Login</h1>
 				{location.state?.message && <div className="login-message">{location.state.message}</div>}
+				{errorMsg && <div className="error-message">{errorMsg}</div>}
+
 				<form id="login-form" onSubmit={handleSubmit}>
 					<label htmlFor="email">Email</label>
 					<input type="email" id="email" name="email" required placeholder="Enter your email" />
@@ -199,18 +221,34 @@ const UserLogin = () => {
 					<label htmlFor="password">Password</label>
 					<input type="password" id="password" name="password" required placeholder="Enter your password" />
 
-					<button type="submit">Login</button>
+					<button type="submit" disabled={loginLoading}>
+						{loginLoading ? (
+							<div className="loader-container">
+								<div className="loader"></div>
+								<span>Logging in...</span>
+							</div>
+						) : (
+							"Login"
+						)}
+					</button>
 				</form>
 
 				{/* Google Sign-in Button container */}
 				<div id="google-signin-container">
 					<div id="google-signin-button"></div>
-					{googleLoading && <div className="google-loading">Connecting to Google...</div>}
+					{googleLoading && (
+						<div className="google-loading">
+							<div className="loader"></div>
+							<span>Connecting to Google...</span>
+						</div>
+					)}
 				</div>
 
 				<div className="links">
 					<NavLink to="/forgot-password">Forgot password?</NavLink>
-					<NavLink to="/register">Don&apos;t have an account? Sign up</NavLink>
+					<NavLink to="/register" style={{ marginTop: "20px" }}>
+						Don&apos;t have an account? Sign up
+					</NavLink>
 				</div>
 			</div>
 			{msg && <ShowMsg msgText={msg?.text} type={msg?.type} />}

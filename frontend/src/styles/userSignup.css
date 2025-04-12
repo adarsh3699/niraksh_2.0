@@ -60,10 +60,44 @@
 	border-radius: 15px;
 	cursor: pointer;
 	margin-top: 15px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
 #userSignup button:hover {
 	background-color: #4a9e94;
+}
+
+#userSignup button:disabled {
+	background-color: #a0d8d0;
+	cursor: not-allowed;
+}
+
+#userSignup .loader-container {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+}
+
+#userSignup .loader {
+	border: 2px solid rgba(255, 255, 255, 0.3);
+	border-radius: 50%;
+	border-top: 2px solid white;
+	width: 16px;
+	height: 16px;
+	animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+	0% {
+		transform: rotate(0deg);
+	}
+
+	100% {
+		transform: rotate(360deg);
+	}
 }
 
 #userSignup .google-btn {
@@ -95,4 +129,15 @@
 	display: flex;
 	gap: 15px;
 	margin-top: 5px;
+}
+
+.error-message {
+	background-color: #fdeaea;
+	border-left: 4px solid #f44336;
+	padding: 10px 15px;
+	margin-bottom: 20px;
+	border-radius: 4px;
+	color: #d32f2f;
+	font-size: 14px;
+	text-align: left;
 }

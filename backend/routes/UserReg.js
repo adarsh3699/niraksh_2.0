@@ -320,10 +320,20 @@ app.post("/signup", async (req, res) => {
     }
 });
 
-app.post("/forget_password", function (req, res) {
+app.post("/forgot-password", async function (req, res) {
     const email = req.body.email ? req.body.email.trim() : req.body.email;
     try {
         if (email) {
+            // Check if the email exists in the database
+            const user = await User.findOne({ email });
+
+            if (!user) {
+                return res.status(404).json({
+                    statusCode: 404,
+                    msg: "Email not registered. Please check your email or create a new account."
+                });
+            }
+
             let toSend = {};
             const otp = Math.floor(1000 + Math.random() * 9000);
 
@@ -344,7 +354,7 @@ app.post("/forget_password", function (req, res) {
     }
 });
 
-app.post("/change_password", async function (req, res) {
+app.post("/reset-password", async function (req, res) {
     const email = req.body.email ? req.body.email.trim() : req.body.email;
     const password = req.body.password ? req.body.password.trim() : req.body.password;
     const otp = req.body.otp ? req.body.otp.trim() : req.body.otp;
