@@ -126,3 +126,22 @@
         font-size: 16px;
     }
 }
+
+@media (max-width: 400px) {
+    .card-overlay {
+        padding: 10px 20px;
+    }
+
+    .DoMore-container .card-title {
+        font-size: 20px;
+    }
+
+    .card-subtitle {
+        font-size: 14px;
+    }
+
+    .card-button {
+        padding: 8px 20px;
+        font-size: 14px;
+    }
+}

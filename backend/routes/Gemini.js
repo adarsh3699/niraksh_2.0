@@ -128,5 +128,35 @@ app.post('/disease', async (req, res) => {
     }
 });
 
+app.post('/summarize-symptoms', async (req, res) => {
+    const chatHistory = req.body.chatHistory;
+
+    if (!chatHistory || !Array.isArray(chatHistory)) {
+        return res.status(400).json({ error: "Chat history is required and must be an array" });
+    }
+
+    try {
+        // Extract all user messages
+        const userMessages = chatHistory
+            .filter(msg => msg.role === 'user')
+            .map(msg => msg.parts[0].text)
+            .join("\n");
+
+
+        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash", systemInstruction: "Only talk about medical and healthcare" });
+
+        const prompt = `Based on the following patient's conversation, summarize their key symptoms and health concerns in a clear, concise paragraph that would help a doctor understand their condition. Focus only on medical information and symptoms:\n\n${userMessages}`;
+
+        const result = await model.generateContent(prompt);
+
+        res.json({
+            summary: result.response.text(),
+            status: "success"
+        });
+    } catch (error) {
+        console.error("Error summarizing symptoms:", error);
+        res.status(500).json({ error: error.message });
+    }
+});
 
 module.exports = app;

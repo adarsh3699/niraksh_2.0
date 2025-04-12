@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import symptomsToCategory from "../../jsonData/symptoms_to_category.json";
 
@@ -35,6 +35,61 @@ const DoctorFinder = () => {
 	const [category, setCategory] = useState("");
 	const [symptoms, setSymptoms] = useState("");
 	const [doctors, setDoctors] = useState([]);
+	const [fromChat, setFromChat] = useState(false);
+	const [symptomSummary, setSymptomSummary] = useState("");
+
+	useEffect(() => {
+		// Check if we have the AI-generated symptom summary
+		const summary = sessionStorage.getItem("symptomSummary");
+		if (summary) {
+			setSymptoms(summary);
+			setSymptomSummary(summary);
+			setFromChat(true);
+			// Clear the session storage to avoid persisting between visits
+			sessionStorage.removeItem("symptomSummary");
+
+			// Automatically search with the AI-generated summary
+			findDoctorWithSymptoms(summary);
+		}
+	}, []);
+
+	const findDoctorWithSymptoms = (symptomText) => {
+		let searchCategories = [];
+
+		for (let symptom in symptomsToCategory) {
+			if (symptomText.toLowerCase().includes(symptom.toLowerCase())) {
+				searchCategories = symptomsToCategory[symptom] || [];
+				break;
+			}
+		}
+
+		if (searchCategories.length === 0) {
+			// Default to General Physician if no specific category found
+			searchCategories = ["General_Physician"];
+		}
+
+		try {
+			const doctorResults = [];
+
+			searchCategories.map(async (cat) => {
+				const data = DoctoreCategories[cat];
+				doctorResults.push(...data);
+			});
+
+			doctorResults.sort((a, b) => {
+				let expA = parseInt(a["Years of Experience"]) || 0;
+				let expB = parseInt(b["Years of Experience"]) || 0;
+				let feeA = parseInt(a["Consult Fee"]?.replace("₹", "")) || 0;
+				let feeB = parseInt(b["Consult Fee"]?.replace("₹", "")) || 0;
+
+				return expB - expA || feeA - feeB;
+			});
+
+			setDoctors(doctorResults);
+		} catch (error) {
+			console.error("Error loading doctor data:", error);
+		}
+	};
 
 	const findDoctor = async (e) => {
 		e.preventDefault();
@@ -57,7 +112,6 @@ const DoctorFinder = () => {
 
 		try {
 			const doctorResults = [];
-			// console.log(searchCategories);
 
 			searchCategories.map(async (cat) => {
 				const data = DoctoreCategories[cat];
@@ -86,6 +140,19 @@ const DoctorFinder = () => {
 			</div>
 			<form className="container" onSubmit={findDoctor}>
 				<h1>Find the Right Doctor</h1>
+				{fromChat && (
+					<>
+						<div className="from-chat-notice">
+							Recommendations based on AI analysis of your health assistant chat
+						</div>
+						{symptomSummary && (
+							<div className="symptom-summary">
+								<h3>Symptom Analysis:</h3>
+								<p>{symptomSummary}</p>
+							</div>
+						)}
+					</>
+				)}
 				<label>Select Category:</label>
 				<select value={category} onChange={(e) => setCategory(e.target.value)}>
 					<option value="">Not Sure? Enter Symptoms Below</option>
