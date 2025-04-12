@@ -1,6 +1,6 @@
 import { useState, memo } from "react";
 import PropTypes from "prop-types";
-import "./NavBar.css"; // Assuming you have a CSS file for styling
+import "./NavBar.css";
 
 import { NavLink, useNavigate } from "react-router-dom";
 import { userDeviceType } from "../../utils";
@@ -8,13 +8,10 @@ import { useAuthContext } from "../../contexts/AuthContext";
 import MenuBar from "../menuBar/MenuBar";
 
 import brandLogo from "../../assets/brandLogo.png";
+import brandLogo1 from "../../assets/brandLogo1.png";
 // import searchIcon from '../../assets/icons/search.svg';
 import profileIcon from "../../assets/icons/profile.svg";
 import menuIcon from "../../assets/icons/menu.svg";
-
-// const userLoggedIn = localStorage.getItem("JWT_token");
-
-// const userEmail = extractEncryptedToken(userLoggedIn)?.email;
 
 const menuItems = [
 	{
@@ -131,7 +128,7 @@ function MobileNavBar({ navigate, menuName, isMenuOpen, setIsMenuOpen, isAuthent
 					<img src={menuIcon} alt="Menu" />
 				</div>
 				<NavLink className="nav-logo phoneBrandLogo" to="/">
-					<img src={brandLogo} alt="Logo" />
+					<img src={brandLogo1} alt="Logo" />
 					Niraksh
 				</NavLink>
 

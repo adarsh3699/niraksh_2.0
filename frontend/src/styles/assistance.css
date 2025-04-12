@@ -1,4 +1,4 @@
-#DiseaseSearch {
+#assistancePage {
     font-family: "Inter", "Segoe UI", "Arial", sans-serif;
     display: flex;
     justify-content: center;
@@ -11,7 +11,7 @@
     box-sizing: border-box;
 }
 
-#DiseaseSearch .chat-header {
+#assistancePage .chat-header {
     background: linear-gradient(135deg, #3b82f6, #4f46e5);
     border-radius: 16px 16px 0 0;
     color: #ffffff;
@@ -25,23 +25,23 @@
     z-index: 10;
 }
 
-#DiseaseSearch .header-left {
+#assistancePage .header-left {
     display: flex;
     align-items: center;
 }
 
-#DiseaseSearch .chat-header h1 {
+#assistancePage .chat-header h1 {
     margin: 0 0 0 10px;
     font-size: 20px;
     font-weight: 600;
 }
 
-#DiseaseSearch .header-buttons {
+#assistancePage .header-buttons {
     display: flex;
     gap: 10px;
 }
 
-#DiseaseSearch .new-chat-btn {
+#assistancePage .new-chat-btn {
     background-color: rgba(255, 255, 255, 0.2);
     color: white;
     border: 1px solid rgba(255, 255, 255, 0.4);
@@ -55,12 +55,12 @@
     gap: 6px;
 }
 
-#DiseaseSearch .new-chat-btn:hover {
+#assistancePage .new-chat-btn:hover {
     background-color: rgba(255, 255, 255, 0.3);
     transform: translateY(-2px);
 }
 
-#DiseaseSearch .doctor-recommend-btn {
+#assistancePage .doctor-recommend-btn {
     background-color: #10b981;
     color: white;
     border: none;
@@ -74,17 +74,17 @@
     gap: 6px;
 }
 
-#DiseaseSearch .doctor-recommend-btn:hover:not(:disabled) {
+#assistancePage .doctor-recommend-btn:hover:not(:disabled) {
     background-color: #059669;
     transform: translateY(-2px);
 }
 
-#DiseaseSearch .doctor-recommend-btn:disabled {
+#assistancePage .doctor-recommend-btn:disabled {
     background-color: #9ca3af;
     cursor: not-allowed;
 }
 
-.loading-spinner {
+#assistancePage .loading-spinner {
     display: inline-block;
     width: 16px;
     height: 16px;
@@ -94,7 +94,7 @@
     animation: spin 1s ease-in-out infinite;
 }
 
-.loading-spinner.small {
+#assistancePage .loading-spinner.small {
     width: 12px;
     height: 12px;
     border-width: 2px;
@@ -106,7 +106,7 @@
     }
 }
 
-#DiseaseSearch .chat-container {
+#assistancePage .chat-container {
     display: flex;
     flex-direction: column;
     width: 100%;
@@ -117,7 +117,7 @@
     overflow: hidden;
 }
 
-#DiseaseSearch .chat-content {
+#assistancePage .chat-content {
     flex: 1;
     overflow-y: auto;
     padding: 20px;
@@ -126,25 +126,25 @@
     background-color: #ffffff;
 }
 
-#DiseaseSearch .message-container {
+#assistancePage .message-container {
     display: flex;
     margin-bottom: 16px;
     position: relative;
     max-width: 85%;
 }
 
-#DiseaseSearch .message-container.model {
+#assistancePage .message-container.model {
     align-self: flex-start;
     margin-right: auto;
 }
 
-#DiseaseSearch .message-container.user {
+#assistancePage .message-container.user {
     flex-direction: row-reverse;
     align-self: flex-end;
     margin-left: auto;
 }
 
-#DiseaseSearch .avatar {
+#assistancePage .avatar {
     width: 32px;
     height: 32px;
     border-radius: 50%;
@@ -156,17 +156,17 @@
     flex-shrink: 0;
 }
 
-#DiseaseSearch .assistant-avatar {
+#assistancePage .assistant-avatar {
     background-color: #e0e7ff;
     margin-right: 8px;
 }
 
-#DiseaseSearch .user-avatar {
+#assistancePage .user-avatar {
     background-color: #f3e8ff;
     margin-right: 8px;
 }
 
-#DiseaseSearch .message {
+#assistancePage .message {
     padding: 10px 15px;
     border-radius: 16px;
     max-width: 100%;
@@ -187,37 +187,37 @@
     }
 }
 
-#DiseaseSearch .message.model {
+#assistancePage .message.model {
     background-color: #f3f4f6;
     border-bottom-left-radius: 4px;
     color: #1f2937;
 }
 
-#DiseaseSearch .message.user {
+#assistancePage .message.user {
     background-color: #6366f1;
     color: #ffffff;
     border-bottom-right-radius: 4px;
 }
 
-#DiseaseSearch .message p {
+#assistancePage .message p {
     margin: 0 0 10px 0;
 }
 
-#DiseaseSearch .message p:last-child {
+#assistancePage .message p:last-child {
     margin-bottom: 0;
 }
 
-#DiseaseSearch .message.loading {
+#assistancePage .message.loading {
     padding: 10px 16px;
 }
 
-#DiseaseSearch .typing-indicator {
+#assistancePage .typing-indicator {
     display: flex;
     align-items: center;
     gap: 5px;
 }
 
-#DiseaseSearch .typing-indicator span {
+#assistancePage .typing-indicator span {
     display: inline-block;
     width: 8px;
     height: 8px;
@@ -226,15 +226,15 @@
     animation: bounce 1.2s infinite ease-in-out;
 }
 
-#DiseaseSearch .typing-indicator span:nth-child(1) {
+#assistancePage .typing-indicator span:nth-child(1) {
     animation-delay: 0s;
 }
 
-#DiseaseSearch .typing-indicator span:nth-child(2) {
+#assistancePage .typing-indicator span:nth-child(2) {
     animation-delay: 0.2s;
 }
 
-#DiseaseSearch .typing-indicator span:nth-child(3) {
+#assistancePage .typing-indicator span:nth-child(3) {
     animation-delay: 0.4s;
 }
 
@@ -251,7 +251,7 @@
     }
 }
 
-#DiseaseSearch .scroll-to-bottom-btn {
+#assistancePage .scroll-to-bottom-btn {
     position: absolute;
     right: 20px;
     bottom: 20px;
@@ -272,24 +272,24 @@
     transition: all 0.2s ease;
 }
 
-#DiseaseSearch .scroll-to-bottom-btn:hover {
+#assistancePage .scroll-to-bottom-btn:hover {
     background-color: #4f46e5;
     transform: translateY(-2px);
 }
 
-#DiseaseSearch .chat-footer {
+#assistancePage .chat-footer {
     padding: 10px;
     background-color: #f9fafb;
     border-top: 1px solid #e5e7eb;
 }
 
-#DiseaseSearch .chat-form {
+#assistancePage .chat-form {
     display: flex;
     gap: 10px;
     margin-bottom: 12px;
 }
 
-#DiseaseSearch .chat-input {
+#assistancePage .chat-input {
     flex-grow: 1;
     padding: 10px 15px;
     border: 1px solid #d1d5db;
@@ -299,18 +299,18 @@
     transition: all 0.2s ease;
 }
 
-#DiseaseSearch .chat-input:focus {
+#assistancePage .chat-input:focus {
     outline: none;
     border-color: #6366f1;
     box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
 }
 
-#DiseaseSearch .chat-input:disabled {
+#assistancePage .chat-input:disabled {
     background-color: #f3f4f6;
     cursor: not-allowed;
 }
 
-#DiseaseSearch .chat-button {
+#assistancePage .chat-button {
     background-color: #6366f1;
     color: #ffffff;
     border: none;
@@ -323,36 +323,36 @@
     min-width: 80px;
 }
 
-#DiseaseSearch .chat-button:hover:not(:disabled) {
+#assistancePage .chat-button:hover:not(:disabled) {
     background-color: #4f46e5;
     transform: translateY(-2px);
 }
 
-#DiseaseSearch .chat-button:disabled {
+#assistancePage .chat-button:disabled {
     background-color: #9ca3af;
     cursor: not-allowed;
 }
 
-#DiseaseSearch .quick-actions {
+#assistancePage .quick-actions {
     display: flex;
     flex-direction: column;
     gap: 8px;
 }
 
-#DiseaseSearch .quick-actions-label {
+#assistancePage .quick-actions-label {
     font-size: 13px;
     color: #6b7280;
     font-weight: 500;
     margin-left: 2px;
 }
 
-#DiseaseSearch .quick-actions-buttons {
+#assistancePage .quick-actions-buttons {
     display: flex;
     flex-wrap: wrap;
     gap: 5px;
 }
 
-#DiseaseSearch .quick-action-btn {
+#assistancePage .quick-action-btn {
     background-color: white;
     border: 1px solid #e5e7eb;
     padding: 5px 10px;
@@ -367,43 +367,43 @@
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
-#DiseaseSearch .symptom-icon {
+#assistancePage .symptom-icon {
     font-size: 16px;
 }
 
-#DiseaseSearch .quick-action-btn:hover:not(:disabled) {
+#assistancePage .quick-action-btn:hover:not(:disabled) {
     background-color: #f9fafb;
     border-color: #d1d5db;
     transform: translateY(-1px);
 }
 
-#DiseaseSearch .quick-action-btn:disabled {
+#assistancePage .quick-action-btn:disabled {
     opacity: 0.6;
     cursor: not-allowed;
 }
 
 /* Markdown styling */
-#DiseaseSearch .message ul,
-#DiseaseSearch .message ol {
+#assistancePage .message ul,
+#assistancePage .message ol {
     margin: 8px 0;
     padding-left: 20px;
 }
 
-#DiseaseSearch .message.model a {
+#assistancePage .message.model a {
     color: #4f46e5;
     text-decoration: none;
 }
 
-#DiseaseSearch .message.model a:hover {
+#assistancePage .message.model a:hover {
     text-decoration: underline;
 }
 
-#DiseaseSearch .message.user a {
+#assistancePage .message.user a {
     color: #e0e7ff;
     text-decoration: underline;
 }
 
-#DiseaseSearch .message code {
+#assistancePage .message code {
     background: rgba(0, 0, 0, 0.1);
     padding: 2px 4px;
     border-radius: 4px;
@@ -411,70 +411,70 @@
     font-size: 0.9em;
 }
 
-#DiseaseSearch .message.model code {
+#assistancePage .message.model code {
     background: rgba(0, 0, 0, 0.07);
 }
 
-#DiseaseSearch .message.user code {
+#assistancePage .message.user code {
     background: rgba(255, 255, 255, 0.2);
 }
 
 /* Media Queries */
 @media (max-width: 768px) {
-    #DiseaseSearch {
+    #assistancePage {
         padding: 10px;
         height: calc(100vh - 82px);
     }
 
-    #DiseaseSearch .chat-header {
+    #assistancePage .chat-header {
         padding: 15px;
     }
 
-    #DiseaseSearch .chat-header h1 {
+    #assistancePage .chat-header h1 {
         font-size: 18px;
     }
 
-    #DiseaseSearch .new-chat-btn,
-    #DiseaseSearch .doctor-recommend-btn {
+    #assistancePage .new-chat-btn,
+    #assistancePage .doctor-recommend-btn {
         padding: 6px 10px;
         font-size: 13px;
     }
 
-    #DiseaseSearch .message-container {
+    #assistancePage .message-container {
         max-width: 95%;
     }
 
-    #DiseaseSearch .quick-actions-buttons {
+    #assistancePage .quick-actions-buttons {
         gap: 6px;
     }
 
-    #DiseaseSearch .quick-action-btn {
+    #assistancePage .quick-action-btn {
         padding: 6px 10px;
         font-size: 13px;
     }
 }
 
 @media (max-width: 480px) {
-    #DiseaseSearch .chat-header {
+    #assistancePage .chat-header {
         flex-direction: column;
         align-items: flex-start;
         gap: 10px;
     }
 
-    #DiseaseSearch .header-buttons {
+    #assistancePage .header-buttons {
         width: 100%;
         justify-content: space-between;
     }
 
-    #DiseaseSearch .chat-content {
+    #assistancePage .chat-content {
         padding: 15px;
     }
 
-    #DiseaseSearch .chat-footer {
+    #assistancePage .chat-footer {
         padding: 10px;
     }
 
-    #DiseaseSearch .quick-actions-buttons {
+    #assistancePage .quick-actions-buttons {
         overflow-x: auto;
         padding-bottom: 5px;
         flex-wrap: nowrap;
@@ -482,7 +482,7 @@
         -webkit-overflow-scrolling: touch;
     }
 
-    #DiseaseSearch .quick-action-btn {
+    #assistancePage .quick-action-btn {
         scroll-snap-align: start;
         flex-shrink: 0;
     }

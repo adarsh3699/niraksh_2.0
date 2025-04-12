@@ -26,7 +26,7 @@ const initialMessage = {
 	],
 };
 
-const DiseaseSearch = () => {
+const AssistancePage = () => {
 	const navigate = useNavigate();
 	const [messages, setMessages] = useState(() => {
 		const savedMessages = localStorage.getItem("healthAssistantChat");
@@ -149,7 +149,7 @@ const DiseaseSearch = () => {
 	};
 
 	return (
-		<div id="DiseaseSearch">
+		<div id="assistancePage">
 			<div className="chat-header">
 				<div className="header-left">
 					<img src={stethoscope} alt="" height="30" />
@@ -258,4 +258,4 @@ const DiseaseSearch = () => {
 	);
 };
 
-export default DiseaseSearch;
+export default AssistancePage;
