@@ -91,7 +91,7 @@ function DesktopNavBar({ isAuthenticated, userProfile, handleSignOut }) {
 				</NavLink>
 
 				{menuItems.map(({ name, path }, index) => (
-					<NavLink key={index} to={path}>
+					<NavLink key={index} to={path} className={({ isActive }) => (isActive ? "active" : "")}>
 						{name}
 					</NavLink>
 				))}
