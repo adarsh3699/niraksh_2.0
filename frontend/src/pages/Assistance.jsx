@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { apiCall } from "../utils";
 
 import stethoscope from "../assets/icons/stethoscope.svg";
-import "../styles/diseaseSearch.css";
+import "../styles/assistance.css";
 
 const symptoms = [
 	{ name: "Headache", icon: "🤕" },
