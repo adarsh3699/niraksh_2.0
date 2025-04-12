@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, memo } from "react";
+import PropTypes from "prop-types";
 import { apiCall } from "../utils";
 
 import symptomsToCategory from "../../jsonData/symptoms_to_category.json";
@@ -31,7 +32,7 @@ const DoctoreCategories = {
 	Sexologist,
 };
 
-const DoctorFinder = () => {
+const DoctorSuggest = () => {
 	const [category, setCategory] = useState("");
 	const [symptoms, setSymptoms] = useState("");
 	const [doctors, setDoctors] = useState([]);
@@ -237,103 +238,214 @@ const DoctorFinder = () => {
 		<div id="doctorSuggest">
 			<form className="container" onSubmit={findDoctor}>
 				<h1>Find the Right Doctor</h1>
-				{fromChat && (
-					<>
-						<div className="from-chat-notice">
-							Recommendations based on AI analysis of your health assistant chat
-						</div>
-						{symptomSummary && (
-							<div className="symptom-summary">
-								<h3>Symptom Analysis:</h3>
-								<p>{symptomSummary}</p>
-							</div>
-						)}
-					</>
-				)}
 
-				{fromHomepage && (
-					<div className="from-homepage-notice">
-						Analyzing your search: <strong>{symptoms}</strong>
-					</div>
-				)}
-
-				{analysisError && <div className="analysis-error">{analysisError}</div>}
-
-				{recommendedCategories.length > 0 && (
-					<div className="recommended-specialists">
-						<h3>Recommended Specialists:</h3>
-						<ul>
-							{recommendedCategories.map((cat, index) => (
-								<li key={index}>
-									{cat.replace(/_/g, " ")}
-									{index === 0 && (
-										<span className="primary-recommendation">(Primary Recommendation)</span>
-									)}
-								</li>
-							))}
-						</ul>
-						{analysisReasoning && (
-							<div className="reasoning">
-								<h4>Why these specialists are recommended:</h4>
-								<p>{analysisReasoning}</p>
-							</div>
-						)}
-					</div>
-				)}
-
-				<label>Select Category:</label>
-				<select value={category} onChange={(e) => setCategory(e.target.value)}>
-					<option value="">Not Sure? Enter Symptoms Below</option>
-					{Object.keys(DoctoreCategories).map((cat) => (
-						<option key={cat} value={cat}>
-							{cat.replace(/_/g, " ")}
-						</option>
-					))}
-				</select>
-
-				<input
-					type="text"
-					value={symptoms}
-					disabled={category || isAnalyzing}
-					onChange={(e) => setSymptoms(e.target.value)}
-					placeholder="Enter symptoms (e.g., 'I have a headache for 3 days')"
+				<NotificationSection
+					fromChat={fromChat}
+					fromHomepage={fromHomepage}
+					symptoms={symptoms}
+					analysisError={analysisError}
+					symptomSummary={symptomSummary}
 				/>
-				<button type="submit" disabled={isAnalyzing}>
-					{isAnalyzing ? "Analyzing Symptoms..." : "Search"}
-				</button>
 
-				<div className="doctor-grid">
-					{isAnalyzing ? (
-						<div className="loading-container">
-							<div className="loading-spinner"></div>
-							<p>Analyzing your symptoms for the best specialist match...</p>
-						</div>
-					) : doctors.length > 0 ? (
-						doctors.map((doc, index) => (
-							<div
-								key={index}
-								className={`doctor-card ${
-									index < 3 && doc.__categoryPriority === 0 ? "primary-recommendation-card" : ""
-								}`}
-							>
-								{doc.__categoryPriority === 0 && index < 3 && (
-									<div className="recommendation-badge">Top Recommendation</div>
-								)}
-								<p>
-									<strong>{doc.Name}</strong>
-								</p>
-								<p>Speciality: {doc.Speciality}</p>
-								<p>Experience: {doc["Years of Experience"]} years</p>
-								<p>Consultation Fee: {doc["Consult Fee"]}</p>
-							</div>
-						))
-					) : (
-						<p>No doctors found. Try describing your symptoms differently or select a category.</p>
-					)}
-				</div>
+				<RecommendationsSection
+					recommendedCategories={recommendedCategories}
+					analysisReasoning={analysisReasoning}
+				/>
+
+				<SearchForm
+					category={category}
+					symptoms={symptoms}
+					isAnalyzing={isAnalyzing}
+					setCategory={setCategory}
+					setSymptoms={setSymptoms}
+					doctorCategories={DoctoreCategories}
+				/>
+
+				<ResultsSection isAnalyzing={isAnalyzing} doctors={doctors} symptoms={symptoms} category={category} />
 			</form>
 		</div>
 	);
 };
 
-export default DoctorFinder;
+// Render a doctor card
+const DoctorCard = memo(({ doctor, index }) => {
+	const isPrimaryRecommendation = doctor.__categoryPriority === 0 && index < 3;
+
+	return (
+		<div className={`doctor-card ${isPrimaryRecommendation ? "primary-recommendation-card" : ""}`}>
+			{isPrimaryRecommendation && <div className="recommendation-badge">Top Recommendation</div>}
+			<p>
+				<strong>{doctor.Name}</strong>
+			</p>
+			<p>Speciality: {doctor.Speciality}</p>
+			<p>Experience: {doctor["Years of Experience"]} years</p>
+			<p>Consultation Fee: {doctor["Consult Fee"]}</p>
+			{doctor.Location && <p>Location: {doctor.Location}</p>}
+		</div>
+	);
+});
+
+DoctorCard.displayName = "DoctorCard";
+DoctorCard.propTypes = {
+	doctor: PropTypes.shape({
+		Name: PropTypes.string.isRequired,
+		Speciality: PropTypes.string.isRequired,
+		"Years of Experience": PropTypes.string.isRequired,
+		"Consult Fee": PropTypes.string.isRequired,
+		Location: PropTypes.string,
+		__categoryPriority: PropTypes.number.isRequired,
+	}).isRequired,
+	index: PropTypes.number.isRequired,
+};
+
+// Render notification section
+const NotificationSection = memo(({ fromChat, fromHomepage, symptoms, analysisError, symptomSummary }) => {
+	return (
+		<>
+			{fromChat && (
+				<div className="from-chat-notice">
+					Recommendations based on AI analysis of your health assistant chat
+				</div>
+			)}
+
+			{fromHomepage && (
+				<div className="from-homepage-notice">
+					Analyzing your search: <strong>{symptoms}</strong>
+				</div>
+			)}
+
+			{analysisError && <div className="analysis-error">{analysisError}</div>}
+
+			{fromChat && symptomSummary && (
+				<div className="symptom-summary">
+					<h3>Symptom Analysis:</h3>
+					<p>{symptomSummary}</p>
+				</div>
+			)}
+		</>
+	);
+});
+
+NotificationSection.displayName = "NotificationSection";
+NotificationSection.propTypes = {
+	fromChat: PropTypes.bool.isRequired,
+	fromHomepage: PropTypes.bool.isRequired,
+	symptoms: PropTypes.string.isRequired,
+	analysisError: PropTypes.string.isRequired,
+	symptomSummary: PropTypes.string.isRequired,
+};
+
+// Render recommended specialists section
+const RecommendationsSection = memo(({ recommendedCategories, analysisReasoning }) => {
+	if (recommendedCategories.length === 0) return null;
+
+	return (
+		<div className="recommended-specialists">
+			<h3>Recommended Specialists:</h3>
+			<ul>
+				{recommendedCategories.map((cat, index) => (
+					<li key={index}>
+						{cat.replace(/_/g, " ")}
+						{index === 0 && <span className="primary-recommendation">Primary Recommendation</span>}
+					</li>
+				))}
+			</ul>
+			{analysisReasoning && (
+				<div className="reasoning">
+					<h4>Why these specialists are recommended:</h4>
+					<p>{analysisReasoning}</p>
+				</div>
+			)}
+		</div>
+	);
+});
+
+RecommendationsSection.displayName = "RecommendationsSection";
+RecommendationsSection.propTypes = {
+	recommendedCategories: PropTypes.arrayOf(PropTypes.string).isRequired,
+	analysisReasoning: PropTypes.string.isRequired,
+};
+
+// Render search form
+const SearchForm = memo(({ category, symptoms, isAnalyzing, setCategory, setSymptoms, doctorCategories }) => {
+	return (
+		<>
+			<label>Select Category:</label>
+			<select value={category} onChange={(e) => setCategory(e.target.value)} disabled={isAnalyzing}>
+				<option value="">Not Sure? Enter Symptoms Below</option>
+				{Object.keys(doctorCategories).map((cat) => (
+					<option key={cat} value={cat}>
+						{cat.replace(/_/g, " ")}
+					</option>
+				))}
+			</select>
+
+			<label>Or Describe Your Symptoms:</label>
+			<input
+				type="text"
+				value={symptoms}
+				disabled={category || isAnalyzing}
+				onChange={(e) => setSymptoms(e.target.value)}
+				placeholder="E.g., 'I have a headache for 3 days with fever'"
+			/>
+			<button type="submit" disabled={isAnalyzing || (!category && !symptoms)}>
+				{isAnalyzing ? "Analyzing Symptoms..." : "Find Doctors"}
+			</button>
+		</>
+	);
+});
+
+SearchForm.displayName = "SearchForm";
+SearchForm.propTypes = {
+	category: PropTypes.string.isRequired,
+	symptoms: PropTypes.string.isRequired,
+	isAnalyzing: PropTypes.bool.isRequired,
+	setCategory: PropTypes.func.isRequired,
+	setSymptoms: PropTypes.func.isRequired,
+	doctorCategories: PropTypes.object.isRequired,
+};
+
+// Render results section
+const ResultsSection = memo(({ isAnalyzing, doctors, symptoms, category }) => {
+	if (isAnalyzing) {
+		return (
+			<div className="loading-container">
+				<div className="loading-spinner"></div>
+				<p>Analyzing your symptoms for the best specialist match...</p>
+			</div>
+		);
+	}
+
+	if (doctors.length > 0) {
+		return (
+			<>
+				<h2 className="results-heading">Recommended Doctors</h2>
+				<div className="doctor-grid">
+					{doctors.map((doctor, index) => (
+						<DoctorCard key={index} doctor={doctor} index={index} />
+					))}
+				</div>
+			</>
+		);
+	}
+
+	if (symptoms || category) {
+		return (
+			<div className="no-results">
+				<p>No doctors found. Try describing your symptoms differently or select another category.</p>
+			</div>
+		);
+	}
+
+	return null;
+});
+
+ResultsSection.displayName = "ResultsSection";
+ResultsSection.propTypes = {
+	isAnalyzing: PropTypes.bool.isRequired,
+	doctors: PropTypes.array.isRequired,
+	symptoms: PropTypes.string.isRequired,
+	category: PropTypes.string.isRequired,
+};
+
+export default memo(DoctorSuggest);
