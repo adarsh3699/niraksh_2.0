@@ -106,7 +106,6 @@ const UserLogin = () => {
 
 			try {
 				const apiResp = await apiCall("user/signin", "post", formData);
-				console.log("Login response:", apiResp);
 
 				if (apiResp?.data?.statusCode === 200 && apiResp?.data?.jwt) {
 					const extractedToken = extractEncryptedToken(apiResp.data.jwt);

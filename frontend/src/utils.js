@@ -158,6 +158,7 @@ async function logoutUser() {
 	localStorage.removeItem('refresh_token');
 	localStorage.removeItem('loginInfo');
 	localStorage.removeItem('user_details');
+	localStorage.removeItem('healthAssistantChat');
 }
 
 
