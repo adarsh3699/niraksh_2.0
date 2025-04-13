@@ -25,7 +25,7 @@ app.post('/medicine', upload.single('file'), async (req, res) => {
     const name = req.body.name
 
     if (name) {
-        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash", systemInstruction: "Only talk about medical and healthcare" });
+        const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash", systemInstruction: "Only talk about medical and healthcare" });
 
         const prompt = "tell me about this medicine named" + name + " and its uses and side effects and everything about it. Give a small note at the end to consult doctor medical advice.";
         const result = await model.generateContent(prompt);
@@ -41,7 +41,7 @@ app.post('/medicine', upload.single('file'), async (req, res) => {
             const filePath = req.file.path;
             const mimeType = req.file.mimetype;
 
-            const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash", systemInstruction: "Only talk about medical and healthcare" });
+            const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash", systemInstruction: "Only talk about medical and healthcare" });
             const prompt = "Tell me about this medicine and its uses and side effects and everything about it. Give a small note at the end to consult doctor medical advice.";
             const filePart = fileToGenerativePart(filePath, mimeType);
 
@@ -65,7 +65,7 @@ app.post('/prescription', upload.array('files', 5), async (req, res) => {
             return res.status(400).json({ error: "No files uploaded" });
         }
 
-        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash", systemInstruction: "Only talk about medical and healthcare" });
+        const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash", systemInstruction: "Only talk about medical and healthcare" });
         const prompt = "Describe the medical prescription in the uploaded images and explain it and give detailed information on medicine and give suggestions or advice.";
 
         // Convert files to generative parts
@@ -91,7 +91,7 @@ app.post('/prescription', upload.array('files', 5), async (req, res) => {
 app.post('/drug-interaction', upload.single('file'), async (req, res) => {
     const medicines = req.body.medicines?.trim();
 
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash", systemInstruction: "Only talk about medical and healthcare" });
+    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash", systemInstruction: "Only talk about medical and healthcare" });
 
     const prompt = "Tell me about Drug Drug Interaction of these medicine" + medicines;
     const result = await model.generateContent(prompt);
@@ -108,7 +108,7 @@ app.post('/disease', async (req, res) => {
 
 
     try {
-        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash", systemInstruction: "Only talk about medical and healthcare", });
+        const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash", systemInstruction: "Only talk about medical and healthcare", });
 
         const chat = model.startChat({
             history: [
@@ -142,7 +142,7 @@ app.post('/summarize-symptoms', async (req, res) => {
             .map(msg => msg.parts[0].text)
             .join("\n");
 
-        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash", systemInstruction: "Only talk about medical and healthcare" });
+        const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash", systemInstruction: "Only talk about medical and healthcare" });
 
         const prompt = `Based on the following patient's conversation, summarize their key symptoms and health concerns in a clear, concise paragraph that would help a doctor understand their condition. Focus only on medical information and symptoms:\n\n${userMessages}`;
 
@@ -168,7 +168,7 @@ app.post('/analyze-symptoms', async (req, res) => {
 
     try {
         const model = genAI.getGenerativeModel({
-            model: "gemini-1.5-flash",
+            model: "gemini-2.0-flash",
             systemInstruction: "You are a medical specialist classifier. Your task is to determine which medical specialists would be most appropriate for a patient based on their symptoms."
         });
 

@@ -32,7 +32,7 @@ Niraksh 2.0 is a comprehensive healthcare platform designed to help users naviga
 
 -   **Server**: Node.js with Express
 -   **APIs**: RESTful endpoints for AI analysis and data processing
--   **AI Integration**: Google Gemini API for advanced symptom analysis
+-   **AI Integration**: Google Gemini 2.0 API for advanced symptom analysis
 -   **Database**: MongoDB for storing doctor and medical data
 -   **Authentication**: JWT-based user authentication
 
@@ -124,7 +124,7 @@ The platform uses a sophisticated system to match patients with appropriate heal
 
 1. **Symptom Analysis**: User symptoms are analyzed using two approaches:
 
-    - Semantic analysis using LLM models for nuanced understanding
+    - Semantic analysis using Gemini 2.0 models for nuanced understanding
     - Keyword matching as a reliable fallback
 
 2. **Doctor Ranking**: Doctors are prioritized based on:
