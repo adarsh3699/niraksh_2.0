@@ -12,7 +12,7 @@ const Gemini = require("./routes/Gemini");
 
 const allowlist = [
     'https://niraksh.bhemu.me/',
-    'https://niraksh-20.vercel.app/',
+    'https://niraksh.vercel.app/',
     'http://localhost:3000/',
     'http://localhost:5173/'
 ];

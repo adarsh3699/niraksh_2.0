@@ -7,8 +7,7 @@ import ShowMsg from "../components/showMsg/ShowMsg";
 import "../styles/userLogin.css";
 
 // Google OAuth client ID
-const GOOGLE_CLIENT_ID =
-	import.meta.env.VITE_GOOGLE_CLIENT_ID || "238415785154-hlq2rg2psoi9cikjqdop740k7i5pjlgf.apps.googleusercontent.com";
+const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
 const UserLogin = () => {
 	const [msg, setMsg] = useState({ text: "", type: "" });
@@ -111,7 +110,6 @@ const UserLogin = () => {
 
 			try {
 				const apiResp = await apiCall("user/signin", "post", formData);
-				console.log("Login response:", apiResp);
 
 				if (apiResp?.data?.statusCode === 200 && apiResp?.data?.jwt) {
 					const extractedToken = extractEncryptedToken(apiResp.data.jwt);
@@ -162,7 +160,6 @@ const UserLogin = () => {
 				const apiResp = await apiCall("user/signin/google", "post", {
 					googleIdToken: credential,
 				});
-				console.log("Google login response:", apiResp);
 
 				if (apiResp?.data?.statusCode === 200 && apiResp?.data?.jwt) {
 					const extractedToken = extractEncryptedToken(apiResp.data.jwt);
