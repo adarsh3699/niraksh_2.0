@@ -66,7 +66,22 @@ app.post('/prescription', upload.array('files', 5), async (req, res) => {
         }
 
         const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash", systemInstruction: "Only talk about medical and healthcare" });
-        const prompt = "Describe the medical prescription in the uploaded images and explain it and give detailed information on medicine and give suggestions or advice.";
+
+        // Enhanced prompt to specifically ask for structured data
+        const prompt = `
+        Analyze this medical prescription in detail. Please provide:
+        
+        1. A comprehensive explanation of the prescription
+        2. List all medicines with their dosages and frequencies
+        3. Purpose of each medicine
+        4. Important instructions for the patient
+        5. Potential side effects to be aware of
+        
+        Format your response in clear markdown. Also, in your response, clearly list all medicines names so they can be extracted for drug interaction checking.
+        
+        After your explanation, include a JSON-formatted list of all medications in this format - place it on a single line at the very end of your response:
+        MEDICINES_JSON:[{"name":"Medicine Name 1", "dosage":"Dosage 1"},{"name":"Medicine Name 2", "dosage":"Dosage 2"}]
+        `;
 
         // Convert files to generative parts
         const imageParts = req.files.map(file => fileToGenerativePart(file.path, file.mimetype));
@@ -76,10 +91,43 @@ app.post('/prescription', upload.array('files', 5), async (req, res) => {
         const response = await result.response;
         const text = response.text();
 
+        // Extract medicines list from the response
+        let medicines = [];
+        const medicinesMatch = text.match(/MEDICINES_JSON:\[(.*?)\]/s);
+
+        if (medicinesMatch && medicinesMatch[1]) {
+            try {
+                // Try to parse the JSON list of medicines
+                const medicinesJson = JSON.parse(`[${medicinesMatch[1]}]`);
+                medicines = medicinesJson.map(med => med.name);
+            } catch (parseError) {
+                console.error("Error parsing medicines list:", parseError);
+
+                // Fallback: Use regex to extract medicine names
+                const medicineRegex = /\b[A-Z][a-zA-Z]*(?:\s+[A-Z][a-zA-Z]*)*\b\s*(?:\d+\s*(?:mg|mcg|g|ml|IU))?/g;
+                const medicineMatches = text.match(medicineRegex) || [];
+                medicines = [...new Set(medicineMatches)];
+            }
+        }
+
         // Cleanup: Delete uploaded files after processing
         req.files.forEach(file => fs.unlinkSync(file.path));
 
-        res.json({ description: text });
+        // Clean up the response by removing the MEDICINES_JSON and related content
+        let cleanedText = text.replace(/MEDICINES_JSON:\[.*?\]/gs, '');
+
+        // Also remove any other sections that might contain the raw medicine data
+        cleanedText = cleanedText.replace(/MEDICINES_LIST:[\s\S]*?}/gs, '');
+        cleanedText = cleanedText.replace(/```json[\s\S]*?```/gs, '');
+        cleanedText = cleanedText.replace(/```[\s\S]*?```/gs, '');
+
+        // Remove any empty sections that might remain
+        cleanedText = cleanedText.replace(/\n\s*\n\s*\n/g, '\n\n');
+
+        res.json({
+            description: cleanedText,
+            medicines: medicines
+        });
 
     } catch (error) {
         console.error(error);
@@ -91,14 +139,73 @@ app.post('/prescription', upload.array('files', 5), async (req, res) => {
 app.post('/drug-interaction', upload.single('file'), async (req, res) => {
     const medicines = req.body.medicines?.trim();
 
-    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash", systemInstruction: "Only talk about medical and healthcare" });
+    if (!medicines || medicines.length === 0) {
+        return res.status(400).json({ error: "Please provide a list of medicines" });
+    }
 
-    const prompt = "Tell me about Drug Drug Interaction of these medicine" + medicines;
-    const result = await model.generateContent(prompt);
+    try {
+        const model = genAI.getGenerativeModel({
+            model: "gemini-2.0-flash",
+            systemInstruction: "You are a helpful medical assistant that provides accurate information about drug interactions based on established medical knowledge. Always provide specific details about interactions when known medicines are mentioned, with evidence-based information. Never refuse to answer with generic disclaimers when legitimate medicines are provided."
+        });
 
+        const prompt = `
+        Provide a detailed analysis of potential Drug Drug interactions between the following medications: ${medicines}.
+        
+        For these specific medications:
+        
+        1. Explain in detail any known interactions between these exact medications using pharmaceutical databases
+        2. Rate each interaction's severity (No interaction, mild, moderate, severe) with clinical significance
+        3. Provide clear recommendations for patients regarding timing, dosing, or monitoring
+        
+        Important guidelines:
+        - Do NOT reply with generic statements like "I cannot provide information" or "I am an AI chatbot"
+        - If these are legitimate medications, provide specific interaction information
+        - If you don't recognize a medication name, suggest possible corrections or similar medication names
+        - If a true interaction exists, be specific about the mechanism and management
+        - Format your response with clear headings and bullet points for readability
+        
+        End with a brief disclaimer reminding patients to consult healthcare providers about drug interactions.
+        `;
 
-    res.json({ description: result.response.text() });
+        const result = await model.generateContent(prompt);
+        const responseText = result.response.text();
 
+        // Check if response contains generic disclaimers without useful information
+        if (
+            (responseText.includes("I am an AI") ||
+                responseText.includes("I cannot provide") ||
+                responseText.includes("cannot recognize") ||
+                responseText.includes("don't have information")) &&
+            responseText.length < 500
+        ) {
+            // If we get a generic disclaimer, try a fallback approach
+            const fallbackModel = genAI.getGenerativeModel({
+                model: "gemini-2.0-flash",
+                systemInstruction: "You are a medical database assistant with expertise in drug interactions."
+            });
+
+            const fallbackPrompt = `
+            Research question: What are the specific, known drug interactions between ${medicines}?
+            
+            Format your response as a detailed medical reference including:
+            - Known interactions between these specific medications (pharmacokinetic, pharmacodynamic)
+            - Clinical significance of each interaction
+            - Specific recommendations for managing these interactions
+            
+            If one of the medicines isn't recognized, suggest possible alternatives it might be referring to.
+            Always provide the best evidence-based information available about these medications.
+            `;
+
+            const fallbackResult = await fallbackModel.generateContent(fallbackPrompt);
+            res.json({ description: fallbackResult.response.text() });
+        } else {
+            res.json({ description: responseText });
+        }
+    } catch (error) {
+        console.error("Drug interaction error:", error);
+        res.status(500).json({ error: error.message });
+    }
 });
 
 app.post('/disease', async (req, res) => {

@@ -81,7 +81,7 @@ function Routes() {
 
 				<Route
 					exact
-					path="/drug_drug_interaction"
+					path="/drug-drug-interaction"
 					element={
 						<>
 							<NavBar />

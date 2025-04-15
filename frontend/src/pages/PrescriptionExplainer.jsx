@@ -2,17 +2,21 @@ import { memo, useState, useCallback } from "react";
 import { useDropzone } from "react-dropzone";
 import ReactMarkdown from "react-markdown";
 import { apiCall } from "../utils";
+import { useNavigate } from "react-router-dom";
 
 import { DNA } from "react-loader-spinner";
 
 import "../styles/prescriptionExplainer.css";
 
 const PrescriptionExplainer = () => {
+	const navigate = useNavigate();
 	const [uploadedFiles, setUploadedFiles] = useState([]);
 	const [uploaded, setUploaded] = useState(false);
 	const [loading, setLoading] = useState(false);
 
 	const [description, setDescription] = useState("");
+	const [medicines, setMedicines] = useState([]);
+	const [selectedMedicines, setSelectedMedicines] = useState([]);
 
 	// Memoize the onDrop handler to avoid re-creation on every render
 	// Handle file drop
@@ -36,6 +40,19 @@ const PrescriptionExplainer = () => {
 			const response = await apiCall("ai/prescription", "POST", formData, true);
 
 			setDescription(response.data?.description); // Update UI with API response
+			setUploaded(true);
+
+			// Extract medicines from the response
+			if (response.data?.medicines && Array.isArray(response.data?.medicines)) {
+				setMedicines(response.data.medicines);
+			} else {
+				// Try to extract medicine names from the description using a simple regex pattern
+				// This is a fallback in case the API doesn't return structured medicine data
+				const medicineRegex = /\b[A-Z][a-zA-Z]*(?:\s+[A-Z][a-zA-Z]*)*\b\s*(?:\d+\s*(?:mg|mcg|g|ml|IU))?/g;
+				const medicineMatches = response.data?.description?.match(medicineRegex) || [];
+				const uniqueMedicines = [...new Set(medicineMatches)];
+				setMedicines(uniqueMedicines);
+			}
 		} catch (error) {
 			console.error("Upload Error:", error);
 			alert("Error uploading files. Please try again.");
@@ -44,11 +61,45 @@ const PrescriptionExplainer = () => {
 		}
 	}, [uploadedFiles]);
 
+	// Handle medicine selection
+	const handleMedicineSelection = (medicine) => {
+		setSelectedMedicines((prev) => {
+			if (prev.includes(medicine)) {
+				return prev.filter((med) => med !== medicine);
+			} else {
+				return [...prev, medicine];
+			}
+		});
+	};
+
+	// Redirect to Drug Interaction page
+	const goToDrugInteraction = () => {
+		if (selectedMedicines.length < 2) {
+			alert("Please select at least two medicines to check for interactions");
+			return;
+		}
+
+		// Clean up medicine names before storing
+		const cleanedMedicines = selectedMedicines.map((med) => {
+			// Remove any dosage information and clean up the name
+			const nameOnly = med.split(/\s+\d+\s*(?:mg|mcg|g|ml|IU)/i)[0].trim();
+			return nameOnly || med; // Use original if cleaning fails
+		});
+
+		// Store selected medicines in sessionStorage to pass to the drug interaction page
+		sessionStorage.setItem("selectedMedicines", JSON.stringify(cleanedMedicines));
+
+		// Navigate to the Drug Drug Interaction page
+		navigate("/drug-drug-interaction");
+	};
+
 	// Memoize the handleReset function
 	const handleReset = useCallback(() => {
 		setUploadedFiles([]);
 		setDescription("");
 		setUploaded(false);
+		setMedicines([]);
+		setSelectedMedicines([]);
 	}, []);
 
 	const removeFile = (index) => {
@@ -145,6 +196,34 @@ const PrescriptionExplainer = () => {
 			{description && !loading && (
 				<div className="prescription-details">
 					<ReactMarkdown className="card-content">{description}</ReactMarkdown>
+				</div>
+			)}
+
+			{/* Medicine Selection Section */}
+			{medicines.length > 0 && !loading && (
+				<div className="medicine-interaction-section">
+					<h2>Identified Medicines</h2>
+					<p>Select medicines to check for drug interactions:</p>
+
+					<div className="medicine-list">
+						{medicines.map((medicine, index) => (
+							<div
+								key={index}
+								className={`medicine-item ${selectedMedicines.includes(medicine) ? "selected" : ""}`}
+								onClick={() => handleMedicineSelection(medicine)}
+							>
+								{medicine}
+							</div>
+						))}
+					</div>
+
+					<button
+						className="interaction-btn"
+						onClick={goToDrugInteraction}
+						disabled={selectedMedicines.length < 2}
+					>
+						Check Drug Interactions
+					</button>
 				</div>
 			)}
 		</div>

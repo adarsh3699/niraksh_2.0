@@ -33,7 +33,7 @@ function DoMore() {
 						<h2 className="card-title">Drug Drug Interaction</h2>
 						<p className="card-subtitle">Find and Drug Interaction between multi Drug</p>
 
-						<NavLink to="drug_drug_interaction" className="card-button">
+						<NavLink to="drug-drug-interaction" className="card-button">
 							Check Now
 						</NavLink>
 					</div>

@@ -28,7 +28,7 @@ const menuItems = [
 	},
 	{
 		name: "Drug Drug Interaction",
-		path: "/drug_drug_interaction",
+		path: "/drug-drug-interaction",
 	},
 	{
 		name: "Assistance",
