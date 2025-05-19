@@ -212,17 +212,21 @@ app.post('/disease', async (req, res) => {
     const history = req.body.history
     const msg = req.body.msg
 
-
-
     try {
         const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash", systemInstruction: "Only talk about medical and healthcare", });
+
+        // Clean history data to remove MongoDB-specific fields
+        const cleanedHistory = history.map(message => ({
+            role: message.role,
+            parts: message.parts.map(part => ({ text: part.text }))
+        }));
 
         const chat = model.startChat({
             history: [
                 {
                     role: "user",
                     parts: [{ text: "Tell me only about healthcare. if any question outside dont answer it." }],
-                }, ...history]
+                }, ...cleanedHistory]
             ,
         });
 
