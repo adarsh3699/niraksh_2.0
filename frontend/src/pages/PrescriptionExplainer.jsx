@@ -1,4 +1,4 @@
-import { memo, useState, useCallback } from "react";
+import { memo, useState, useCallback, useEffect } from "react";
 import { useDropzone } from "react-dropzone";
 import ReactMarkdown from "react-markdown";
 import { apiCall } from "../utils";
@@ -17,6 +17,47 @@ const PrescriptionExplainer = () => {
 	const [description, setDescription] = useState("");
 	const [medicines, setMedicines] = useState([]);
 	const [selectedMedicines, setSelectedMedicines] = useState([]);
+
+	// Load saved prescription data from sessionStorage on initial render
+	useEffect(() => {
+		const savedDescription = sessionStorage.getItem("prescriptionDescription");
+		const savedMedicines = sessionStorage.getItem("prescriptionMedicines");
+		const savedSelectedMedicines = sessionStorage.getItem("prescriptionSelectedMedicines");
+		
+		if (savedDescription) {
+			setDescription(savedDescription);
+			setUploaded(true);
+		}
+		
+		if (savedMedicines) {
+			try {
+				setMedicines(JSON.parse(savedMedicines));
+			} catch (error) {
+				console.error("Error parsing saved medicines:", error);
+			}
+		}
+		
+		if (savedSelectedMedicines) {
+			try {
+				setSelectedMedicines(JSON.parse(savedSelectedMedicines));
+			} catch (error) {
+				console.error("Error parsing saved selected medicines:", error);
+			}
+		}
+	}, []);
+
+	// Save prescription data to sessionStorage whenever it changes
+	useEffect(() => {
+		if (description) {
+			sessionStorage.setItem("prescriptionDescription", description);
+		}
+		
+		if (medicines.length > 0) {
+			sessionStorage.setItem("prescriptionMedicines", JSON.stringify(medicines));
+		}
+		
+		sessionStorage.setItem("prescriptionSelectedMedicines", JSON.stringify(selectedMedicines));
+	}, [description, medicines, selectedMedicines]);
 
 	// Memoize the onDrop handler to avoid re-creation on every render
 	// Handle file drop
@@ -84,8 +125,8 @@ const PrescriptionExplainer = () => {
 		}
 
 		// For multiple medicines, proceed with drug interaction check
-		if (selectedMedicines.length < 1) {
-			alert("Please select at least one medicine to check.");
+		if (selectedMedicines.length < 2) {
+			alert("Please select at least two medicines to check for interactions");
 			return;
 		}
 
@@ -110,6 +151,11 @@ const PrescriptionExplainer = () => {
 		setUploaded(false);
 		setMedicines([]);
 		setSelectedMedicines([]);
+		
+		// Clear session storage items related to prescription
+		sessionStorage.removeItem("prescriptionDescription");
+		sessionStorage.removeItem("prescriptionMedicines");
+		sessionStorage.removeItem("prescriptionSelectedMedicines");
 	}, []);
 
 	const removeFile = (index) => {
