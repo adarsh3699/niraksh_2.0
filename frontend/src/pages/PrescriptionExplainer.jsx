@@ -72,10 +72,20 @@ const PrescriptionExplainer = () => {
 		});
 	};
 
-	// Redirect to Drug Interaction page
+	// Redirect to Drug Interaction page and medicine search page
 	const goToDrugInteraction = () => {
-		if (selectedMedicines.length < 2) {
-			alert("Please select at least two medicines to check for interactions");
+		// If only one medicine is selected, redirect to medicine search page
+		if (selectedMedicines.length === 1) {
+			// Store the selected medicine in sessionStorage for the search
+			sessionStorage.setItem("medicine", JSON.stringify([selectedMedicines[0]]));
+			// Navigate to the medicine search page
+			navigate("/medicine_search");
+			return;
+		}
+
+		// For multiple medicines, proceed with drug interaction check
+		if (selectedMedicines.length < 1) {
+			alert("Please select at least one medicine to check.");
 			return;
 		}
 
@@ -220,9 +230,9 @@ const PrescriptionExplainer = () => {
 					<button
 						className="interaction-btn"
 						onClick={goToDrugInteraction}
-						disabled={selectedMedicines.length < 2}
+						disabled={selectedMedicines.length < 1}
 					>
-						Check Drug Interactions
+						{selectedMedicines.length === 1 ? "Check Medicine Details" : "Check Drug Interactions"}
 					</button>
 				</div>
 			)}

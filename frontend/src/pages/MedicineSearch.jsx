@@ -36,8 +36,8 @@ const MedicineSearch = () => {
 	});
 
 	// Handle search when clicking the button
-	const handleSearch = async (e) => {
-		e.preventDefault();
+	const handleSearch = useCallback(async (e) => {
+		if (e) e.preventDefault();
 
 		if (!searchQuery && !selectedFile) {
 			alert("Please enter a medicine name or upload a file.");
@@ -58,12 +58,12 @@ const MedicineSearch = () => {
 				const matches = response.data?.description.match(/_(.*?)_/g);
 				const extractedWords = matches ? matches.map((word) => word.replace(/_/g, "")) : [];
 
-				const localMeds = localStorage.getItem("medicine");
+				const localMeds = sessionStorage.getItem("medicine");
 
 				console.log("localMeds", localMeds);
 				console.log("extractedWords", extractedWords);
 
-				localStorage.setItem("medicine", JSON.stringify([...extractedWords]));
+				sessionStorage.setItem("medicine", JSON.stringify([...extractedWords]));
 			} catch (error) {
 				console.error("Error uploading file:", error);
 			} finally {
@@ -76,11 +76,11 @@ const MedicineSearch = () => {
 
 				setDescription(response?.data.description); // Set API response
 
-				const localMeds = JSON.parse(localStorage.getItem("medicine")) || [];
+				const localMeds = JSON.parse(sessionStorage.getItem("medicine")) || [];
 
 				if (!localMeds.includes(searchQuery)) {
 					localMeds.push(searchQuery);
-					localStorage.setItem("medicine", JSON.stringify(localMeds));
+					sessionStorage.setItem("medicine", JSON.stringify(localMeds));
 				}
 			} catch (error) {
 				console.error("Error searching for medicine:", error);
@@ -90,7 +90,7 @@ const MedicineSearch = () => {
 		} else {
 			console.log("No search query or file uploaded");
 		}
-	};
+	}, [searchQuery, selectedFile]);
 
 	const removeFile = useCallback(() => {
 		if (uploadedFiles.length > 0 && uploadedFiles[0].preview) {
@@ -100,6 +100,41 @@ const MedicineSearch = () => {
 		setSelectedFile(null);
 		setDescription(""); // Clear description when file is removed
 	}, [uploadedFiles]);
+
+	// Auto-search if medicine was passed from PrescriptionExplainer
+	useEffect(() => {
+		const storedMedicines = sessionStorage.getItem("medicine");
+		if (storedMedicines) {
+			try {
+				const medicineList = JSON.parse(storedMedicines);
+				sessionStorage.removeItem("medicine");
+				// If there's exactly one medicine, it likely came from PrescriptionExplainer
+				if (medicineList.length === 1) {
+					const medicineName = medicineList[0];
+					setSearchQuery(medicineName);
+					
+					// Directly search with the medicine name rather than waiting for state update
+					setTimeout(() => {
+						// Pass medicine name directly to avoid the empty state issue
+						const customSearch = async () => {
+							try {
+								setLoading(true);
+								const response = await apiCall("ai/medicine", "POST", { name: medicineName });
+								setDescription(response?.data.description);
+							} catch (error) {
+								console.error("Error searching for medicine:", error);
+							} finally {
+								setLoading(false);
+							}
+						};
+						customSearch();
+					}, 100);
+				}
+			} catch (error) {
+				console.error("Error parsing medicine from sessionStorage:", error);
+			}
+		}
+	}, []);
 
 	useEffect(() => {
 		return () => {
