@@ -253,14 +253,49 @@ app.post('/summarize-symptoms', async (req, res) => {
             .map(msg => msg.parts[0].text)
             .join("\n");
 
+        // Check for non-healthcare related terms in user messages
+        const nonMedicalKeywords = [
+            "just doing time pass",
+            "not related to healthcare", 
+            "not a medical",
+            "not medical",
+            "no symptoms"
+        ];
+
+        // Check if any non-medical keyword is found
+        const isNonMedical = nonMedicalKeywords.some(keyword => 
+            userMessages.toLowerCase().includes(keyword.toLowerCase())
+        );
+
+        if (isNonMedical) {
+            return res.json({
+                summary: "This user has not provided any medical information or described any symptoms. They stated they are \"just doing time pass,\" indicating the conversation is not related to healthcare or medical concerns.",
+                status: "non_medical"
+            });
+        }
+
         const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash", systemInstruction: "Only talk about medical and healthcare" });
 
-        const prompt = `Based on the following patient's conversation, summarize their key symptoms and health concerns in a clear, concise paragraph that would help a doctor understand their condition. Focus only on medical information and symptoms:\n\n${userMessages}`;
+        const prompt = `Based on the following patient's conversation, summarize their key symptoms and health concerns in a clear, concise paragraph that would help a doctor understand their condition. Focus only on medical information and symptoms.
+
+If the conversation contains NO medical symptoms or health concerns, respond with EXACTLY: "This user has not provided any medical information or described any symptoms. The conversation is not related to healthcare or medical concerns."
+
+Here's the conversation:\n\n${userMessages}`;
 
         const result = await model.generateContent(prompt);
+        const summary = result.response.text();
+
+        // Check if the AI identified this as non-medical content
+        if (summary.includes("not provided any medical information") || 
+            summary.includes("not related to healthcare")) {
+            return res.json({
+                summary: summary,
+                status: "non_medical"
+            });
+        }
 
         res.json({
-            summary: result.response.text(),
+            summary: summary,
             status: "success"
         });
     } catch (error) {
@@ -275,6 +310,27 @@ app.post('/analyze-symptoms', async (req, res) => {
 
     if (!symptoms || typeof symptoms !== 'string') {
         return res.status(400).json({ error: "Symptoms description is required" });
+    }
+
+    // Check for non-healthcare related terms
+    const nonMedicalKeywords = [
+        "just doing time pass",
+        "not related to healthcare", 
+        "not a medical",
+        "not medical",
+        "no symptoms"
+    ];
+
+    // Check if any non-medical keyword is found
+    const isNonMedical = nonMedicalKeywords.some(keyword => 
+        symptoms.toLowerCase().includes(keyword.toLowerCase())
+    );
+
+    if (isNonMedical) {
+        return res.json({
+            categories: [],
+            reasoning: "This conversation doesn't appear to be healthcare-related."
+        });
     }
 
     try {
@@ -309,6 +365,8 @@ Analyze the symptoms carefully and return a JSON object with ONLY the following 
 }
 
 List the categories in order of relevance (most relevant first). Include 1-3 categories that best match the symptoms.
+
+If the text doesn't contain any medical symptoms or health-related concerns, return an empty categories array and indicate that no healthcare concerns were identified.
 `;
 
         const result = await model.generateContent(prompt);
@@ -324,7 +382,14 @@ List the categories in order of relevance (most relevant first). Include 1-3 cat
                 const parsedResult = JSON.parse(jsonStr);
 
                 // Validate the response format
-                if (Array.isArray(parsedResult.categories) && parsedResult.categories.length > 0) {
+                if (Array.isArray(parsedResult.categories)) {
+                    // If categories array is empty, it means no healthcare concerns were identified
+                    if (parsedResult.categories.length === 0) {
+                        return res.json({
+                            categories: [],
+                            reasoning: "No healthcare concerns were identified in the provided text."
+                        });
+                    }
                     return res.json(parsedResult);
                 }
             }

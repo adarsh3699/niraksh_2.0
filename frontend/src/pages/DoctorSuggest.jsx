@@ -83,11 +83,42 @@ const DoctorSuggest = () => {
 		setAnalysisReasoning("");
 		setRecommendedCategories([]);
 
+		// Check if the symptom text indicates non-healthcare content
+		// Common patterns that suggest non-healthcare conversation
+		const nonMedicalKeywords = [
+			"just doing time pass",
+			"not related to healthcare",
+			"not a medical",
+			"not medical",
+			"no symptoms"
+		];
+
+		// Check if any non-medical keyword is found
+		const isNonMedical = nonMedicalKeywords.some(keyword => 
+			symptomText.toLowerCase().includes(keyword.toLowerCase())
+		);
+
+		if (isNonMedical) {
+			setIsAnalyzing(false);
+			setAnalysisError("This conversation doesn't appear to be healthcare-related. No doctors will be suggested.");
+			return;
+		}
+
 		try {
 			// Call the backend API for semantic analysis using LangChain
 			const response = await apiCall("ai/analyze-symptoms", "POST", {
 				symptoms: symptomText,
 			});
+
+			// If API returns data but categories array is empty with specific reasoning
+			if (response?.data?.categories && response.data.categories.length === 0) {
+				if (response.data.reasoning && 
+					(response.data.reasoning.includes("doesn't appear to be healthcare-related") ||
+					 response.data.reasoning.includes("No healthcare concerns"))) {
+					setAnalysisError("This conversation doesn't appear to be healthcare-related. No doctors will be suggested.");
+					return;
+				}
+			}
 
 			if (response?.data?.categories && response.data.categories.length > 0) {
 				// Use the categories returned from the semantic analysis
@@ -212,6 +243,17 @@ const DoctorSuggest = () => {
 					symptoms: symptoms,
 				});
 
+				// If API returns data but categories array is empty with specific reasoning
+				if (response?.data?.categories && response.data.categories.length === 0) {
+					if (response.data.reasoning && 
+						(response.data.reasoning.includes("doesn't appear to be healthcare-related") ||
+						 response.data.reasoning.includes("No healthcare concerns"))) {
+						setAnalysisError("This conversation doesn't appear to be healthcare-related. No doctors will be suggested.");
+						setIsAnalyzing(false);
+						return;
+					}
+				}
+
 				if (response?.data?.categories && response.data.categories.length > 0) {
 					setRecommendedCategories(response.data.categories);
 					if (response.data.reasoning) {
@@ -300,23 +342,35 @@ DoctorCard.propTypes = {
 
 // Render notification section
 const NotificationSection = memo(({ fromChat, fromHomepage, symptoms, analysisError, symptomSummary }) => {
+	// Determine if this is a non-healthcare related conversation
+	const isNonHealthcareRelated = analysisError && 
+		analysisError.includes("doesn't appear to be healthcare-related");
+
 	return (
 		<>
-			{fromChat && (
+			{fromChat && !isNonHealthcareRelated && (
 				<div className="from-chat-notice">
 					Recommendations based on AI analysis of your health assistant chat
 				</div>
 			)}
 
-			{fromHomepage && (
+			{fromHomepage && !isNonHealthcareRelated && (
 				<div className="from-homepage-notice">
 					Analyzing your search: <strong>{symptoms}</strong>
 				</div>
 			)}
 
-			{analysisError && <div className="analysis-error">{analysisError}</div>}
+			{isNonHealthcareRelated ? (
+				<div className="analysis-error warning">
+					<h3>No Doctor Recommendations Available</h3>
+					<p>{analysisError}</p>
+					<p>Please use the healthcare assistant for medical queries to get relevant doctor suggestions.</p>
+				</div>
+			) : analysisError && (
+				<div className="analysis-error">{analysisError}</div>
+			)}
 
-			{fromChat && symptomSummary && (
+			{fromChat && symptomSummary && !isNonHealthcareRelated && (
 				<div className="symptom-summary">
 					<h3>Symptom Analysis:</h3>
 					<p>{symptomSummary}</p>
@@ -337,6 +391,7 @@ NotificationSection.propTypes = {
 
 // Render recommended specialists section
 const RecommendationsSection = memo(({ recommendedCategories, analysisReasoning }) => {
+	// Don't show recommendations if there are none or if error indicates non-healthcare conversation
 	if (recommendedCategories.length === 0) return null;
 
 	return (
@@ -407,6 +462,14 @@ SearchForm.propTypes = {
 
 // Render results section
 const ResultsSection = memo(({ isAnalyzing, doctors, symptoms, category }) => {
+	// Check if there's an error message related to non-healthcare content in the DOM
+	const nonHealthcareErrorElement = document.querySelector('.analysis-error.warning');
+	const isNonHealthcareRelated = !!nonHealthcareErrorElement;
+
+	if (isNonHealthcareRelated) {
+		return null; // Don't show any results for non-healthcare related content
+	}
+
 	if (isAnalyzing) {
 		return (
 			<div className="loading-container">

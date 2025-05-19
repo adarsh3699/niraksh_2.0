@@ -332,7 +332,20 @@ const AssistancePage = () => {
 				chatHistory: messages,
 			});
 
-			if (response?.data?.summary) {
+			if (response?.data?.status === "non_medical") {
+				// Show a dialog informing the user their conversation isn't healthcare related
+				showDialog(
+					"No Medical Content Detected",
+					"Your conversation doesn't appear to contain any healthcare-related information or symptoms. Please discuss your medical concerns to get doctor recommendations.",
+					{ type: "warning" }
+				);
+				
+				// Still navigate but with a flag that this is non-medical content
+				if (response?.data?.summary) {
+					sessionStorage.setItem("symptomSummary", response.data.summary);
+					navigate("/doctor_suggest");
+				}
+			} else if (response?.data?.summary) {
 				// Save the summary in sessionStorage
 				sessionStorage.setItem("symptomSummary", response.data.summary);
 
