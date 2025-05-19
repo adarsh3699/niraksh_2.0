@@ -8,18 +8,24 @@ const { authenticateUser, optionalAuth } = require("./middleware/auth");
 
 const UserReg = require("./routes/UserReg");
 const Gemini = require("./routes/Gemini");
+const Chat = require("./routes/Chat");
 
 
-const allowlist = [
-    'https://niraksh.bhemu.me/',
-    'https://niraksh.vercel.app/',
-    'http://localhost:3000/',
-    'http://localhost:5173/'
-];
+const corsOptions = {
+    origin: [
+        'https://niraksh.bhemu.me',
+        'https://niraksh.vercel.app',
+        'http://localhost:3000',
+        'http://localhost:5173'
+    ],
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
+    optionsSuccessStatus: 200
+};
 
 const app = express();
 
-app.use(cors(allowlist));
+app.use(cors(corsOptions));
 app.use(express.json());
 
 // Public routes (no authentication required)
@@ -27,6 +33,7 @@ app.use("/user", UserReg);
 
 // Protected routes (authentication required)
 app.use("/ai", authenticateUser, Gemini);
+app.use("/chats", authenticateUser, Chat);
 
 const PORT = process.env.PORT || 4000;
 
